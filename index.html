@@ -8,6 +8,11 @@
         * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         body { background-color: #4b6584; margin: 0; padding: 20px; }
         
+        /* Fitur Penyembunyian Halaman yang Akurat */
+        .hidden {
+            display: none !important;
+        }
+
         /* Gaya untuk Halaman Login */
         .login-wrapper {
             display: flex;
@@ -101,8 +106,6 @@
             .container { box-shadow: none; padding: 0; max-width: 100%; }
             form, h2, .form-section, .print-action-bar, .login-wrapper { display: none !important; }
             .print-area { display: block !important; border: none; padding: 0; margin-top: 0; }
-
-            /* Memaksa elemen tanda tangan dan ketidakhadiran agar tidak terpotong di tengah halaman */
             .table-ttd, .ketidakhadiran-box { page-break-inside: avoid !important; }
         }
     </style>
@@ -116,18 +119,18 @@
         <form id="loginForm">
             <div class="form-group">
                 <label>Username</label>
-                <input type="text" id="guru" placeholder="Masukkan Username" required autocomplete="off">
+                <input type="text" id="username" placeholder="Masukkan Username" required autocomplete="off">
             </div>
             <div class="form-group">
                 <label>Password</label>
-                <input type="password" id="guru123" placeholder="Masukkan Password" required autocomplete="off">
+                <input type="password" id="password" placeholder="Masukkan Password" required autocomplete="off">
             </div>
             <button type="submit" class="btn-login">MASUK</button>
         </form>
     </div>
 </div>
 
-<div class="container" id="mainApp" style="display: none !important;">
+<div class="container hidden" id="mainApp">
     <h2>INPUT DATA LAPORAN HASIL BELAJAR (KURIKULUM MERDEKA)</h2>
 
     <form id="raportForm">
@@ -269,7 +272,7 @@
                     <div class="col"><label>Izin (Hari)</label><input type="text" id="izin" value="-"></div>
                     <div class="col"><label>Alpa (Hari)</label><input type="text" id="alpa" value="-"></div>
                 </div>
-                <label style="margin-top:10px;">Keputusan Kenaikan</label>
+                <label style="margin-top:10px;">Keputusan KNAIKAN</label>
                 <input type="text" id="kenaikan" value="ANANDA NAIK DI KELAS XI">
 
                 <label style="margin-top:10px;">Catatan Wali Kelas</label>
@@ -293,7 +296,6 @@
     </form>
 
     <div class="print-area" id="printArea">
-
         <div class="print-action-bar">
             <button onclick="window.print()" class="btn-print">
                 <span>🖨️</span> Cetak Lembar Rapor / Simpan PDF
@@ -372,7 +374,8 @@
                     <div class="space-ttd"></div>
                     <strong><span id="lbl_nama_ortu"></span></strong>
                 </td>
-                <td style="width: 20%;"></td> <td style="width: 40%; text-align: center; vertical-align: top;">
+                <td style="width: 20%;"></td>
+                <td style="width: 40%; text-align: center; vertical-align: top;">
                     <span id="lbl_titimangsa"></span><br>
                     Wali Kelas,
                     <div class="space-ttd"></div>
@@ -388,31 +391,29 @@
                 </td>
             </tr>
         </table>
-
     </div>
 </div>
 
 <script>
-    // FIX PROSES LOGIN AGRESIF
+    // SISTEM LOGIN AMAN & STRUKTUR KELAS CSS
     document.getElementById('loginForm').addEventListener('submit', function(e) {
-        e.preventDefault(); // Menghentikan reload halaman alami browser
+        e.preventDefault();
         
         var userIn = document.getElementById('username').value.trim();
         var passIn = document.getElementById('password').value.trim();
         var errMsg = document.getElementById('loginError');
-        var wrapper = document.getElementById('loginWrapper');
-        var app = document.getElementById('mainApp');
+        var loginWindow = document.getElementById('loginWrapper');
+        var mainWindow = document.getElementById('mainApp');
 
         if (userIn === "guru" && passIn === "guru123") {
-            // Sembunyikan form login secara total
-            wrapper.removeAttribute("style");
-            wrapper.style.display = 'none';
-            
-            // Tampilkan paksa aplikasi utama dengan menimpa aturan css lamanya
-            app.setAttribute("style", "display: block !important;");
+            // Sembunyikan Halaman Login
+            loginWindow.classList.add('hidden');
+            // Tampilkan Halaman Utama Rapor
+            mainWindow.classList.remove('hidden');
+            // Bersihkan error jika ada
             errMsg.style.display = 'none';
         } else {
-            // Jika salah, munculkan notifikasi error merah
+            // Tampilkan teks salah password
             errMsg.style.display = 'block';
         }
     });
