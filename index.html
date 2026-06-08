@@ -27,6 +27,8 @@
             margin-bottom: 20px;
             border-bottom: 2px solid #2c3e50;
             padding-bottom: 10px;
+            text-align: center;
+            color: #2c3e50;
         }
         .login-box .form-group {
             margin-bottom: 15px;
@@ -35,7 +37,7 @@
             background-color: #2c3e50;
             color: white;
             border: none;
-            padding: 10px;
+            padding: 12px;
             font-size: 16px;
             font-weight: bold;
             border-radius: 4px;
@@ -113,19 +115,19 @@
         <div id="loginError" class="error-message">Username atau Password salah!</div>
         <form id="loginForm">
             <div class="form-group">
-                <label for="username">Username</label>
-                <input type="text" id="username" placeholder="Masukkan Username" required>
+                <label>Username</label>
+                <input type="text" id="username" placeholder="Masukkan Username" required autocomplete="off">
             </div>
             <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" placeholder="Masukkan Password" required>
+                <label>Password</label>
+                <input type="password" id="password" placeholder="Masukkan Password" required autocomplete="off">
             </div>
             <button type="submit" class="btn-login">MASUK</button>
         </form>
     </div>
 </div>
 
-<div class="container" id="mainApp" style="display: none;">
+<div class="container" id="mainApp" style="display: none !important;">
     <h2>INPUT DATA LAPORAN HASIL BELAJAR (KURIKULUM MERDEKA)</h2>
 
     <form id="raportForm">
@@ -391,19 +393,26 @@
 </div>
 
 <script>
-    // LOGIKA PROSES LOGIN
+    // FIX PROSES LOGIN AGRESIF
     document.getElementById('loginForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        const userIn = document.getElementById('username').value;
-        const passIn = document.getElementById('password').value;
-        const errMsg = document.getElementById('loginError');
+        e.preventDefault(); // Menghentikan reload halaman alami browser
+        
+        var userIn = document.getElementById('username').value.trim();
+        var passIn = document.getElementById('password').value.trim();
+        var errMsg = document.getElementById('loginError');
+        var wrapper = document.getElementById('loginWrapper');
+        var app = document.getElementById('mainApp');
 
         if (userIn === "guru" && passIn === "guru123") {
-            // Sembunyikan form login, tampilkan aplikasi utama
-            document.getElementById('loginWrapper').style.display = 'none';
-            document.getElementById('mainApp').style.display = 'block';
+            // Sembunyikan form login secara total
+            wrapper.removeAttribute("style");
+            wrapper.style.display = 'none';
+            
+            // Tampilkan paksa aplikasi utama dengan menimpa aturan css lamanya
+            app.setAttribute("style", "display: block !important;");
+            errMsg.style.display = 'none';
         } else {
-            // Tampilkan pesan error jika salah
+            // Jika salah, munculkan notifikasi error merah
             errMsg.style.display = 'block';
         }
     });
@@ -507,4 +516,35 @@
         ];
 
         let htmlTabel = '';
-        let nomor = 1
+        let nomor = 1;
+
+        susunanMapel.forEach(item => {
+            if (item.start) {
+                htmlTabel += `<tr class="sub-header"><td colspan="4">${item.group}</td></tr>`;
+                nomor = 1;
+            }
+            const nilaiAkhir = document.getElementById('n_' + item.id).value || "-";
+            const teksDeskripsi = document.getElementById('d_' + item.id).value || "-";
+            const deskripsiFormatted = teksDeskripsi.replace(/\n/g, '<br>');
+
+            htmlTabel += `<tr>
+                <td class="center">${nomor}</td>
+                <td>${item.name}</td>
+                <td class="center" style="font-weight:bold;">${nilaiAkhir}</td>
+                <td style="text-align:justify; font-size:11.5px;">${deskripsiFormatted}</td>
+            </tr>`;
+            nomor++;
+        });
+        document.getElementById('print_table_body').innerHTML = htmlTabel;
+
+        let htmlEkskul = `<tr><td class="center">1</td><td>${document.getElementById('e1_nama').value}</td><td class="center">${document.getElementById('e1_nilai').value}</td><td>${document.getElementById('e1_ket').value}</td></tr>`;
+        htmlEkskul += `<tr><td class="center">2</td><td>${document.getElementById('e2_nama').value}</td><td class="center">${document.getElementById('e2_nilai').value}</td><td>${document.getElementById('e2_ket').value}</td></tr>`;
+        document.getElementById('print_ekskul_body').innerHTML = htmlEkskul;
+
+        document.getElementById('printArea').style.display = 'block';
+        document.getElementById('printArea').scrollIntoView({ behavior: 'smooth' });
+    });
+</script>
+
+</body>
+</html>
