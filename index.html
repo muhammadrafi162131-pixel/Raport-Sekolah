@@ -3,468 +3,210 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Software Raport Kurikulum Merdeka - Fix Cetak Tanda Tangan</title>
+    <title>Sistem Informasi Guru</title>
     <style>
-        * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: #4b6584; margin: 0; padding: 20px; }
-        .container { max-width: 1100px; margin: 0 auto; background: #ffffff; padding: 30px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
-        h2, h3 { text-align: center; color: #2c3e50; margin: 5px 0; }
-        h2 { border-bottom: 3px double #2c3e50; padding-bottom: 10px; margin-bottom: 20px; }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
 
-        .form-section { background: #f9f9f9; padding: 20px; border: 1px solid #dcdde1; border-radius: 6px; margin-bottom: 20px; }
-        .section-title { background: #2c3e50; color: white; padding: 8px 12px; font-weight: bold; border-radius: 4px; margin-top: 0; margin-bottom: 15px; }
+        body {
+            background-color: #f4f6f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
 
-        .row { display: flex; gap: 15px; margin-bottom: 10px; }
-        .col { flex: 1; }
-        label { display: block; margin-bottom: 5px; font-weight: bold; color: #2f3542; font-size: 13px; }
-        input[type="text"], input[type="number"], textarea { width: 100%; padding: 8px; border: 1px solid #ced4da; border-radius: 4px; font-size: 14px; }
-        textarea { resize: vertical; height: 80px; font-size: 13px; line-height: 1.4; }
+        /* ================= STYLE HALAMAN LOGIN ================= */
+        .login-card {
+            background-color: #ffffff;
+            padding: 35px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 360px;
+        }
 
-        .auto-textarea { background-color: #f1f2f6; color: #2c3e50; font-style: italic; }
+        .login-card h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #2c3e50;
+            font-size: 24px;
+        }
 
-        table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
-        th, td { border: 1px solid #2c3e50; padding: 8px; font-size: 13px; vertical-align: top; }
-        th { background-color: #f1f2f6; }
-        .sub-header { background-color: #dfe4ea; font-weight: bold; }
-        .center { text-align: center; }
+        .input-group {
+            margin-bottom: 20px;
+        }
 
-        .btn-block { background-color: #27ae60; color: white; border: none; padding: 12px; font-size: 16px; font-weight: bold; border-radius: 4px; cursor: pointer; width: 100%; margin-top: 10px; }
-        .btn-block:hover { background-color: #219a52; }
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-size: 14px;
+            font-weight: 600;
+        }
 
-        /* Gaya Khusus Area Output Cetak */
-        .print-area { display: none; background: white; color: black; padding: 30px; border: 2px solid #000; margin-top: 40px; border-radius: 4px; }
-        .report-header table { border: none; margin-bottom: 10px; }
-        .report-header td { border: none; padding: 2px; }
-        .printable-table td { line-height: 1.5; }
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
 
-        .print-action-bar { display: flex; justify-content: flex-end; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px dashed #ccc; }
-        .btn-print { background-color: #eb3b5a; color: white; border: none; padding: 12px 25px; font-size: 15px; font-weight: bold; border-radius: 4px; cursor: pointer; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: 0.2s; }
-        .btn-print:hover { background-color: #cf2a46; transform: translateY(-1px); }
+        .input-icon {
+            position: absolute;
+            left: 12px;
+            color: #888;
+        }
 
-        /* Struktur Tabel Tanda Tangan Tanpa Border untuk Print Menggunakan Tabel Murni */
-        table.table-ttd { border: none; width: 100%; margin-top: 30px; page-break-inside: avoid; }
-        table.table-ttd td { border: none; font-size: 14px; padding: 5px; line-height: 1.4; }
-        .space-ttd { height: 70px; } /* Jarak tinggi tanda tangan tangan asli */
+        .input-group input {
+            width: 100%;
+            padding: 12px 12px 12px 40px;
+            border: 1px solid #ccd1d9;
+            border-radius: 6px;
+            font-size: 14px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
 
-        /* ================= TATA ATURAN PRINT & ANTI-POTONG ================= */
-        @media print {
-            body { background: white; padding: 0; margin: 0; }
-            .container { box-shadow: none; padding: 0; max-width: 100%; }
-            form, h2, .form-section, .print-action-bar { display: none !important; }
-            .print-area { display: block !important; border: none; padding: 0; margin-top: 0; }
+        .input-group input:focus {
+            border-color: #4a90e2;
+            box-shadow: 0 0 5px rgba(74, 144, 226, 0.3);
+        }
 
-            /* Memaksa elemen tanda tangan dan ketidakhadiran agar tidak terpotong di tengah halaman */
-            .table-ttd, .ketidakhadiran-box { page-break-inside: avoid !important; }
+        .btn-login {
+            width: 100%;
+            padding: 12px;
+            background-color: #4a90e2;
+            border: none;
+            border-radius: 6px;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-login:hover {
+            background-color: #357abd;
+        }
+
+        .error-message {
+            color: #e74c3c;
+            font-size: 14px;
+            text-align: center;
+            margin-top: 15px;
+            display: none;
+        }
+
+        /* ================= STYLE HALAMAN UTAMA ================= */
+        .main-dashboard {
+            display: none; /* Disembunyikan saat pertama kali dimuat */
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px;
+            text-align: center;
+        }
+
+        .main-dashboard h1 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+
+        .main-dashboard p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .btn-logout {
+            padding: 10px 25px;
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+
+        .btn-logout:hover {
+            background-color: #c0392b;
         }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h2>INPUT DATA LAPORAN HASIL BELAJAR (KURIKULUM MERDEKA)</h2>
-
-    <form id="raportForm">
-        <!-- DATA IDENTITAS -->
-        <div class="form-section">
-            <div class="section-title">DATA SISWA & SEKOLAH</div>
-            <div class="row">
-                <div class="col"><label>Nama Peserta Didik</label><input type="text" id="nama" value="ABDULLOH SAJAD" required></div>
-                <div class="col"><label>Kelas</label><input type="text" id="kelas" value="X (sepuluh)" required></div>
-            </div>
-            <div class="row">
-                <div class="col"><label>NISN</label><input type="text" id="nisn" value="3086299358" required></div>
-                <div class="col"><label>Fase</label><input type="text" id="fase" value="E" required></div>
-            </div>
-            <div class="row">
-                <div class="col"><label>Sekolah</label><input type="text" id="sekolah" value="SMK AL KAAFFAH" required></div>
-                <div class="col"><label>Semester</label><input type="text" id="semester" value="II (Dua)" required></div>
-            </div>
-            <div class="row">
-                <div class="col"><label>Alamat</label><input type="text" id="alamat" value="Jalan Semeru No.18 A Dilem Kepanjen" required></div>
-                <div class="col"><label>Tahun Pelajaran</label><input type="text" id="tapel" value="2024-2025" required></div>
-            </div>
-        </div>
-
-        <!-- TABEL INPUT NILAI & DESKRIPSI OTOMATIS -->
-        <div class="form-section">
-            <div class="section-title">MATA PELAJARAN DAN CAPAIAN KOMPETENSI</div>
-            <table>
-                <thead>
-                    <tr>
-                        <th style="width: 5%;">No</th>
-                        <th style="width: 35%;">Muatan Pelajaran</th>
-                        <th style="width: 12%;">Nilai Akhir</th>
-                        <th style="width: 48%;">Capaian Kompetensi (Otomatis)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- KELOMPOK A -->
-                    <tr class="sub-header"><td colspan="4">A. Kelompok Mata Pelajaran Umum</td></tr>
-                    <tr>
-                        <td class="center">1</td>
-                        <td>Pendidikan Agama Islam dan Budi Pekerti</td>
-                        <td><input type="number" id="n_pai" class="nilai-input" data-mapel="pai" min="0" max="100" placeholder="Contoh: 80"></td>
-                        <td><textarea id="d_pai" class="auto-textarea" readonly placeholder="Akan terisi otomatis..."></textarea></td>
-                    </tr>
-                    <tr>
-                        <td class="center">2</td>
-                        <td>Pendidikan Pancasila</td>
-                        <td><input type="number" id="n_pancasila" class="nilai-input" data-mapel="pancasila" min="0" max="100" placeholder="Contoh: 78"></td>
-                        <td><textarea id="d_pancasila" class="auto-textarea" readonly placeholder="Akan terisi otomatis..."></textarea></td>
-                    </tr>
-                    <tr>
-                        <td class="center">3</td>
-                        <td>Bahasa Indonesia</td>
-                        <td><input type="number" id="n_indo" class="nilai-input" data-mapel="indo" min="0" max="100" placeholder="Contoh: 81"></td>
-                        <td><textarea id="d_indo" class="auto-textarea" readonly placeholder="Akan terisi otomatis..."></textarea></td>
-                    </tr>
-                    <tr>
-                        <td class="center">4</td>
-                        <td>Pendidikan Jasmani, Olahraga, dan Kesehatan</td>
-                        <td><input type="number" id="n_pjok" class="nilai-input" data-mapel="pjok" min="0" max="100" placeholder="Contoh: 78"></td>
-                        <td><textarea id="d_pjok" class="auto-textarea" readonly placeholder="Akan terisi otomatis..."></textarea></td>
-                    </tr>
-                    <tr>
-                        <td class="center">5</td>
-                        <td>Sejarah</td>
-                        <td><input type="number" id="n_sejarah" class="nilai-input" data-mapel="sejarah" min="0" max="100" placeholder="Contoh: 80"></td>
-                        <td><textarea id="d_sejarah" class="auto-textarea" readonly placeholder="Akan terisi otomatis..."></textarea></td>
-                    </tr>
-                    <tr>
-                        <td class="center">6</td>
-                        <td>Seni Budaya</td>
-                        <td><input type="number" id="n_seni" class="nilai-input" data-mapel="seni" min="0" max="100" placeholder="Contoh: 83"></td>
-                        <td><textarea id="d_seni" class="auto-textarea" readonly placeholder="Akan terisi otomatis..."></textarea></td>
-                    </tr>
-
-                    <!-- KELOMPOK B -->
-                    <tr class="sub-header"><td colspan="4">B. Kelompok Mata Pelajaran Kejuruan</td></tr>
-                    <tr>
-                        <td class="center">1</td>
-                        <td>Matematika</td>
-                        <td><input type="number" id="n_math" class="nilai-input" data-mapel="math" min="0" max="100" placeholder="Contoh: 74"></td>
-                        <td><textarea id="d_math" class="auto-textarea" readonly placeholder="Akan terisi otomatis..."></textarea></td>
-                    </tr>
-                    <tr>
-                        <td class="center">2</td>
-                        <td>Bahasa Inggris</td>
-                        <td><input type="number" id="n_inggris" class="nilai-input" data-mapel="inggris" min="0" max="100" placeholder="Contoh: 96"></td>
-                        <td><textarea id="d_inggris" class="auto-textarea" readonly placeholder="Akan terisi otomatis..."></textarea></td>
-                    </tr>
-                    <tr>
-                        <td class="center">3</td>
-                        <td>Informatika</td>
-                        <td><input type="number" id="n_info" class="nilai-input" data-mapel="info" min="0" max="100" placeholder="Contoh: 91"></td>
-                        <td><textarea id="d_info" class="auto-textarea" readonly placeholder="Akan terisi otomatis..."></textarea></td>
-                    </tr>
-                    <tr>
-                        <td class="center">4</td>
-                        <td>Projek Ilmu Pengetahuan Alam dan Sosial</td>
-                        <td><input type="number" id="n_ipas" class="nilai-input" data-mapel="ipas" min="0" max="100" placeholder="Contoh: 80"></td>
-                        <td><textarea id="d_ipas" class="auto-textarea" readonly placeholder="Akan terisi otomatis..."></textarea></td>
-                    </tr>
-                    <tr>
-                        <td class="center">5</td>
-                        <td>Dasar Program Keahlian</td>
-                        <td><input type="number" id="n_dpk" class="nilai-input" data-mapel="dpk" min="0" max="100" placeholder="Contoh: 86"></td>
-                        <td><textarea id="d_dpk" class="auto-textarea" readonly placeholder="Akan terisi otomatis..."></textarea></td>
-                    </tr>
-
-                    <!-- KELOMPOK C -->
-                    <tr class="sub-header"><td colspan="4">C. Muatan Lokal</td></tr>
-                    <tr>
-                        <td class="center">1</td>
-                        <td>Muatan Lokal</td>
-                        <td><input type="number" id="n_mulok" class="nilai-input" data-mapel="mulok" min="0" max="100" placeholder="Contoh: 80"></td>
-                        <td><textarea id="d_mulok" class="auto-textarea" readonly placeholder="Akan terisi otomatis..."></textarea></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <!-- EKSKUL, ABSENSI, CATATAN DAN NAMA PENANDATANGAN -->
-        <div class="row">
-            <div class="col form-section">
-                <div class="section-title">Ekstrakurikuler</div>
-                <label>Ekskul 1</label>
-                <div class="row">
-                    <input type="text" id="e1_nama" value="English Conversation Club (ECC)" style="flex:2;">
-                    <input type="text" id="e1_nilai" value="B" style="flex:1;">
+    <div id="loginPage" class="login-card">
+        <h2>Login Guru</h2>
+        <form id="loginForm">
+            <div class="input-group">
+                <label for="username">Username</label>
+                <div class="input-wrapper">
+                    <span class="input-icon">👤</span>
+                    <input type="text" id="username" required placeholder="Masukkan username">
                 </div>
-                <textarea id="e1_ket">Ananda baik dan aktif dalam menangkap makna lisan teks transaksional lisan Bahasa Inggris sederhana.</textarea>
-
-                <label style="margin-top:10px;">Ekskul 2</label>
-                <div class="row">
-                    <input type="text" id="e2_nama" value="Pagar Nusa" style="flex:2;">
-                    <input type="text" id="e2_nilai" value="A" style="flex:1;">
+            </div>
+            <div class="input-group">
+                <label for="password">Password</label>
+                <div class="input-wrapper">
+                    <span class="input-icon">🔒</span>
+                    <input type="password" id="password" required placeholder="Masukkan password">
                 </div>
-                <textarea id="e2_ket">Ananda sangat aktif dalam mengikuti kegiatan ekstrakurikuler pagar nusa.</textarea>
             </div>
-
-            <div class="col form-section">
-                <div class="section-title">Ketidakhadiran & Keputusan</div>
-                <div class="row">
-                    <div class="col"><label>Sakit (Hari)</label><input type="text" id="sakit" value="-"></div>
-                    <div class="col"><label>Izin (Hari)</label><input type="text" id="izin" value="-"></div>
-                    <div class="col"><label>Alpa (Hari)</label><input type="text" id="alpa" value="-"></div>
-                </div>
-                <label style="margin-top:10px;">Keputusan Kenaikan</label>
-                <input type="text" id="kenaikan" value="ANANDA NAIK DI KELAS XI">
-
-                <label style="margin-top:10px;">Catatan Wali Kelas</label>
-                <textarea id="catatan">Ananda telah menunjukkan usaha yang luar biasa di semester ini dan hasilnya sangat membanggakan. Tetap semangat dan teruslah berprestasi.</textarea>
-            </div>
-        </div>
-
-        <!-- INPUT NAMA TANDA TANGAN (DINAMIS) -->
-        <div class="form-section">
-            <div class="section-title">NAMA PENANDATANGAN RAPOR</div>
-            <div class="row">
-                <div class="col"><label>Tempat, Tanggal Rapor</label><input type="text" id="titimangsa" value="Kepanjen, 21 Juni 2025"></div>
-                <div class="col"><label>Nama Orang Tua / Wali</label><input type="text" id="nama_ortu" value="Daimatus Sadriyah"></div>
-            </div>
-            <div class="row">
-                <div class="col"><label>Nama Wali Kelas</label><input type="text" id="nama_walas" value="Darin Intan Nur A.S, S.Pd"></div>
-                <div class="col"><label>Nama Kepala Sekolah</label><input type="text" id="nama_kepsek" value="Nama Kepala Sekolah, S.Pd"></div>
-            </div>
-        </div>
-
-        <button type="submit" class="btn-block">PROSES & TAMPILKAN PRATINJAU RAPOR</button>
-    </form>
-
-    <!-- ================= AREA PRATINJAU SIAP CETAK ================= -->
-    <div class="print-area" id="printArea">
-
-        <div class="print-action-bar">
-            <button onclick="window.print()" class="btn-print">
-                <span>🖨️</span> Cetak Lembar Rapor / Simpan PDF
-            </button>
-        </div>
-
-        <h3 style="text-transform: uppercase; letter-spacing: 1px;">LAPORAN HASIL BELAJAR</h3>
-        <h3 style="margin-bottom:20px; font-weight: bold;">PENILAIAN SUMATIF AKHIR TAHUN</h3>
-
-        <div class="report-header">
-            <table style="width: 100%;">
-                <tr>
-                    <td style="width: 18%;">Nama Peserta Didik</td><td style="width: 37%;">: <strong id="lbl_nama"></strong></td>
-                    <td style="width: 15%;">Kelas</td><td style="width: 30%;">: <span id="lbl_kelas"></span></td>
-                </tr>
-                <tr>
-                    <td>NISN</td><td>: <span id="lbl_nisn"></span></td>
-                    <td>Fase</td><td>: <span id="lbl_fase"></span></td>
-                </tr>
-                <tr>
-                    <td>Sekolah</td><td>: <span id="lbl_sekolah"></span></td>
-                    <td>Semester</td><td>: <span id="lbl_semester"></span></td>
-                </tr>
-                <tr>
-                    <td>Alamat</td><td>: <span id="lbl_alamat"></span></td>
-                    <td>Tahun Pelajaran</td><td>: <span id="lbl_tapel"></span></td>
-                </tr>
-            </table>
-        </div>
-
-        <table class="printable-table">
-            <thead>
-                <tr>
-                    <th style="width: 5%;">No</th>
-                    <th style="width: 35%;">Muatan Pelajaran</th>
-                    <th style="width: 12%;">Nilai Akhir</th>
-                    <th style="width: 48%;">Capaian Kompetensi</th>
-                </tr>
-            </thead>
-            <tbody id="print_table_body"></tbody>
-        </table>
-
-        <h4 style="margin: 15px 0 5px 0;">Ekstrakurikuler</h4>
-        <table>
-            <thead>
-                <tr>
-                    <th style="width: 5%;">No</th>
-                    <th style="width: 35%;">Ekstrakurikuler</th>
-                    <th style="width: 12%;">Nilai</th>
-                    <th style="width: 48%;">Keterangan</th>
-                </tr>
-            </thead>
-            <tbody id="print_ekskul_body"></tbody>
-        </table>
-
-        <div style="border: 1px solid #000; padding: 8px; margin: 15px 0; font-weight: bold; background: #f1f2f6; text-align: center;">
-            <span id="lbl_kenaikan"></span>
-        </div>
-
-        <p style="text-align: justify;"><strong>Catatan Wali Kelas:</strong> <span id="lbl_catatan"></span></p>
-
-        <!-- Box Tabel Ketidakhadiran -->
-        <div class="ketidakhadiran-box">
-            <table style="width: 35%; margin-top:15px; margin-bottom: 25px;">
-                <tr class="sub-header"><td colspan="2" class="center">Ketidakhadiran</td></tr>
-                <tr><td>Sakit</td><td class="center"><span id="lbl_sakit"></span> hari</td></tr>
-                <tr><td>Izin</td><td class="center"><span id="lbl_izin"></span> hari</td></tr>
-                <tr><td>Tanpa Keterangan</td><td class="center"><span id="lbl_alpa"></span> hari</td></tr>
-            </table>
-        </div>
-
-        <!-- ================= FIX TABEL TANDA TANGAN MURNI (ANTI POTONG) ================= -->
-        <table class="table-ttd">
-            <tr>
-                <td style="width: 40%; text-align: center; vertical-align: top;">
-                    <br>
-                    Orang Tua/Wali,
-                    <div class="space-ttd"></div>
-                    <strong><span id="lbl_nama_ortu"></span></strong>
-                </td>
-                <td style="width: 20%;"></td> <!-- Spasi Tengah Kosong -->
-                <td style="width: 40%; text-align: center; vertical-align: top;">
-                    <span id="lbl_titimangsa"></span><br>
-                    Wali Kelas,
-                    <div class="space-ttd"></div>
-                    <strong><u><span id="lbl_nama_walas"></span></u></strong>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="3" style="text-align: center; vertical-align: top; padding-top: 20px;">
-                    Mengetahui,<br>
-                    Kepala Sekolah
-                    <div class="space-ttd"></div>
-                    <strong><u><span id="lbl_nama_kepsek"></span></u></strong>
-                </td>
-            </tr>
-        </table>
-
+            <button type="submit" class="btn-login">Masuk</button>
+            <div id="errorMessage" class="error-message">Username atau Password salah!</div>
+        </form>
     </div>
-</div>
 
-<script>
-    const kamusKompetensi = {
-        pai: {
-            paham: "menunjukkan pemahaman dalam meyakini bahwa pergaulan bebas dan zina merupakan larangan agama, Meyakini bahwa sikap temperamental (ghadhab) merupakan larangan dan sikap kontrol diri dan berani adalah perintah agama, menganalisis cabang iman hakikat mencintai Allah SWT, Khauf, raja' dan tawakal kepada-Nya, menganalisis cabang iman hakikat mencintai Allah SWT, Khauf, raja' dan tawakal kepada-Nya,",
-            bimbingan: "membutuhkan bimbingan dalam meningkatkan konsistensi penerapan sikap kontrol diri di lingkungan sekolah."
-        },
-        pancasila: {
-            paham: "menunjukkan pemahaman dalam memahami dan mengamalkan nilai-nilai Pancasila,",
-            bimbingan: "membutuhkan bimbingan dalam memahami sistem pemerintahan di Indonesia,"
-        },
-        indo: {
-            paham: "menunjukkan pemahaman dalam Teks Biografi,",
-            bimbingan: "membutuhkan bimbingan dalam Hikayat,"
-        },
-        pjok: {
-            paham: "menunjukkan pemahaman dalam mempraktikkan kombinasi pola gerak dominan (bertumpu, bergantung, keseimbangan, berpindah/lokomotor, tolakan, putaran, ayunan, melayang, dan mendarat) untuk membentuk keterampilan dasar senam menggunakan alat sesuai potensi dan kreativitas yang dimiliki,",
-            bimbingan: "membutuhkan bimbingan dalam memahami konsep dan prinsip pergaulan yang sehat antar remaja dan menjaga diri dari kehamilan pada usia sekolah,"
-        },
-        sejarah: {
-            paham: "menunjukkan pemahaman dalam mengidentifikasi kelebihan dan kelemahan teori masuknya Islam di Indonesia ,",
-            bimbingan: "membutuhkan bimbingan dalam menganalisis cara penyebaran agama Islam di Indonesia ,"
-        },
-        seni: {
-            paham: "menunjukkan pemahaman dalam merancang karya seni rupa 3 dimensi,",
-            bimbingan: "membutuhkan bimbingan dalam mempersiapkan alat dan bahan dalam pembuatan karya seni rupa 3 dimensi, proses pembuatan karya seni rupa 3 dimensi, membagikan hasil karya seni rupa 3 dimensi,"
-        },
-        math: {
-            paham: "menunjukkan pemahaman dalam menentukan ingkaran dari suatu pernyataan,",
-            bimbingan: "membutuhkan bimbingan dalam menentukan nilai kebenaran dari suatu pernyataan majemuk dan berkuantor,"
-        },
-        inggris: {
-            paham: "menunjukkan pemahaman dalam membedakan dan menggunakan regular dan irregular verb dalam konteks past events., membuat kalimat Simple Past Tense dengan memperhatikan fungsi sosial, struktur, dan unsur kebahasaan. , membuat kalimat present perfect tense dengan memperhatikan fungsi sosial, struktur, dan unsur kebahasaan. , memahami fungsi sosial, struktur, dan unsur kebahasaan dalam Procedure Text lalu menyusun teks tulis sederhana.,",
-            bimbingan: "membutuhkan bimbingan dalam memahami fungsi sosial, struktur, dan unsur kebahasaan dalam Recount Text lalu menyusun teks tulis sederhana.,"
-        },
-        info: {
-            paham: "menunjukkan pemahaman dalam Memahami perintah-perintah dasar dan menu dasar pada pada microsoft office word,",
-            bimbingan: "membutuhkan bimbingan dalam Memahami perintah-perintah dasar, rumus dasar dan menu dasar pada pada microsoft excel,"
-        },
-        ipas: {
-            paham: "menunjukkan pemahaman dalam memahami konsep-konsep dasar ilmu ekonomi dan mengidentifikasi berbagai kegiatan ekonomi dan perilaku ekonomi,",
-            bimbingan: "membutuhkan bimbingan dalam menelaah konsep energi dan usaha,, serta mampu mengaitkan hubungan energi dengan usaha.,"
-        },
-        dpk: {
-            paham: "menunjukkan pemahaman dalam Memahami proses penyimpanan, pemindahan, olah digital dan pencetakan gambar, Memahami dasar komponen komputer, alat input output, mekanisme transfer data, dan instalasi, Memahami perkembangan teknologi mikroprosesor, manfaat bagi kehidupan manusia dan troubleshooting PC,",
-            bimbingan: "membutuhkan bimbingan dalam Memahami perangkat kamera, jenis perangkat kamera, mengatur ketajaman gambar dan sudut pandang pengambilan kamera,"
-        },
-        mulok: {
-            paham: "menunjukkan pemahaman dalam mengidentifikasi karakteristik bahasa dalam teks sastra dan teks non sastra, mengklasifikasikan jenis basa rinengga dalam teks,",
-            bimbingan: "membutuhkan bimbingan dalam menganalisis bacaan dan menjawab pertanyaan ,"
-        }
-    };
+    <div id="mainPage" class="main-dashboard">
+        <h1>Selamat Datang, Guru!</h1>
+        <p>Anda telah berhasil masuk ke Halaman Utama Sistem Informasi Sekolah. Di sini Anda dapat mengelola data nilai, absensi, dan materi pembelajaran.</p>
+        <button id="btnLogout" class="btn-logout">Keluar (Logout)</button>
+    </div>
 
-    function generateCapaianDeskripsi(mapelKey, nilai, namaSiswa) {
-        if (!nilai || isNaN(nilai)) return "";
-        const data = kamusKompetensi[mapelKey];
-        if (!data) return "";
+    <script>
+        const loginPage = document.getElementById('loginPage');
+        const mainPage = document.getElementById('mainPage');
+        const loginForm = document.getElementById('loginForm');
+        const errorMessage = document.getElementById('errorMessage');
+        const btnLogout = document.getElementById('btnLogout');
 
-        let n = parseInt(nilai);
-        if (n >= 85) {
-            return `${namaSiswa} ${data.paham}`;
-        } else if (n >= 75 && n < 85) {
-            return `${namaSiswa} ${data.paham}\n\n${namaSiswa} ${data.bimbingan}`;
-        } else {
-            return `${namaSiswa} ${data.bimbingan}`;
-        }
-    }
+        // Event saat form login disubmit
+        loginForm.addEventListener('submit', function(event) {
+            event.preventDefault(); // Menahan refresh halaman
 
-    document.querySelectorAll('.nilai-input').forEach(element => {
-        element.addEventListener('input', function() {
-            const mapelKey = this.getAttribute('data-mapel');
-            const nilaiVal = this.value;
-            const namaSiswa = document.getElementById('nama').value || "Siswa";
-            document.getElementById('d_' + mapelKey).value = generateCapaianDeskripsi(mapelKey, nilaiVal, namaSiswa);
-        });
-    });
+            const usernameInput = document.getElementById('username').value;
+            const passwordInput = document.getElementById('password').value;
 
-    document.getElementById('raportForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-
-        const fields = ['nama', 'kelas', 'nisn', 'fase', 'sekolah', 'semester', 'alamat', 'tapel', 'kenaikan', 'sakit', 'izin', 'alpa', 'catatan', 'titimangsa', 'nama_ortu', 'nama_walas', 'nama_kepsek'];
-        fields.forEach(f => {
-            document.getElementById('lbl_' + f).innerText = document.getElementById(f).value;
-        });
-
-        const susunanMapel = [
-            { id: 'pai', name: 'Pendidikan Agama Islam dan Budi Pekerti', group: 'A. Kelompok Mata Pelajaran Umum', start: true },
-            { id: 'pancasila', name: 'Pendidikan Pancasila' },
-            { id: 'indo', name: 'Bahasa Indonesia' },
-            { id: 'pjok', name: 'Pendidikan Jasmani, Olahraga, dan Kesehatan' },
-            { id: 'sejarah', name: 'Sejarah' },
-            { id: 'seni', name: 'Seni Budaya' },
-            { id: 'math', name: 'Matematika', group: 'B. Kelompok Mata Pelajaran Kejuruan', start: true },
-            { id: 'inggris', name: 'Bahasa Inggris' },
-            { id: 'info', name: 'Informatika' },
-            { id: 'ipas', name: 'Projek Ilmu Pengetahuan Alam dan Sosial' },
-            { id: 'dpk', name: 'Dasar Program Keahlian' },
-            { id: 'mulok', name: 'Muatan Lokal', group: 'C. Muatan Lokal', start: true }
-        ];
-
-        let htmlTabel = '';
-        let nomor = 1;
-
-        susunanMapel.forEach(item => {
-            if (item.start) {
-                htmlTabel += `<tr class="sub-header"><td colspan="4">${item.group}</td></tr>`;
-                nomor = 1;
+            // Validasi statis
+            if (usernameInput === 'guru' && passwordInput === 'guru123') {
+                // Sembunyikan halaman login, tampilkan halaman utama
+                loginPage.style.display = 'none';
+                mainPage.style.display = 'block';
+                
+                // Reset form dan error message agar bersih saat logout nanti
+                loginForm.reset();
+                errorMessage.style.display = 'none';
+            } else {
+                // Tampilkan pesan error jika salah
+                errorMessage.style.display = 'block';
             }
-            const nilaiAkhir = document.getElementById('n_' + item.id).value || "-";
-            const teksDeskripsi = document.getElementById('d_' + item.id).value || "-";
-            const deskripsiFormatted = teksDeskripsi.replace(/\n/g, '<br>');
-
-            htmlTabel += `<tr>
-                <td class="center">${nomor}</td>
-                <td>${item.name}</td>
-                <td class="center" style="font-weight:bold;">${nilaiAkhir}</td>
-                <td style="text-align:justify; font-size:11.5px;">${deskripsiFormatted}</td>
-            </tr>`;
-            nomor++;
         });
-        document.getElementById('print_table_body').innerHTML = htmlTabel;
 
-        let htmlEkskul = `<tr><td class="center">1</td><td>${document.getElementById('e1_nama').value}</td><td class="center">${document.getElementById('e1_nilai').value}</td><td>${document.getElementById('e1_ket').value}</td></tr>`;
-        htmlEkskul += `<tr><td class="center">2</td><td>${document.getElementById('e2_nama').value}</td><td class="center">${document.getElementById('e2_nilai').value}</td><td>${document.getElementById('e2_ket').value}</td></tr>`;
-        document.getElementById('print_ekskul_body').innerHTML = htmlEkskul;
-
-        document.getElementById('printArea').style.display = 'block';
-        document.getElementById('printArea').scrollIntoView({ behavior: 'smooth' });
-    });
-</script>
+        // Event saat tombol logout diklik
+        btnLogout.addEventListener('click', function() {
+            // Sembunyikan halaman utama, tampilkan kembali halaman login
+            mainPage.style.display = 'none';
+            loginPage.style.display = 'block';
+        });
+    </script>
 
 </body>
 </html>
