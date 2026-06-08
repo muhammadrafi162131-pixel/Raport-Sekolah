@@ -108,25 +108,27 @@
         /* Gaya Khusus Area Output Cetak */
         .print-area { display: none; background: white; color: black; padding: 30px; border: 2px solid #000; margin-top: 40px; border-radius: 4px; }
         
-        /* Container khusus Logo di atas Judul */
-        .logo-center-wrapper {
+        /* Pembungkus Khusus Logo Sentral Atas Judul */
+        .kop-cetak-container {
             text-align: center;
-            margin-bottom: 15px;
+            width: 100%;
+            margin-bottom: 25px;
         }
-        .logo-center-wrapper img {
-            width: 105px;
+        .kop-cetak-container img {
+            width: 110px;
             height: auto;
-            display: inline-block;
+            display: block;
+            margin: 0 auto 15px auto; /* Ketetapan logo di tengah-tengah atas */
         }
 
-        /* Batas Pemisah Setelah Identitas Siswa */
+        /* Batas Pemisah Desain */
         .identity-divider {
             border-bottom: 2px dashed #000;
             margin-top: 15px;
             margin-bottom: 20px;
         }
 
-        .report-header table { border: none; margin-bottom: 0; }
+        .report-header table { border: none; margin-bottom: 0; width: 100%; }
         .report-header td { border: none; padding: 4px 2px; font-size: 13.5px; }
         .printable-table td { line-height: 1.5; }
 
@@ -354,17 +356,18 @@
             </button>
         </div>
 
-        <!-- LOGO TERPUSAT DI ATAS JUDUL -->
-        <div class="logo-center-wrapper">
+        <!-- STRUKTUR KOP UTAMA: LOGO DI ATAS JUDUL -->
+        <div class="kop-cetak-container">
+            <!-- Logo Sekolah Murni Paling Atas Tengah -->
             <img src="image_05f785.jpg" alt="Logo SMK Al Kaaffah">
+            
+            <h3 style="text-transform: uppercase; letter-spacing: 1px; margin-top: 10px;">LAPORAN HASIL BELAJAR</h3>
+            <h3 style="margin-bottom: 25px; font-weight: bold;">PENILAIAN SUMATIF AKHIR TAHUN</h3>
         </div>
 
-        <h3 style="text-transform: uppercase; letter-spacing: 1px;">LAPORAN HASIL BELAJAR</h3>
-        <h3 style="margin-bottom:25px; font-weight: bold;">PENILAIAN SUMATIF AKHIR TAHUN</h3>
-
-        <!-- BLOK DATA IDENTITAS SISWA -->
+        <!-- BLOK DATA IDENTITAS SISWA (DI BAWAH JUDUL) -->
         <div class="report-header">
-            <table style="width: 100%;">
+            <table>
                 <tr>
                     <td style="width: 20%;">Nama Peserta Didik</td><td style="width: 40%;">: <strong id="lbl_nama"></strong></td>
                     <td style="width: 15%;">Kelas</td><td style="width: 25%;">: <span id="lbl_kelas"></span></td>
@@ -384,7 +387,7 @@
             </table>
         </div>
 
-        <!-- Garis Pemisah Desain -->
+        <!-- Garis Pemisah Desain Rapor -->
         <div class="identity-divider"></div>
 
         <table class="printable-table">
