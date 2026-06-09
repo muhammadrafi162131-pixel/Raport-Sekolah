@@ -67,8 +67,7 @@
 
         @media print {
             body { background: white; }
-            .app-layout { display: block; }
-            .sidebar, .main-panel { display: none !important; }
+            .app-layout { display: none !important; }
             #print_isolated_wrapper { display: block !important; position: absolute; top:0; left:0; width:100%; }
             .table-ttd { page-break-inside: avoid !important; }
         }
@@ -335,7 +334,6 @@
 <div id="print_isolated_wrapper" class="hidden"></div>
 
 <script>
-    // Data Sinkronisasi NISN Otomatis sesuai Nama
     const dbSiswaNisn = {
         "ABDULLOH SAJAD": "3086299358",
         "SITI AMINAH": "3087541299",
@@ -343,7 +341,6 @@
         "CHELSEA OLIVIA": "3083349102"
     };
 
-    // Kamus Kompetensi Sesuai File Asli Anda
     const kamusKompetensi = {
         pai: {
             paham: "menunjukkan pemahaman dalam meyakini bahwa pergaulan bebas dan zina merupakan larangan agama, Meyakini bahwa sikap temperamental (ghadhab) merupakan larangan dan sikap kontrol diri dan berani adalah perintah agama, menganalisis cabang iman hakikat mencintai Allah SWT, Khauf, raja' dan tawakal kepada-Nya, menganalisis cabang iman hakikat mencintai Allah SWT, Khauf, raja' dan tawakal kepada-Nya,",
@@ -397,12 +394,10 @@
 
     let arrayDatabaseLaporan = [];
 
-    // Mengeset Kalender Secara Otomatis Ke Hari Ini Saat Aplikasi Dibuka
     window.addEventListener('DOMContentLoaded', () => {
         const hariIni = new Date().toISOString().split('T')[0];
         document.getElementById('kalender_tgl').value = hariIni;
         updateNisnMekanik();
-        pemicuKalkulasiDeskripsiOtomatis();
     });
 
     function updateNisnMekanik() {
@@ -411,7 +406,6 @@
         pemicuKalkulasiDeskripsiOtomatis();
     }
 
-    // Mengganti Tab Menu Atas/Samping Sidebar
     function switchTab(contentId, tabId) {
         document.querySelectorAll('.tab-content-panel').forEach(panel => panel.classList.add('hidden'));
         document.querySelectorAll('.sidebar-menu li').forEach(li => li.classList.remove('active'));
@@ -419,7 +413,6 @@
         document.getElementById(tabId).classList.add('active');
     }
 
-    // Kalkulator Generator Narasi Deskripsi Otomatis Kurikulum Merdeka
     function hitungDeskripsiString(mapelKey, nilai, namaSiswa) {
         if (!nilai || isNaN(nilai)) return "";
         const data = kamusKompetensi[mapelKey];
@@ -442,7 +435,6 @@
         element.addEventListener('input', pemicuKalkulasiDeskripsiOtomatis);
     });
 
-    // PROSES TOMBOL SUBMIT (MENU 1)
     document.getElementById('raportForm').addEventListener('submit', function(e) {
         e.preventDefault();
 
@@ -487,20 +479,15 @@
 
         arrayDatabaseLaporan.push(dataSubmit);
 
-        // Tampilkan Output Ringkasan di Bawah Menu 1
         document.getElementById('outSiswa').innerText = dataSubmit.nama;
         document.getElementById('outKelas').innerText = dataSubmit.kelas;
         document.getElementById('outKeputusan').innerText = dataSubmit.kenaikan;
         document.getElementById('outputSubmitMenu1').classList.remove('hidden');
 
-        // Segarkan Data di Menu Tabel Ketiga
         renderTabelMenu3Kolektif();
-
-        // Gulir Otomatis ke Kotak Hasil
         document.getElementById('outputSubmitMenu1').scrollIntoView({ behavior: 'smooth' });
     });
 
-    // RE-RENDER TABEL LAPORAN (MENU 3)
     function renderTabelMenu3Kolektif() {
         const tbody = document.getElementById('tbodyLaporanMenu3');
         if(arrayDatabaseLaporan.length === 0) {
@@ -529,7 +516,6 @@
         }
     }
 
-    // MANAJEMEN DOWNLOAD CSV TEMPLATE SISWA (MENU 2)
     function downloadTemplateCSV() {
         let csv = "data:text/csv;charset=utf-8,No,Nama Siswa,Kelas\n1,ABDULLOH SAJAD,X (sepuluh)\n2,SITI AMINAH,XI (sebelas)\n3,BUDI SANTOSO,XII (dua belas)\n";
         const link = document.createElement("a");
@@ -540,7 +526,6 @@
         document.body.removeChild(link);
     }
 
-    // UPLOAD CSV TEMPLATE SISWA (MENU 2)
     function uploadTemplateCSV(input) {
         const file = input.files[0];
         if (!file) return;
@@ -569,13 +554,11 @@
         reader.readAsText(file);
     }
 
-    // TOMBOL PRINT INDIVIDU CEPAT DI MENU 2
     function printCepatSiswa(nama, kelas) {
         const hub = document.getElementById('print_isolated_wrapper');
         hub.innerHTML = `
             <div class="print-area">
                 <div class="kop-cetak-container">
-                    <img src="image_05f785.jpg" alt="Logo">
                     <h2 style="margin-top:10px;">LAPORAN PRESENSI AKTIF SISWA</h2>
                     <h3>SMK AL KAAFFAH MALANG</h3>
                 </div>
@@ -585,12 +568,10 @@
                     <tr><td style="font-weight:bold;">Kelas</td><td>: ${kelas}</td></tr>
                     <tr><td style="font-weight:bold;">Status</td><td>: Terdaftar / Aktif</td></tr>
                 </table>
-                <p style="text-align:center; font-style:italic; margin-top:50px; color:#555;">Dicetak otomatis oleh sistem manajemen kurikulum merdeka.</p>
             </div>`;
         window.print();
     }
 
-    // PRINT FORMAT RAPOR LENGKAP STRUKTUR MULTI-HALAMAN ANTI POTONG (DARI MENU 3)
     function eksekusiCetakRaporID(id) {
         const d = arrayDatabaseLaporan.find(item => item.id === id);
         if(!d) return;
@@ -632,7 +613,6 @@
         hub.innerHTML = `
             <div class="print-area">
                 <div class="kop-cetak-container">
-                    <img src="image_05f785.jpg" alt="Logo Al Kaaffah">
                     <h3 style="text-transform: uppercase; margin-top:5px;">LAPORAN HASIL BELAJAR</h3>
                     <h4 style="margin:4px 0;">PROGRAM KEAHLIAN: ${d.program.toUpperCase()}</h4>
                 </div>
