@@ -3,26 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Software Raport Kurikulum Merdeka - Advance Sidebar & Multi-Menu</title>
+    <title>Software Raport Kurikulum Merdeka - Panel Utama & Multi Menu</title>
     <style>
         * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         body { background-color: #4b6584; margin: 0; padding: 0; min-height: 100vh; }
         
         .hidden { display: none !important; }
 
-        /* STRUCTURE: SIDEBAR & MAIN PANEL */
+        /* STRUKTUR UTAMA: SIDEBAR & PANEL UTAMA */
         .app-layout { display: grid; grid-template-columns: 280px 1fr; min-height: 100vh; }
 
-        /* SIDEBAR STYLES */
+        /* NAVIGASI SIDEBAR */
         .sidebar { background-color: #2c3e50; color: #ecf0f1; padding: 25px 0; display: flex; flex-direction: column; border-right: 1px solid #1a252f; }
         .sidebar-brand { padding: 0 20px 20px 20px; border-bottom: 1px solid #34495e; margin-bottom: 20px; }
-        .sidebar-brand h3 { margin: 0; font-size: 16px; letter-spacing: 1px; color: #3498db; }
-        .sidebar-brand h2 { margin: 5px 0 0 0; font-size: 20px; color: #ffffff; text-align: left; }
+        .sidebar-brand h3 { margin: 0; font-size: 14px; letter-spacing: 1px; color: #3498db; }
+        .sidebar-brand h2 { margin: 5px 0 0 0; font-size: 18px; color: #ffffff; }
         .sidebar-menu { list-style: none; padding: 0; margin: 0; flex: 1; }
         .sidebar-menu li a { display: block; padding: 15px 20px; color: #bdc3c7; text-decoration: none; font-weight: 600; font-size: 14px; transition: all 0.2s; border-left: 4px solid transparent; cursor: pointer; }
         .sidebar-menu li a:hover, .sidebar-menu li.active a { color: #ffffff; background-color: #34495e; border-left-color: #27ae60; }
         
-        /* MAIN PANEL STYLES */
+        /* PANEL UTAMA (MAIN PANEL) */
         .main-panel { background-color: #f5f6fa; padding: 30px; overflow-y: auto; height: 100vh; }
         .panel-content { background: #ffffff; padding: 25px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
 
@@ -36,14 +36,14 @@
         textarea { resize: vertical; height: 75px; font-size: 13px; line-height: 1.4; }
         .auto-textarea { background-color: #f1f2f6; color: #2c3e50; font-style: italic; }
 
-        /* Table Styles */
+        /* Desain Tabel di Dalam Panel */
         table { width: 100%; border-collapse: collapse; margin-bottom: 20px; background: #fff; }
         th, td { border: 1px solid #cbd5e1; padding: 10px; font-size: 13px; text-align: left; vertical-align: top; }
         th { background-color: #f1f2f6; color: #2c3e50; }
         .sub-header { background-color: #dfe4ea; font-weight: bold; }
         .center { text-align: center; }
         
-        /* Buttons */
+        /* Tombol Aksi */
         .btn-block { background-color: #27ae60; color: white; border: none; padding: 14px; font-size: 16px; font-weight: bold; border-radius: 4px; cursor: pointer; width: 100%; margin-top: 10px; }
         .btn-block:hover { background-color: #219a52; }
         .btn-action { padding: 6px 12px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 12px; margin-right: 5px; display: inline-flex; align-items: center; gap: 4px; }
@@ -51,13 +51,12 @@
         .btn-p-red { background-color: #e74c3c; color: white; }
         .btn-tools { background-color: #2c3e50; color: white; padding: 8px 15px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 13px; margin-right: 10px; }
 
-        /* Output Box Bottom Menu 1 */
+        /* Kotak Output Ringkasan di Bawah Form Menu 1 */
         .output-box { margin-top: 25px; padding: 20px; border: 2px dashed #27ae60; background: #f0fff4; border-radius: 6px; }
 
-        /* PRINT LAYOUT MECHANICAL */
+        /* KONFIGURASI CETAK RAPOR ISOLASI */
         .print-area { background: white; color: black; padding: 30px; border: 1px solid #000; border-radius: 4px; }
         .kop-cetak-container { text-align: center; width: 100%; margin-bottom: 25px; }
-        .kop-cetak-container img { width: 110px; display: block; margin: 0 auto 10px auto; }
         .identity-divider { border-bottom: 2px dashed #000; margin: 15px 0 20px 0; }
         .report-header table { border: none; width: 100%; }
         .report-header td { border: none; padding: 4px 2px; font-size: 13.5px; }
@@ -80,11 +79,11 @@
     <aside class="sidebar">
         <div class="sidebar-brand">
             <h3>SMK AL KAAFFAH</h3>
-            <h2>Sistem Rapor</h2>
+            <h2>Sistem Manajemen Rapor</h2>
         </div>
         <ul class="sidebar-menu">
-            <li class="active" id="tab-nilai" onclick="switchTab('menu-nilai', 'tab-nilai')"><a>📝 Nilai Akademik & Profil</a></li>
-            <li id="tab-siswa" onclick="switchTab('menu-siswa', 'tab-siswa')"><a>👥 Data Siswa & Template</a></li>
+            <li class="active" id="tab-nilai" onclick="switchTab('menu-nilai', 'tab-nilai')"><a>📝 Nilai Akademik & Siswa</a></li>
+            <li id="tab-siswa" onclick="switchTab('menu-siswa', 'tab-siswa')"><a>👥 Template Data Siswa</a></li>
             <li id="tab-laporan" onclick="switchTab('menu-laporan', 'tab-laporan')"><a>📊 Laporan Hasil Submit</a></li>
         </ul>
     </aside>
@@ -98,10 +97,9 @@
                         <div class="section-title">DATA SISWA & SEKOLAH</div>
                         <div class="row">
                             <div class="col">
-                                <label>Nama Peserta Didik (Pilih Siswa)</label>
+                                <label>Nama Peserta Didik</label>
                                 <select id="nama" onchange="updateNisnMekanik()" required>
-                                    <option value="" disabled selected>-- Pilih Siswa --</option>
-                                    <option value="ABDULLOH SAJAD">ABDULLOH SAJAD</option>
+                                    <option value="ABDULLOH SAJAD" selected>ABDULLOH SAJAD</option>
                                     <option value="SITI AMINAH">SITI AMINAH</option>
                                     <option value="BUDI SANTOSO">BUDI SANTOSO</option>
                                     <option value="CHELSEA OLIVIA">CHELSEA OLIVIA</option>
@@ -110,29 +108,29 @@
                             <div class="col">
                                 <label>Kelas</label>
                                 <select id="kelas" required>
-                                    <option value="X (sepuluh)">X (sepuluh)</option>
+                                    <option value="X (sepuluh)" selected>X (sepuluh)</option>
                                     <option value="XI (sebelas)">XI (sebelas)</option>
                                     <option value="XII (dua belas)">XII (dua belas)</option>
                                 </select>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col"><label>NISN (Otomatis)</label><input type="text" id="nisn" readonly placeholder="Pilih nama terlebih dahulu"></div>
+                            <div class="col"><label>NISN (Otomatis Berubah)</label><input type="text" id="nisn" readonly placeholder="Pilih siswa"></div>
                             <div class="col"><label>Fase</label><input type="text" id="fase" value="E"></div>
                         </div>
                         <div class="row">
                             <div class="col">
                                 <label>Program Keahlian</label>
                                 <select id="program" required>
-                                    <option value="Teknik Jaringan Komputer">Teknik Jaringan Komputer</option>
+                                    <option value="Teknik Jaringan Komputer" selected>Teknik Jaringan Komputer</option>
                                     <option value="Teknik Kendaraan Ringan">Teknik Kendaraan Ringan</option>
-                                    <option value="Teknik Audio Vidio">Teknik Audio Vidio</option>
+                                    <option value="Teknik Audio Video">Teknik Audio Video</option>
                                 </select>
                             </div>
                             <div class="col"><label>Semester</label><input type="text" id="semester" value="II (Dua)"></div>
                         </div>
                         <div class="row">
-                            <div class="col"><label>Tanggal Dokumen / Rapor (Kalender Otomatis)</label><input type="date" id="kalender_tgl" required></div>
+                            <div class="col"><label>Tanggal Rapor (Kalender)</label><input type="date" id="kalender_tgl" required></div>
                             <div class="col"><label>Tahun Pelajaran</label><input type="text" id="tapel" value="2025-2026"></div>
                         </div>
                         <div class="row">
@@ -251,7 +249,7 @@
                             <input type="text" id="kenaikan" value="ANANDA NAIK DI KELAS XI">
 
                             <label style="margin-top:10px;">Catatan Wali Kelas</label>
-                            <textarea id="catatan">Ananda telah menunjukkan usaha yang luar biasa di semester ini dan hasilnya sangat membanggakan. Tetap semangat dan teruslah berprestasi.</textarea>
+                            <textarea id="catatan">Ananda telah menunjukkan usaha yang luar biasa di semester ini dan hasilnya sangat membanggakan. Tetap semangat.</textarea>
                         </div>
                     </div>
 
@@ -267,14 +265,14 @@
                         </div>
                     </div>
 
-                    <button type="submit" class="btn-block">SUBMIT DATA RAPOR</button>
+                    <button type="submit" class="btn-block">SUBMIT DATA SISWA & NILAI AKADEMIK</button>
                 </form>
 
                 <div id="outputSubmitMenu1" class="output-box hidden">
-                    <h3>✅ Data Rapor Berhasil Disubmit!</h3>
+                    <h3 style="text-align: left; color:#27ae60;">✅ Ringkasan Berhasil Disubmit Ke Sistem</h3>
                     <p><strong>Nama Siswa:</strong> <span id="outSiswa"></span> (<span id="outKelas"></span>)</p>
-                    <p><strong>Status / Keputusan:</strong> <span id="outKeputusan" style="font-weight: bold; color: #27ae60;"></span></p>
-                    <p style="font-size: 12px; color: #666;">*Data laporan lengkap otomatis dikirim dan diperbarui ke tab menu ke-3 (Laporan Hasil Submit).</p>
+                    <p><strong>Keputusan Kenaikan:</strong> <span id="outKeputusan" style="font-weight: bold;"></span></p>
+                    <p style="font-size: 12px; color: #7f8c8d; margin-0;">*Data di atas telah terekam secara real-time dan dikirim langsung ke Panel Menu Ketiga (Laporan Hasil Submit).</p>
                 </div>
             </div>
 
@@ -287,7 +285,7 @@
                         <input type="file" id="uploadFile" class="hidden" accept=".csv" onchange="uploadTemplateCSV(this)">
                     </div>
 
-                    <table id="tableMenu2">
+                    <table>
                         <thead>
                             <tr>
                                 <th class="center" style="width: 8%;">No</th>
@@ -307,15 +305,15 @@
 
             <div id="menu-laporan" class="tab-content-panel hidden">
                 <div class="form-section">
-                    <div class="section-title">LAPORAN DETAIL HASIL SUBMIT DARI MENU 1</div>
+                    <div class="section-title">LAPORAN REKAPITULASI DATA HASIL SUBMIT DARI MENU 1</div>
                     <table id="tableLaporanKompleks">
                         <thead>
                             <tr>
                                 <th>Tanggal Input</th>
                                 <th>Nama Siswa</th>
-                                <th>Kelas / Program</th>
-                                <th>Keputusan</th>
-                                <th class="center" style="width: 20%;">Aksi setelah Print</th>
+                                <th>Kelas / Keahlian</th>
+                                <th>Keputusan Status</th>
+                                <th class="center" style="width: 20%;">Aksi Operasional</th>
                             </tr>
                         </thead>
                         <tbody id="tbodyLaporanMenu3">
@@ -334,6 +332,7 @@
 <div id="print_isolated_wrapper" class="hidden"></div>
 
 <script>
+    // Database NISN Otomatis Rekonsiliasi
     const dbSiswaNisn = {
         "ABDULLOH SAJAD": "3086299358",
         "SITI AMINAH": "3087541299",
@@ -342,58 +341,23 @@
     };
 
     const kamusKompetensi = {
-        pai: {
-            paham: "menunjukkan pemahaman dalam meyakini bahwa pergaulan bebas dan zina merupakan larangan agama, Meyakini bahwa sikap temperamental (ghadhab) merupakan larangan dan sikap kontrol diri dan berani adalah perintah agama, menganalisis cabang iman hakikat mencintai Allah SWT, Khauf, raja' dan tawakal kepada-Nya, menganalisis cabang iman hakikat mencintai Allah SWT, Khauf, raja' dan tawakal kepada-Nya,",
-            bimbingan: "membutuhkan bimbingan dalam meningkatkan konsistensi penerapan sikap kontrol diri di lingkungan sekolah."
-        },
-        pancasila: {
-            paham: "menunjukkan pemahaman dalam memahami dan mengamalkan nilai-nilai Pancasila,",
-            bimbingan: "membutuhkan bimbingan dalam memahami sistem pemerintahan di Indonesia,"
-        },
-        indo: {
-            paham: "menunjukkan pemahaman dalam Teks Biografi,",
-            bimbingan: "membutuhkan bimbingan dalam Hikayat,"
-        },
-        pjok: {
-            paham: "menunjukkan pemahaman dalam mempraktikkan kombinasi pola gerak dominan (bertumpu, bergantung, keseimbangan, berpindah/lokomotor, tolakan, putaran, ayunan, melayang, dan mendarat) untuk membentuk keterampilan dasar senam menggunakan alat sesuai potensi dan kreativitas yang dimiliki,",
-            bimbingan: "membutuhkan bimbingan dalam memahami konsep dan prinsip pergaulan yang sehat antar remaja dan menjaga diri dari kehamilan pada usia sekolah,"
-        },
-        sejarah: {
-            paham: "menunjukkan pemahaman dalam mengidentifikasi kelebihan dan kelemahan teori masuknya Islam di Indonesia ,",
-            bimbingan: "membutuhkan bimbingan dalam menganalisis cara penyebaran agama Islam di Indonesia ,"
-        },
-        seni: {
-            paham: "menunjukkan pemahaman dalam merancang karya seni rupa 3 dimensi,",
-            bimbingan: "membutuhkan bimbingan dalam mempersiapkan alat dan bahan dalam pembuatan karya seni rupa 3 dimensi, proses pembuatan karya seni rupa 3 dimensi, membagikan hasil karya seni rupa 3 dimensi,"
-        },
-        math: {
-            paham: "menunjukkan pemahaman dalam menentukan ingkaran dari suatu pernyataan,",
-            bimbingan: "membutuhkan bimbingan dalam menentukan nilai kebenaran dari suatu pernyataan majemuk dan berkuantor,"
-        },
-        inggris: {
-            paham: "menunjukkan pemahaman dalam membedakan dan menggunakan regular dan irregular verb dalam konteks past events., membuat kalimat Simple Past Tense dengan memperhatikan fungsi sosial, struktur, dan unsur kebahasaan. , membuat kalimat present perfect tense dengan memperhatikan fungsi sosial, struktur, dan unsur kebahasaan. , memahami fungsi sosial, struktur, dan unsur kebahasaan dalam Procedure Text lalu menyusun teks tulis sederhana.,",
-            bimbingan: "membutuhkan bimbingan dalam memahami fungsi sosial, struktur, dan unsur kebahasaan dalam Recount Text lalu menyusun teks tulis sederhana.,"
-        },
-        info: {
-            paham: "menunjukkan pemahaman dalam Memahami perintah-perintah dasar dan menu dasar pada pada microsoft office word,",
-            bimbingan: "membutuhkan bimbingan dalam Memahami perintah-perintah dasar, rumus dasar dan menu dasar pada pada microsoft excel,"
-        },
-        ipas: {
-            paham: "menunjukkan pemahaman dalam memahami konsep-konsep dasar ilmu ekonomi dan mengidentifikasi berbagai kegiatan ekonomi dan perilaku ekonomi,",
-            bimbingan: "membutuhkan bimbingan dalam menelaah konsep energi dan usaha,, serta mampu mengaitkan hubungan energi dengan usaha.,"
-        },
-        dpk: {
-            paham: "menunjukkan pemahaman dalam Memahami proses penyimpanan, pemindahan, olah digital dan pencetakan gambar, Memahami dasar komponen komputer, alat input output, mekanisme transfer data, dan instalasi, Memahami perkembangan teknologi mikroprosesor, manfaat bagi kehidupan manusia dan troubleshooting PC,",
-            bimbingan: "membutuhkan bimbingan dalam Memahami perangkat kamera, jenis perangkat kamera, mengatur ketajaman gambar dan sudut pandang pengambilan kamera,"
-        },
-        mulok: {
-            paham: "menunjukkan pemahaman dalam mengidentifikasi karakteristik bahasa dalam teks sastra dan teks non sastra, mengklasifikasikan jenis basa rinengga dalam teks,",
-            bimbingan: "membutuhkan bimbingan dalam menganalisis bacaan dan menjawab pertanyaan ,"
-        }
+        pai: { paham: "menunjukkan pemahaman dalam meyakini bahwa pergaulan bebas dan zina merupakan larangan agama...", bimbingan: "membutuhkan bimbingan dalam meningkatkan konsistensi penerapan sikap kontrol diri..." },
+        pancasila: { paham: "menunjukkan pemahaman dalam memahami dan mengamalkan nilai-nilai Pancasila,", bimbingan: "membutuhkan bimbingan dalam memahami sistem pemerintahan di Indonesia," },
+        indo: { paham: "menunjukkan pemahaman dalam Teks Biografi,", bimbingan: "membutuhkan bimbingan dalam Hikayat," },
+        pjok: { paham: "menunjukkan pemahaman dalam mempraktikkan kombinasi pola gerak dominan senam...", bimbingan: "membutuhkan bimbingan dalam memahami konsep dan prinsip pergaulan yang sehat..." },
+        sejarah: { paham: "menunjukkan pemahaman dalam mengidentifikasi kelebihan teori masuknya Islam...", bimbingan: "membutuhkan bimbingan dalam menganalisis cara penyebaran agama Islam..." },
+        seni: { paham: "menunjukkan pemahaman dalam merancang karya seni rupa 3 dimensi,", bimbingan: "membutuhkan bimbingan dalam mempersiapkan alat dan bahan seni rupa..." },
+        math: { paham: "menunjukkan pemahaman dalam menentukan ingkaran dari suatu pernyataan,", bimbingan: "membutuhkan bimbingan dalam menentukan nilai kebenaran dari suatu pernyataan majemuk..." },
+        inggris: { paham: "menunjukkan pemahaman dalam membedakan regular dan irregular verb...", bimbingan: "membutuhkan bimbingan dalam menyusun Procedure Text..." },
+        info: { paham: "menunjukkan pemahaman dalam Memahami perintah-perintah dasar microsoft office word,", bimbingan: "membutuhkan bimbingan dalam rumus dasar microsoft excel," },
+        ipas: { paham: "menunjukkan pemahaman dalam memahami konsep-konsep dasar ilmu ekonomi,", bimbingan: "membutuhkan bimbingan dalam menelaah konsep energi dan usaha..." },
+        dpk: { paham: "menunjukkan pemahaman dalam Memahami proses penyimpanan, pemindahan, olah digital gambar,", bimbingan: "membutuhkan bimbingan dalam perangkat kamera dan sudut pandang pengambilan kamera," },
+        mulok: { paham: "menunjukkan pemahaman dalam mengidentifikasi karakteristik bahasa dalam teks sastra,", bimbingan: "membutuhkan bimbingan dalam menganalisis bacaan dan menjawab pertanyaan," }
     };
 
     let arrayDatabaseLaporan = [];
 
+    // Set otomatis kalender hari ini sewaktu web dibuka
     window.addEventListener('DOMContentLoaded', () => {
         const hariIni = new Date().toISOString().split('T')[0];
         document.getElementById('kalender_tgl').value = hariIni;
@@ -435,6 +399,7 @@
         element.addEventListener('input', pemicuKalkulasiDeskripsiOtomatis);
     });
 
+    // SISTEM PENGIRIMAN DATA FORM MENU 1
     document.getElementById('raportForm').addEventListener('submit', function(e) {
         e.preventDefault();
 
@@ -477,17 +442,23 @@
             }
         };
 
+        // Masukkan data ke array penampung (Database lokal)
         arrayDatabaseLaporan.push(dataSubmit);
 
+        // Tampilkan Laporan Hasil Menu Pertama di bagian bawah form secara instan
         document.getElementById('outSiswa').innerText = dataSubmit.nama;
         document.getElementById('outKelas').innerText = dataSubmit.kelas;
         document.getElementById('outKeputusan').innerText = dataSubmit.kenaikan;
         document.getElementById('outputSubmitMenu1').classList.remove('hidden');
 
+        // Segera perbarui data di panel menu ketiga
         renderTabelMenu3Kolektif();
+
+        // Gulir layar otomatis agar pengguna melihat kotak ringkasan sukses
         document.getElementById('outputSubmitMenu1').scrollIntoView({ behavior: 'smooth' });
     });
 
+    // RENDERING DATA DI MANING PANEL MENU KETIGA
     function renderTabelMenu3Kolektif() {
         const tbody = document.getElementById('tbodyLaporanMenu3');
         if(arrayDatabaseLaporan.length === 0) {
@@ -510,7 +481,7 @@
     }
 
     function eksekusiHapusID(id) {
-        if(confirm("Apakah Anda ingin menghapus baris data laporan ini?")) {
+        if(confirm("Apakah Anda ingin menghapus baris laporan ini dari histori?")) {
             arrayDatabaseLaporan = arrayDatabaseLaporan.filter(item => item.id !== id);
             renderTabelMenu3Kolektif();
         }
@@ -558,20 +529,19 @@
         const hub = document.getElementById('print_isolated_wrapper');
         hub.innerHTML = `
             <div class="print-area">
-                <div class="kop-cetak-container">
-                    <h2 style="margin-top:10px;">LAPORAN PRESENSI AKTIF SISWA</h2>
-                    <h3>SMK AL KAAFFAH MALANG</h3>
-                </div>
+                <h2 style="text-align:center;">LAPORAN PRESENSI ELEKTRONIK</h2>
+                <h3 style="text-align:center;">SMK AL KAAFFAH MALANG</h3>
                 <div class="identity-divider"></div>
                 <table style="border:none;">
-                    <tr><td style="width:20%; font-weight:bold;">Nama Siswa</td><td>: ${nama}</td></tr>
+                    <tr><td style="width:25%; font-weight:bold;">Nama Siswa</td><td>: ${nama}</td></tr>
                     <tr><td style="font-weight:bold;">Kelas</td><td>: ${kelas}</td></tr>
-                    <tr><td style="font-weight:bold;">Status</td><td>: Terdaftar / Aktif</td></tr>
+                    <tr><td style="font-weight:bold;">Status Validasi</td><td>: Terdaftar Sistem Aktif</td></tr>
                 </table>
             </div>`;
         window.print();
     }
 
+    // MEKANISME ISOLASI CETAK UNTUK STRUKTUR MULTI-MENU
     function eksekusiCetakRaporID(id) {
         const d = arrayDatabaseLaporan.find(item => item.id === id);
         if(!d) return;
