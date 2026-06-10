@@ -39,22 +39,16 @@
                         <input type="text" id="username" class="w-full pl-9 pr-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm" required placeholder="admin">
                     </div>
                 </div>
-               <div class="flex flex-wrap gap-2 mb-4">
-    <button type="button" onclick="downloadTemplateExcel()" class="bg-green-600 hover:bg-green-700 text-white text-xs font-bold py-1.5 px-3 rounded shadow transition flex items-center">
-        <i class="fa-solid fa-file-arrow-down mr-1"></i> Download Template Kosong
-    </button>
-
-    <button type="button" onclick="document.getElementById('fileExcelInput').click()" class="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-1.5 px-3 rounded shadow transition flex items-center">
-        <i class="fa-solid fa-file-arrow-up mr-1"></i> Upload Template Excel
-    </button>
-    <input type="file" id="fileExcelInput" class="hidden" accept=".csv" onchange="bacaTemplateCSV(this)">
-</div>
-
-...
-
-<button type="button" onclick="triggerPrintHalaman()" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold py-1.5 px-3 rounded shadow transition flex items-center">
-    <i class="fa-solid fa-print mr-1"></i> Print Lembar Dokumen
-</button>
+                <div>
+                    <label class="block text-slate-700 text-xs font-bold uppercase mb-1">Password</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400"><i class="fa-solid fa-lock text-sm"></i></span>
+                        <input type="password" id="password" class="w-full pl-9 pr-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm" required placeholder="admin123">
+                    </div>
+                </div>
+                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 rounded-lg text-sm shadow transition duration-300">
+                    Masuk ke Sistem <i class="fa-solid fa-right-to-bracket ml-1"></i>
+                </button>
             </form>
         </div>
     </div>
@@ -88,7 +82,7 @@
                 <button id="btn-menu4" onclick="switchMenu(4)" class="w-full flex items-center gap-3 px-4 py-3 text-slate-300 hover:bg-slate-700 rounded-lg font-medium text-sm transition text-left">
                     <i class="fa-solid fa-gear w-5 text-center text-blue-400"></i> <span>Settings Sistem</span>
                 </button>
-                <button onclick="handleLogout()" class="w-full flex items-center gap-3 px-4 py-3 text-red-400 hover:bg-red-950/30 rounded-lg font-medium text-sm transition text-left">
+                <button type="button" onclick="handleLogout()" class="w-full flex items-center gap-3 px-4 py-3 text-red-400 hover:bg-red-950/30 rounded-lg font-medium text-sm transition text-left">
                     <i class="fa-solid fa-right-from-bracket w-5 text-center"></i> <span>Keluar / Logout</span>
                 </button>
             </div>
@@ -207,8 +201,8 @@
                     <div id="hasilLaporanBox" class="bg-white p-6 rounded-xl shadow border border-slate-200 hidden">
                         <div class="flex justify-between items-center mb-4 border-b pb-3 border-dashed">
                             <span class="text-sm font-bold text-slate-500 uppercase tracking-wider"><i class="fa-solid fa-eye text-blue-500"></i> Hasil Preview Dokumen Resmi</span>
-                            <button onclick="window.print()" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold py-1.5 px-3 rounded shadow transition">
-                                <i class="fa-solid fa-print mr-1"></i> Print Lembar Dokumen
+                            <button type="button" onclick="triggerPrintHalaman()" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold py-1.5 px-3 rounded shadow transition flex items-center gap-1">
+                                <i class="fa-solid fa-print"></i> Cetak Lembar Dokumen
                             </button>
                         </div>
                         
@@ -271,14 +265,15 @@
                 </div>
 
                 <div id="content-menu2" class="space-y-4 hidden">
-                    <div class="flex gap-3">
-                        <label class="bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold py-2 px-4 rounded-lg shadow transition cursor-pointer flex items-center gap-2">
-                            <i class="fa-solid fa-file-arrow-up"></i> Upload Template Excel (.csv)
-                            <input type="file" id="fileUploadInput" accept=".csv" class="hidden" onchange="bacaTemplateCSV(this)">
-                        </label>
-                        <button onclick="downloadTemplateExcel()" class="bg-amber-600 hover:bg-amber-700 text-white text-sm font-bold py-2 px-4 rounded-lg shadow transition flex items-center gap-2">
-                            <i class="fa-solid fa-file-arrow-down"></i> Download Template Untuk Excel (.csv)
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <button type="button" onclick="downloadTemplateExcel()" class="bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold py-2 px-4 rounded-lg shadow transition flex items-center gap-2">
+                            <i class="fa-solid fa-file-arrow-down"></i> Download Template Kosong (.csv)
                         </button>
+                        
+                        <button type="button" onclick="document.getElementById('fileUploadInput').click()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold py-2 px-4 rounded-lg shadow transition flex items-center gap-2">
+                            <i class="fa-solid fa-file-arrow-up"></i> Upload Template Excel (.csv)
+                        </button>
+                        <input type="file" id="fileUploadInput" accept=".csv" class="hidden" onchange="bacaTemplateCSV(this)">
                     </div>
 
                     <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
@@ -291,8 +286,7 @@
                                     <th class="p-3 text-center w-32">Aksi</th>
                                 </tr>
                             </thead>
-                            <tbody id="siswaTemplateTableBody" class="divide-y divide-slate-200">
-                                </tbody>
+                            <tbody id="siswaTemplateTableBody" class="divide-y divide-slate-200"></tbody>
                         </table>
                     </div>
                 </div>
@@ -308,8 +302,7 @@
                                 <th class="p-3 text-center w-28">Tombol Hapus</th>
                             </tr>
                         </thead>
-                        <tbody id="complexTableBody" class="divide-y divide-slate-200">
-                            </tbody>
+                        <tbody id="complexTableBody" class="divide-y divide-slate-200"></tbody>
                     </table>
                 </div>
 
@@ -362,7 +355,7 @@
         // Data Konfigurasi Default
         let appConfig = { pencarianOtomatis: true, statusOtomatis: true, nilaiKKM: 75 };
 
-        // Database Master Siswa (Bisa ditambah lewat upload CSV)
+        // Database Master Siswa
         let masterSiswa = [
             { nama: "Diana Alentisya Putri", nisn: "3082804200", keahlian: "Teknik Komputer dan Jaringan", kelas: "X (sepuluh)" },
             { nama: "Abdulloh Sajad", nisn: "3082804201", keahlian: "Teknik Komputer dan Jaringan", kelas: "X (sepuluh)" },
@@ -372,7 +365,6 @@
         // Riwayat Data yang telah disubmit
         let dataRekapRaport = [];
 
-        // Inisialisasi awal saat aplikasi dibuka
         window.onload = function() {
             renderSiswaTable();
         };
@@ -384,7 +376,6 @@
             const pass = document.getElementById('password').value;
             const errorMsg = document.getElementById('errorMsg');
 
-            // Akun default: admin | admin123
             if (user === 'admin' && pass === 'admin123') {
                 errorMsg.classList.add('hidden');
                 document.getElementById('loginPage').classList.add('hidden');
@@ -403,7 +394,6 @@
 
         // 2. Sistem Navigasi Menu
         function switchMenu(menuId) {
-            // Sembunyikan semua menu kontainer
             for (let i = 1; i <= 4; i++) {
                 document.getElementById('content-menu' + i).classList.add('hidden');
                 const btn = document.getElementById('btn-menu' + i);
@@ -412,16 +402,13 @@
                 }
             }
 
-            // Tampilkan menu yang aktif
             document.getElementById('content-menu' + menuId).classList.remove('hidden');
             
-            // Ubah style tombol menu aktif
             const activeBtn = document.getElementById('btn-menu' + menuId);
             if(activeBtn) {
                 activeBtn.className = "w-full flex items-center gap-3 px-4 py-3 bg-blue-600 text-white rounded-lg font-medium text-sm transition text-left";
             }
 
-            // Ubah Header Judul Halaman
             const titles = {
                 1: "Menu 1: Form Input Raport",
                 2: "Menu 2: Data Siswa & Template",
@@ -448,7 +435,6 @@
 
         // 4. Proses Submit Form dan Pembuatan Preview Raport
         function processSubmitRaport() {
-            // Ambil data profil
             const nama = document.getElementById('siswaNama').value;
             const nisn = document.getElementById('siswaNisn').value;
             const keahlian = document.getElementById('siswaKeahlian').value;
@@ -456,7 +442,6 @@
             const kelas = document.getElementById('siswaKelas').value;
             const semester = document.getElementById('siswaSemester').value;
 
-            // Set ke label dokumen cetak
             document.getElementById('lblNama').innerText = nama;
             document.getElementById('lblNisn').innerText = nisn;
             document.getElementById('lblKeahlian').innerText = keahlian;
@@ -465,7 +450,6 @@
             document.getElementById('lblTanggal').innerText = tanggal;
             document.getElementById('lblTanggalTtd').innerText = tanggal;
 
-            // Ambil seluruh nilai angka & deskripsi dari tabel input
             let totalNilai = 0;
             let diBawahKkm = false;
 
@@ -482,7 +466,6 @@
                 }
             }
 
-            // Aturan Kalkulasi Kelulusan Otomatis (KKM)
             const lblStatus = document.getElementById('lblStatusKelulusan');
             if (appConfig.statusOtomatis) {
                 if (diBawahKkm) {
@@ -497,21 +480,28 @@
                 lblStatus.className = "text-sm font-black px-3 py-1 rounded text-white bg-slate-500";
             }
 
-            // Masukkan ke Menu 3 (Laporan Kompleks Rekap) jika belum ada
             if(!dataRekapRaport.some(r => r.nisn === nisn)) {
                 dataRekapRaport.push({ nama, nisn, keahlian });
                 renderRekapTable();
             }
 
-            // Tampilkan kotak preview laporan dokumen resmi
             document.getElementById('hasilLaporanBox').classList.remove('hidden');
-            // Scroll otomatis ke tampilan berkas
             document.getElementById('hasilLaporanBox').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // ========================================================
+        // PERBAIKAN TOTAL: FUNGSI CETAK PRINT (AMAN UNTUK EVENT JAVASCRIPT)
+        // ========================================================
+        function triggerPrintHalaman() {
+            // Kita gunakan window.print() bawaan browser karena CSS @media print 
+            // sudah dikonfigurasi dengan sangat baik di baris 11-16 berkas Anda.
+            window.print();
         }
 
         // 5. Render Data Tabel Menu 2
         function renderSiswaTable() {
             const tbody = document.getElementById('siswaTemplateTableBody');
+            if(!tbody) return;
             tbody.innerHTML = "";
             masterSiswa.forEach((siswa, index) => {
                 tbody.innerHTML += `
@@ -520,14 +510,13 @@
                         <td class="p-3 font-semibold text-slate-700">${siswa.nama}</td>
                         <td class="p-3">${siswa.kelas}</td>
                         <td class="p-3 text-center">
-                            <button onclick="pilihSiswaCetak('${siswa.nama}')" class="bg-blue-600 text-white text-xs font-bold py-1 px-3 rounded hover:bg-blue-700">Pilih & Input</button>
+                            <button type="button" onclick="pilihSiswaCetak('${siswa.nama.replace(/'/g, "\\'")}')" class="bg-blue-600 text-white text-xs font-bold py-1 px-3 rounded hover:bg-blue-700">Pilih & Input</button>
                         </td>
                     </tr>
                 `;
             });
         }
 
-        // Fungsi saat tombol "Pilih & Input" di Menu 2 diklik
         function pilihSiswaCetak(namaSiswa) {
             const siswa = masterSiswa.find(s => s.nama === namaSiswa);
             if(siswa) {
@@ -543,6 +532,7 @@
         // 6. Render Data Laporan Rekap Menu 3
         function renderRekapTable() {
             const tbody = document.getElementById('complexTableBody');
+            if(!tbody) return;
             tbody.innerHTML = "";
             dataRekapRaport.forEach((rekap, index) => {
                 tbody.innerHTML += `
@@ -551,10 +541,10 @@
                         <td class="p-3 font-semibold text-slate-700">${rekap.nama}</td>
                         <td class="p-3">${rekap.keahlian}</td>
                         <td class="p-3 text-center">
-                            <button onclick="pilihSiswaCetak('${rekap.nama}')" class="text-blue-600 font-bold hover:underline"><i class="fa-solid fa-print"></i> Open</button>
+                            <button type="button" onclick="pilihSiswaCetak('${rekap.nama.replace(/'/g, "\\'")}')" class="text-blue-600 font-bold hover:underline"><i class="fa-solid fa-print"></i> Open</button>
                         </td>
                         <td class="p-3 text-center">
-                            <button onclick="hapusBarisRekap(this, '${rekap.nisn}')" class="text-red-600 font-bold hover:underline"><i class="fa-solid fa-trash"></i> Hapus</button>
+                            <button type="button" onclick="hapusBarisRekap(this, '${rekap.nisn}')" class="text-red-600 font-bold hover:underline"><i class="fa-solid fa-trash"></i> Hapus</button>
                         </td>
                     </tr>
                 `;
@@ -584,51 +574,77 @@
             alert("Konfigurasi sistem berhasil disimpan!");
         }
 
-        // 8. Fitur Download Format CSV / Excel Template
+        // ========================================================
+        // PERBAIKAN TOTAL: DOWNLOAD TEMPLATE KOSONG (DUAL FORMAT EXCEL)
+        // ========================================================
         function downloadTemplateExcel() {
-            let csvContent = "data:text/csv;charset=utf-8,Nama,NISN,Keahlian,Kelas\n";
+            // Gunakan sep=; agar Excel Indonesia otomatis mengenali kolom secara terpisah
+            let csvContent = "sep=;\nNama;NISN;Keahlian;Kelas\n";
             masterSiswa.forEach(s => {
-                csvContent += `"${s.nama}","${s.nisn}","${s.keahlian}","${s.kelas}"\n`;
+                csvContent += `"${s.nama}";"${s.nisn}";"${s.keahlian}";"${s.kelas}"\n`;
             });
-            const encodedUri = encodeURI(csvContent);
+
+            // Tambahkan BOM UTF-8 (\uFEFF) agar simbol karakter terbaca sempurna di Microsoft Excel Windows
+            const blob = new Blob([new Uint8Array([0xEF, 0xBB, 0xBF]), csvContent], { type: 'text/csv;charset=utf-8;' });
             const link = document.createElement("a");
-            link.setAttribute("href", encodedUri);
+            const url = URL.createObjectURL(blob);
+            
+            link.setAttribute("href", url);
             link.setAttribute("download", "template_siswa_alkaaffah.csv");
+            link.style.visibility = 'hidden';
+            
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
         }
 
-        // 9. Fitur Upload CSV Data Siswa Baru ke Tabel
+        // ========================================================
+        // PERBAIKAN TOTAL: UPLOAD TEMPLATE EXCEL (KOMPATIBEL DENGAN EXCEL)
+        // ========================================================
         function bacaTemplateCSV(input) {
             const file = input.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    const text = e.target.result;
-                    const baris = text.split("\n");
-                    
-                    // Lewati baris pertama (header)
-                    for (let i = 1; i < baris.length; i++) {
-                        if (baris[i].trim() === "") continue;
-                        const kolom = baris[i].split(",");
-                        
-                        // Bersihkan tanda kutip jika ada
-                        const nama = kolom[0].replace(/['"]+/g, '');
-                        const nisn = kolom[1].replace(/['"]+/g, '');
-                        const keahlian = kolom[2].replace(/['"]+/g, '');
-                        const kelas = kolom[3] ? kolom[3].replace(/['"]+/g, '') : "X (sepuluh)";
+            if (!file) return;
 
-                        // Validasi agar tidak duplikat
-                        if(!masterSiswa.some(s => s.nisn === nisn)) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const text = e.target.result;
+                const baris = text.split("\n");
+                
+                let barisMulai = 1;
+                // Deteksi jika dokumen memiliki baris metadata pemisah 'sep='
+                if (baris[0].trim().startsWith("sep=")) {
+                    barisMulai = 2;
+                }
+
+                let jumlahDataBaru = 0;
+
+                for (let i = barisMulai; i < baris.length; i++) {
+                    const lineText = baris[i].trim();
+                    if (lineText === "") continue;
+                    
+                    // Deteksi otomatis pembatas kolom (apakah menggunakan titik koma ';' atau koma ',')
+                    const separator = lineText.includes(";") ? ";" : ",";
+                    const kolom = lineText.split(separator);
+                    
+                    if (kolom.length >= 3) {
+                        const nama = kolom[0].replace(/['"]+/g, '').trim();
+                        const nisn = kolom[1].replace(/['"]+/g, '').trim();
+                        const keahlian = kolom[2].replace(/['"]+/g, '').trim();
+                        const kelas = kolom[3] ? kolom[3].replace(/['"]+/g, '').trim() : "X (sepuluh)";
+
+                        // Validasi string tidak kosong dan NISN tidak boleh duplikat
+                        if(nama && nisn && !masterSiswa.some(s => s.nisn === nisn)) {
                             masterSiswa.push({ nama, nisn, keahlian, kelas });
+                            jumlahDataBaru++;
                         }
                     }
-                    renderSiswaTable();
-                    alert("Data berkas .CSV berhasil di-import ke sistem!");
-                };
-                reader.readAsText(file);
-            }
+                }
+                
+                renderSiswaTable();
+                alert(`Impor Sukses! Berhasil menambahkan ${jumlahDataBaru} data siswa baru ke sistem.`);
+                input.value = ''; // Reset input agar file yang sama bisa di-upload ulang
+            };
+            reader.readAsText(file);
         }
     </script>
 </body>
