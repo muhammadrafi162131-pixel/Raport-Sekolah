@@ -39,16 +39,22 @@
                         <input type="text" id="username" class="w-full pl-9 pr-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm" required placeholder="admin">
                     </div>
                 </div>
-                <div>
-                    <label class="block text-slate-700 text-xs font-bold uppercase mb-1">Password</label>
-                    <div class="relative">
-                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400"><i class="fa-solid fa-lock text-sm"></i></span>
-                        <input type="password" id="password" class="w-full pl-9 pr-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm" required placeholder="admin123">
-                    </div>
-                </div>
-               <button type="button" onclick="triggerPrintHalaman()" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold py-1.5 px-3 rounded shadow transition">
-       <i class="fa-solid fa-print mr-1"></i> Print Lembar Dokumen
-   </button>
+               <div class="flex flex-wrap gap-2 mb-4">
+    <button type="button" onclick="downloadTemplateExcel()" class="bg-green-600 hover:bg-green-700 text-white text-xs font-bold py-1.5 px-3 rounded shadow transition flex items-center">
+        <i class="fa-solid fa-file-arrow-down mr-1"></i> Download Template Kosong
+    </button>
+
+    <button type="button" onclick="document.getElementById('fileExcelInput').click()" class="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-1.5 px-3 rounded shadow transition flex items-center">
+        <i class="fa-solid fa-file-arrow-up mr-1"></i> Upload Template Excel
+    </button>
+    <input type="file" id="fileExcelInput" class="hidden" accept=".csv" onchange="bacaTemplateCSV(this)">
+</div>
+
+...
+
+<button type="button" onclick="triggerPrintHalaman()" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold py-1.5 px-3 rounded shadow transition flex items-center">
+    <i class="fa-solid fa-print mr-1"></i> Print Lembar Dokumen
+</button>
             </form>
         </div>
     </div>
