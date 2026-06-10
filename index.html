@@ -17,6 +17,7 @@
 </head>
 <body class="bg-slate-100 text-slate-800 font-sans h-screen overflow-hidden">
 
+    <!-- LOGIN PAGE -->
     <div id="loginPage" class="flex items-center justify-center h-screen w-full bg-slate-900 absolute inset-0 z-50 transition-all duration-500">
         <div class="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-sm border border-slate-200">
             <div class="text-center mb-6">
@@ -53,8 +54,10 @@
         </div>
     </div>
 
+    <!-- MAIN DASHBOARD -->
     <div id="mainDashboard" class="hidden flex h-screen w-full">
         
+        <!-- SIDEBAR -->
         <div class="w-64 bg-slate-800 text-white flex flex-col justify-between h-screen flex-shrink-0 shadow-xl">
             <div>
                 <div class="p-5 text-lg font-bold bg-slate-900 flex items-center gap-3 border-b border-slate-700">
@@ -88,6 +91,7 @@
             </div>
         </div>
 
+        <!-- MAIN CONTENT AREA -->
         <div class="flex-1 flex flex-col overflow-hidden bg-slate-50">
             
             <header class="bg-white shadow-sm border-b border-slate-200 px-8 py-4 flex justify-between items-center flex-shrink-0">
@@ -99,6 +103,7 @@
 
             <div class="flex-1 overflow-y-auto p-8">
                 
+                <!-- CONTENT MENU 1 -->
                 <div id="content-menu1" class="space-y-6">
                     <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
                         <div class="text-center border-b border-slate-200 pb-4 mb-6">
@@ -108,86 +113,190 @@
                         
                         <div class="mb-5 bg-blue-50 p-3 rounded-lg border border-blue-100 flex items-center gap-3">
                             <label class="text-xs font-bold text-blue-800 shrink-0"><i class="fa-solid fa-magnifying-glass"></i> Pencarian Cepat:</label>
-                            <input type="text" id="searchBar" oninput="liveSearchSiswa(this.value)" placeholder="Ketikkan nama siswa di sini... (Contoh: Diana atau Abdulloh)" class="w-full px-3 py-1 border border-slate-300 rounded text-sm focus:outline-none focus:border-blue-500">
+                            <input type="text" id="searchBar" oninput="liveSearchSiswa(this.value)" placeholder="Ketikkan nama siswa di sini..." class="w-full px-3 py-1 border border-slate-300 rounded text-sm focus:outline-none focus:border-blue-500">
                         </div>
 
                         <form id="raportForm" onsubmit="event.preventDefault(); processSubmitRaport();" class="space-y-6">
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <!-- Profil Informasi Berdasarkan Screenshot -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-slate-50 p-4 rounded-xl border mb-4">
                                 <div>
                                     <label class="block text-xs font-bold text-slate-700 mb-1">Nama Peserta Didik</label>
                                     <input type="text" id="siswaNama" value="Diana Alentisya Putri" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:border-blue-500" required>
-                                </div>
-                                <div>
-                                    <label class="block text-xs font-bold text-slate-700 mb-1">NISN</label>
-                                    <input type="text" id="siswaNisn" value="3082804200" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:border-blue-500" required>
-                                </div>
-                                <div>
-                                    <label class="block text-xs font-bold text-slate-700 mb-1">Program Keahlian</label>
-                                    <input type="text" id="siswaKeahlian" value="Teknik Komputer dan Jaringan" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:border-blue-500" required>
-                                </div>
-                                <div>
-                                    <label class="block text-xs font-bold text-slate-700 mb-1">Tanggal Cetak Raport</label>
-                                    <input type="date" id="raportTanggal" value="2026-06-08" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:border-blue-500" required>
                                 </div>
                                 <div>
                                     <label class="block text-xs font-bold text-slate-700 mb-1">Kelas</label>
                                     <input type="text" id="siswaKelas" value="X (sepuluh)" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:border-blue-500" required>
                                 </div>
                                 <div>
-                                    <label class="block text-xs font-bold text-slate-700 mb-1">Semester & Tahun Pelajaran</label>
-                                    <input type="text" id="siswaSemester" value="II (Dua) / 2025-2026" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:border-blue-500" required>
+                                    <label class="block text-xs font-bold text-slate-700 mb-1">NISN</label>
+                                    <input type="text" id="siswaNisn" value="3082804200" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:border-blue-500" required>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 mb-1">Fase</label>
+                                    <input type="text" id="siswaFase" value="E" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:border-blue-500" required>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 mb-1">Sekolah</label>
+                                    <input type="text" id="siswaSekolah" value="SMK AL KAAFFAH" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:border-blue-500" required>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 mb-1">Semester</label>
+                                    <input type="text" id="siswaSemester" value="II (Dua)" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:border-blue-500" required>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 mb-1">Alamat</label>
+                                    <input type="text" id="siswaAlamat" value="Jalan Semeru No.18 A Dilem Kepanjen" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:border-blue-500" required>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 mb-1">Tahun Pelajaran</label>
+                                    <input type="text" id="siswaTahunAjar" value="2024-2025" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:border-blue-500" required>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 mb-1">Program Keahlian</label>
+                                    <input type="text" id="siswaKeahlian" value="Teknik Komputer dan Jaringan" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:border-blue-500" required>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 mb-1">Tanggal Cetak Dokumen</label>
+                                    <input type="date" id="raportTanggal" value="2026-06-08" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:border-blue-500" required>
                                 </div>
                             </div>
 
-                            <div class="overflow-x-auto">
-                                <table class="w-full border-collapse border border-slate-200 text-sm">
-                                    <thead>
-                                        <tr class="bg-slate-100 text-slate-700">
-                                            <th class="border border-slate-200 p-2 w-12 text-center">No</th>
-                                            <th class="border border-slate-200 p-2 text-left">Muatan Pelajaran (Mata Pelajaran)</th>
-                                            <th class="border border-slate-200 p-2 w-24 text-center">Nilai Akhir</th>
-                                            <th class="border border-slate-200 p-2 text-left">Capaian Kompetensi (Deskripsi)</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td class="border border-slate-200 p-2 text-center">1</td>
-                                            <td class="border border-slate-200 p-2 font-medium">Pendidikan Agama Islam dan Budi Pekerti</td>
-                                            <td class="border border-slate-200 p-2"><input type="number" id="n1" value="80" class="w-full p-1 border text-center rounded focus:ring-1 focus:ring-blue-500"></td>
-                                            <td class="border border-slate-200 p-2"><textarea id="c1" class="w-full p-1 border rounded text-xs h-16">Menunjukkan pemahaman dalam meyakini bahwa pergaulan bebas dan zina merupakan larangan agama. Membutuhkan bimbingan dalam meningkatkan konsistensi penerapan sikap kontrol diri.</textarea></td>
-                                        </tr>
-                                        <tr>
-                                            <td class="border border-slate-200 p-2 text-center">2</td>
-                                            <td class="border border-slate-200 p-2 font-medium">Pendidikan Pancasila</td>
-                                            <td class="border border-slate-200 p-2"><input type="number" id="n2" value="78" class="w-full p-1 border text-center rounded focus:ring-1 focus:ring-blue-500"></td>
-                                            <td class="border border-slate-200 p-2"><textarea id="c2" class="w-full p-1 border rounded text-xs h-16">Menunjukkan pemahaman dalam memahami dan mengamalkan nilai-nilai Pancasila. Membutuhkan bimbingan dalam memahami sistem pemerintahan di Indonesia.</textarea></td>
-                                        </tr>
-                                        <tr>
-                                            <td class="border border-slate-200 p-2 text-center">3</td>
-                                            <td class="border border-slate-200 p-2 font-medium">Bahasa Indonesia</td>
-                                            <td class="border border-slate-200 p-2"><input type="number" id="n3" value="81" class="w-full p-1 border text-center rounded focus:ring-1 focus:ring-blue-500"></td>
-                                            <td class="border border-slate-200 p-2"><textarea id="c3" class="w-full p-1 border rounded text-xs h-16">Menunjukkan pemahaman dalam Teks Biografi. Membutuhkan bimbingan dalam materi Hikayat.</textarea></td>
-                                        </tr>
-                                        <tr>
-                                            <td class="border border-slate-200 p-2 text-center">4</td>
-                                            <td class="border border-slate-200 p-2 font-medium">Pendidikan Jasmani, Olahraga, dan Kesehatan</td>
-                                            <td class="border border-slate-200 p-2"><input type="number" id="n4" value="78" class="w-full p-1 border text-center rounded focus:ring-1 focus:ring-blue-500"></td>
-                                            <td class="border border-slate-200 p-2"><textarea id="c4" class="w-full p-1 border rounded text-xs h-16">Menunjukkan pemahaman dalam mempraktikkan kombinasi pola gerak dominan senam. Membutuhkan bimbingan dalam memahami konsep pergaulan sehat antar remaja.</textarea></td>
-                                        </tr>
-                                        <tr>
-                                            <td class="border border-slate-200 p-2 text-center">5</td>
-                                            <td class="border border-slate-200 p-2 font-medium">Sejarah</td>
-                                            <td class="border border-slate-200 p-2"><input type="number" id="n5" value="80" class="w-full p-1 border text-center rounded focus:ring-1 focus:ring-blue-500"></td>
-                                            <td class="border border-slate-200 p-2"><textarea id="c5" class="w-full p-1 border rounded text-xs h-16">Menunjukkan pemahaman dalam mengidentifikasi kelebihan dan kelemahan teori masuknya Islam ke Indonesia. Membutuhkan bimbingan dalam menganalisis cara penyebaran agama Islam.</textarea></td>
-                                        </tr>
-                                        <tr>
-                                            <td class="border border-slate-200 p-2 text-center">6</td>
-                                            <td class="border border-slate-200 p-2 font-medium">Seni Budaya</td>
-                                            <td class="border border-slate-200 p-2"><input type="number" id="n6" value="83" class="w-full p-1 border text-center rounded focus:ring-1 focus:ring-blue-500"></td>
-                                            <td class="border border-slate-200 p-2"><textarea id="c6" class="w-full p-1 border rounded text-xs h-16">Menunjukkan pemahaman yang sangat baik dalam merancang karya seni rupa 3 dimensi secara kreatif.</textarea></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                            <!-- Form Input Nilai per Kategori -->
+                            <div class="space-y-6">
+                                <!-- Kategori A -->
+                                <div>
+                                    <h3 class="text-sm font-bold text-slate-800 mb-2 border-b pb-1">A. Kelompok Mata Pelajaran Umum</h3>
+                                    <div class="overflow-x-auto">
+                                        <table class="w-full border text-sm">
+                                            <thead>
+                                                <tr class="bg-slate-100">
+                                                    <th class="border p-2 w-12 text-center">No</th>
+                                                    <th class="border p-2 text-left">Muatan Pelajaran</th>
+                                                    <th class="border p-2 w-24 text-center">Nilai Akhir</th>
+                                                    <th class="border p-2 text-left">Capaian Kompetensi</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td class="border p-2 text-center">1</td>
+                                                    <td class="border p-2 font-medium">Pendidikan Agama Islam dan Budi Pekerti</td>
+                                                    <td class="border p-2"><input type="number" id="n1" value="80" class="w-full p-1 border text-center rounded"></td>
+                                                    <td class="border p-2"><textarea id="c1" class="w-full p-1 border rounded text-xs h-16">Diana Alentisya Putri menunjukkan pemahaman dalam meyakini bahwa pergaulan bebas dan zina merupakan larangan agama...&#10;&#10;Diana Alentisya Putri membutuhkan bimbingan dalam meningkatkan konsistensi penerapan sikap kontrol diri di lingkungan sekolah.</textarea></td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="border p-2 text-center">2</td>
+                                                    <td class="border p-2 font-medium">Pendidikan Pancasila</td>
+                                                    <td class="border p-2"><input type="number" id="n2" value="78" class="w-full p-1 border text-center rounded"></td>
+                                                    <td class="border p-2"><textarea id="c2" class="w-full p-1 border rounded text-xs h-16">Diana Alentisya Putri menunjukkan pemahaman dalam memahami dan mengamalkan nilai-nilai Pancasila,&#10;&#10;Diana Alentisya Putri membutuhkan bimbingan dalam memahami sistem pemerintahan di Indonesia,</textarea></td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="border p-2 text-center">3</td>
+                                                    <td class="border p-2 font-medium">Bahasa Indonesia</td>
+                                                    <td class="border p-2"><input type="number" id="n3" value="81" class="w-full p-1 border text-center rounded"></td>
+                                                    <td class="border p-2"><textarea id="c3" class="w-full p-1 border rounded text-xs h-16">Diana Alentisya Putri menunjukkan pemahaman dalam Teks Biografi,&#10;&#10;Diana Alentisya Putri membutuhkan bimbingan dalam materi Hikayat,</textarea></td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="border p-2 text-center">4</td>
+                                                    <td class="border p-2 font-medium">Pendidikan Jasmani, Olahraga, dan Kesehatan</td>
+                                                    <td class="border p-2"><input type="number" id="n4" value="78" class="w-full p-1 border text-center rounded"></td>
+                                                    <td class="border p-2"><textarea id="c4" class="w-full p-1 border rounded text-xs h-16">Diana Alentisya Putri menunjukkan pemahaman dalam mempraktikkan kombinasi pola gerak dominan...&#10;&#10;Diana Alentisya Putri membutuhkan bimbingan dalam memahami konsep dan prinsip pergaulan yang sehat antar remaja...</textarea></td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="border p-2 text-center">5</td>
+                                                    <td class="border p-2 font-medium">Sejarah</td>
+                                                    <td class="border p-2"><input type="number" id="n5" value="80" class="w-full p-1 border text-center rounded"></td>
+                                                    <td class="border p-2"><textarea id="c5" class="w-full p-1 border rounded text-xs h-16">Diana Alentisya Putri menunjukkan pemahaman dalam mengidentifikasi kelebihan dan kelemahan teori masuknya Islam ke Indonesia ,&#10;&#10;Diana Alentisya Putri membutuhkan bimbingan dalam menganalisis cara penyebaran agama Islam di Indonesia ,</textarea></td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="border p-2 text-center">6</td>
+                                                    <td class="border p-2 font-medium">Seni Budaya</td>
+                                                    <td class="border p-2"><input type="number" id="n6" value="83" class="w-full p-1 border text-center rounded"></td>
+                                                    <td class="border p-2"><textarea id="c6" class="w-full p-1 border rounded text-xs h-16">Diana Alentisya Putri menunjukkan pemahaman dalam merancang karya seni rupa 3 dimensi,</textarea></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <!-- Kategori B -->
+                                <div>
+                                    <h3 class="text-sm font-bold text-slate-800 mb-2 border-b pb-1">B. Kelompok Mata Pelajaran Kejuruan</h3>
+                                    <div class="overflow-x-auto">
+                                        <table class="w-full border text-sm">
+                                            <thead>
+                                                <tr class="bg-slate-100">
+                                                    <th class="border p-2 w-12 text-center">No</th>
+                                                    <th class="border p-2 text-left">Muatan Pelajaran</th>
+                                                    <th class="border p-2 w-24 text-center">Nilai Akhir</th>
+                                                    <th class="border p-2 text-left">Capaian Kompetensi</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td class="border p-2 text-center">1</td>
+                                                    <td class="border p-2 font-medium">Matematika</td>
+                                                    <td class="border p-2"><input type="number" id="n7" value="85" class="w-full p-1 border text-center rounded"></td>
+                                                    <td class="border p-2"><textarea id="c7" class="w-full p-1 border rounded text-xs h-16">Menunjukkan pemahaman yang sangat baik dalam perhitungan logika matematika dan matriks.</textarea></td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="border p-2 text-center">2</td>
+                                                    <td class="border p-2 font-medium">Bahasa Inggris</td>
+                                                    <td class="border p-2"><input type="number" id="n8" value="82" class="w-full p-1 border text-center rounded"></td>
+                                                    <td class="border p-2"><textarea id="c8" class="w-full p-1 border rounded text-xs h-16">Menunjukkan kelancaran dalam menyusun teks deskriptif dan percakapan transaksional.</textarea></td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="border p-2 text-center">3</td>
+                                                    <td class="border p-2 font-medium">Informatika</td>
+                                                    <td class="border p-2"><input type="number" id="n9" value="88" class="w-full p-1 border text-center rounded"></td>
+                                                    <td class="border p-2"><textarea id="c9" class="w-full p-1 border rounded text-xs h-16">Sangat terampil dalam memahami algoritma pemrograman dasar dan berpikir komputasional.</textarea></td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="border p-2 text-center">4</td>
+                                                    <td class="border p-2 font-medium">Projek Ilmu Pengetahuan Alam dan Sosial</td>
+                                                    <td class="border p-2"><input type="number" id="n10" value="80" class="w-full p-1 border text-center rounded"></td>
+                                                    <td class="border p-2"><textarea id="c10" class="w-full p-1 border rounded text-xs h-16">Menunjukkan pemahaman dalam mengamati fenomena alam dan hubungannya dengan aspek sosial.</textarea></td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="border p-2 text-center">5</td>
+                                                    <td class="border p-2 font-medium">Dasar Program Keahlian</td>
+                                                    <td class="border p-2"><input type="number" id="n11" value="86" class="w-full p-1 border text-center rounded"></td>
+                                                    <td class="border p-2"><textarea id="c11" class="w-full p-1 border rounded text-xs h-16">Sangat baik dalam mempraktikkan instalasi jaringan lokal dan perakitan perangkat keras komputer.</textarea></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <!-- Kategori C & Ekstra -->
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <h3 class="text-sm font-bold text-slate-800 mb-2 border-b pb-1">C. Muatan Lokal</h3>
+                                        <table class="w-full border text-sm">
+                                            <tbody>
+                                                <tr>
+                                                    <td class="border p-2 font-medium">Muatan Lokal (Bahasa Daerah/Khas)</td>
+                                                    <td class="border p-2 w-24"><input type="number" id="n12" value="80" class="w-full p-1 border text-center rounded"></td>
+                                                    <td class="border p-2"><input type="text" id="c12" value="Menunjukkan pemahaman dalam penulisan aksara dan unggah-ungguh bahasa." class="w-full p-1 border text-xs rounded"></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-sm font-bold text-slate-800 mb-2 border-b pb-1">Ekstrakurikuler</h3>
+                                        <table class="w-full border text-sm">
+                                            <tbody>
+                                                <tr>
+                                                    <td class="border p-2 font-medium" width="40%">1. Pramuka</td>
+                                                    <td class="border p-2"><input type="text" id="ekstra1" value="Sangat Baik, aktif dalam berbagai kegiatan kepramukaan dan disiplin." class="w-full p-1 border text-xs rounded"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="border p-2 font-medium">2. PMR / Olahraga</td>
+                                                    <td class="border p-2"><input type="text" id="ekstra2" value="Baik, menunjukkan kerja sama tim yang solid." class="w-full p-1 border text-xs rounded"></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
                             </div>
 
                             <div class="flex justify-end">
@@ -198,6 +307,7 @@
                         </form>
                     </div>
 
+                    <!-- BOX HASIL PREVIEW RAPORT -->
                     <div id="hasilLaporanBox" class="bg-white p-6 rounded-xl shadow border border-slate-200 hidden">
                         <div class="flex justify-between items-center mb-4 border-b pb-3 border-dashed">
                             <span class="text-sm font-bold text-slate-500 uppercase tracking-wider"><i class="fa-solid fa-eye text-blue-500"></i> Hasil Preview Dokumen Resmi</span>
@@ -206,53 +316,86 @@
                             </button>
                         </div>
                         
-                        <div id="printArea" class="p-8 border border-slate-300 bg-white text-slate-900 mx-auto max-w-4xl">
-                            <div class="text-center border-b-4 border-double border-slate-800 pb-3 mb-6">
-                                <h3 class="text-xl font-bold uppercase tracking-wide">Laporan Hasil Belajar (Raport)</h3>
-                                <p class="text-base font-bold uppercase">SMK AL KAAFFAH MALANG</p>
-                                <p class="text-xs text-slate-500 lowercase">Jalan Semeru No.18 A Dilem Kepanjen Malang</p>
+                        <!-- AREA CETAK ADAPTASI TOTAL DARI SCREENSHOT -->
+                        <div id="printArea" class="p-8 border border-slate-300 bg-white text-slate-900 mx-auto max-w-4xl text-xs">
+                            <div class="text-center pb-1 mb-4">
+                                <div class="font-bold text-base tracking-wide uppercase">Laporan Hasil Belajar</div>
+                                <div class="font-bold text-base tracking-wide uppercase">Penilaian Sumatif Akhir Tahun</div>
                             </div>
 
-                            <table class="w-full text-xs mb-4">
-                                <tr>
-                                    <td class="py-1 font-semibold" width="18%">Nama Siswa</td><td width="2%">:</td><td width="30%" id="lblNama" class="font-bold text-sm">-</td>
-                                    <td class="py-1 font-semibold" width="18%">Kelas</td><td width="2%">:</td><td width="30%" id="lblKelas">-</td>
-                                </tr>
-                                <tr>
-                                    <td class="py-1 font-semibold">NISN</td><td>:</td><td id="lblNisn">-</td>
-                                    <td class="py-1 font-semibold">Semester</td><td>:</td><td id="lblSemester">-</td>
-                                </tr>
-                                <tr>
-                                    <td class="py-1 font-semibold">Program Keahlian</td><td>:</td><td id="lblKeahlian">-</td>
-                                    <td class="py-1 font-semibold">Tanggal Cetak</td><td>:</td><td id="lblTanggal">-</td>
-                                </tr>
-                            </table>
+                            <!-- Layout Grid Header Informasi -->
+                            <div class="grid grid-cols-2 gap-x-8 mb-4 border-b pb-3 border-slate-300">
+                                <table class="w-full">
+                                    <tr><td width="35%" class="py-0.5">Nama Peserta Didik</td><td width="3%">:</td><td class="font-bold uppercase" id="lblNama">-</td></tr>
+                                    <tr><td class="py-0.5">NISN</td><td>:</td><td id="lblNisn">-</td></tr>
+                                    <tr><td class="py-0.5">Sekolah</td><td>:</td><td id="lblSekolah">-</td></tr>
+                                    <tr><td class="py-0.5">Alamat</td><td>:</td><td id="lblAlamat">-</td></tr>
+                                </table>
+                                <table class="w-full">
+                                    <tr><td width="35%" class="py-0.5">Kelas</td><td width="3%">:</td><td id="lblKelas">-</td></tr>
+                                    <tr><td class="py-0.5">Fase</td><td>:</td><td id="lblFase">-</td></tr>
+                                    <tr><td class="py-0.5">Semester</td><td>:</td><td id="lblSemester">-</td></tr>
+                                    <tr><td class="py-0.5">Tahun Pelajaran</td><td>:</td><td id="lblTahunAjar">-</td></tr>
+                                </table>
+                            </div>
 
                             <table class="w-full border-collapse border border-slate-800 text-xs">
                                 <thead>
-                                    <tr class="bg-slate-50 text-slate-900 font-bold">
-                                        <th class="border border-slate-800 p-2 w-10 text-center">No</th>
-                                        <th class="border border-slate-800 p-2 text-left">Muatan Pelajaran</th>
-                                        <th class="border border-slate-800 p-2 w-20 text-center">Nilai Akhir</th>
-                                        <th class="border border-slate-800 p-2 text-left">Capaian Kompetensi</th>
+                                    <tr class="bg-slate-50 font-bold text-center">
+                                        <th class="border border-slate-800 p-1.5 w-10">No</th>
+                                        <th class="border border-slate-800 p-1.5 text-left w-64">Muatan Pelajaran</th>
+                                        <th class="border border-slate-800 p-1.5 w-24">Nilai Akhir</th>
+                                        <th class="border border-slate-800 p-1.5 text-left">Capaian Kompetensi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr><td class="border border-slate-800 p-2 text-center">1</td><td class="border border-slate-800 p-2">Pendidikan Agama Islam dan Budi Pekerti</td><td class="border border-slate-800 p-2 text-center font-bold" id="lbl_n1">-</td><td class="border border-slate-800 p-2 text-slate-700 text-xs" id="lbl_c1">-</td></tr>
-                                    <tr><td class="border border-slate-800 p-2 text-center">2</td><td class="border border-slate-800 p-2">Pendidikan Pancasila</td><td class="border border-slate-800 p-2 text-center font-bold" id="lbl_n2">-</td><td class="border border-slate-800 p-2 text-slate-700 text-xs" id="lbl_c2">-</td></tr>
-                                    <tr><td class="border border-slate-800 p-2 text-center">3</td><td class="border border-slate-800 p-2">Bahasa Indonesia</td><td class="border border-slate-800 p-2 text-center font-bold" id="lbl_n3">-</td><td class="border border-slate-800 p-2 text-slate-700 text-xs" id="lbl_c3">-</td></tr>
-                                    <tr><td class="border border-slate-800 p-2 text-center">4</td><td class="border border-slate-800 p-2">Pendidikan Jasmani, Olahraga, dan Kesehatan</td><td class="border border-slate-800 p-2 text-center font-bold" id="lbl_n4">-</td><td class="border border-slate-800 p-2 text-slate-700 text-xs" id="lbl_c4">-</td></tr>
-                                    <tr><td class="border border-slate-800 p-2 text-center">5</td><td class="border border-slate-800 p-2">Sejarah</td><td class="border border-slate-800 p-2 text-center font-bold" id="lbl_n5">-</td><td class="border border-slate-800 p-2 text-slate-700 text-xs" id="lbl_c5">-</td></tr>
-                                    <tr><td class="border border-slate-800 p-2 text-center">6</td><td class="border border-slate-800 p-2">Seni Budaya</td><td class="border border-slate-800 p-2 text-center font-bold" id="lbl_n6">-</td><td class="border border-slate-800 p-2 text-slate-700 text-xs" id="lbl_c6">-</td></tr>
+                                    <!-- A. Kelompok Umum -->
+                                    <tr class="bg-slate-100 font-bold"><td colspan="4" class="border border-slate-800 p-1">A. Kelompok Mata Pelajaran Umum</td></tr>
+                                    <tr><td class="border border-slate-800 p-2 text-center">1</td><td class="border border-slate-800 p-2">Pendidikan Agama Islam dan Budi Pekerti</td><td class="border border-slate-800 p-2 text-center font-bold text-sm" id="lbl_n1">-</td><td class="border border-slate-800 p-2 whitespace-pre-line" id="lbl_c1">-</td></tr>
+                                    <tr><td class="border border-slate-800 p-2 text-center">2</td><td class="border border-slate-800 p-2">Pendidikan Pancasila</td><td class="border border-slate-800 p-2 text-center font-bold text-sm" id="lbl_n2">-</td><td class="border border-slate-800 p-2 whitespace-pre-line" id="lbl_c2">-</td></tr>
+                                    <tr><td class="border border-slate-800 p-2 text-center">3</td><td class="border border-slate-800 p-2">Bahasa Indonesia</td><td class="border border-slate-800 p-2 text-center font-bold text-sm" id="lbl_n3">-</td><td class="border border-slate-800 p-2 whitespace-pre-line" id="lbl_c3">-</td></tr>
+                                    <tr><td class="border border-slate-800 p-2 text-center">4</td><td class="border border-slate-800 p-2">Pendidikan Jasmani, Olahraga, dan Kesehatan</td><td class="border border-slate-800 p-2 text-center font-bold text-sm" id="lbl_n4">-</td><td class="border border-slate-800 p-2 whitespace-pre-line" id="lbl_c4">-</td></tr>
+                                    <tr><td class="border border-slate-800 p-2 text-center">5</td><td class="border border-slate-800 p-2">Sejarah</td><td class="border border-slate-800 p-2 text-center font-bold text-sm" id="lbl_n5">-</td><td class="border border-slate-800 p-2 whitespace-pre-line" id="lbl_c5">-</td></tr>
+                                    <tr><td class="border border-slate-800 p-2 text-center">6</td><td class="border border-slate-800 p-2">Seni Budaya</td><td class="border border-slate-800 p-2 text-center font-bold text-sm" id="lbl_n6">-</td><td class="border border-slate-800 p-2 whitespace-pre-line" id="lbl_c6">-</td></tr>
+                                    
+                                    <!-- B. Kelompok Kejuruan -->
+                                    <tr class="bg-slate-100 font-bold"><td colspan="4" class="border border-slate-800 p-1">B. Kelompok Mata Pelajaran Kejuruan</td></tr>
+                                    <tr><td class="border border-slate-800 p-2 text-center">1</td><td class="border border-slate-800 p-2">Matematika</td><td class="border border-slate-800 p-2 text-center font-bold text-sm" id="lbl_n7">-</td><td class="border border-slate-800 p-2" id="lbl_c7">-</td></tr>
+                                    <tr><td class="border border-slate-800 p-2 text-center">2</td><td class="border border-slate-800 p-2">Bahasa Inggris</td><td class="border border-slate-800 p-2 text-center font-bold text-sm" id="lbl_n8">-</td><td class="border border-slate-800 p-2" id="lbl_c8">-</td></tr>
+                                    <tr><td class="border border-slate-800 p-2 text-center">3</td><td class="border border-slate-800 p-2">Informatika</td><td class="border border-slate-800 p-2 text-center font-bold text-sm" id="lbl_n9">-</td><td class="border border-slate-800 p-2" id="lbl_c9">-</td></tr>
+                                    <tr><td class="border border-slate-800 p-2 text-center">4</td><td class="border border-slate-800 p-2">Projek Ilmu Pengetahuan Alam dan Sosial</td><td class="border border-slate-800 p-2 text-center font-bold text-sm" id="lbl_n10">-</td><td class="border border-slate-800 p-2" id="lbl_c10">-</td></tr>
+                                    <tr><td class="border border-slate-800 p-2 text-center">5</td><td class="border border-slate-800 p-2">Dasar Program Keahlian</td><td class="border border-slate-800 p-2 text-center font-bold text-sm" id="lbl_n11">-</td><td class="border border-slate-800 p-2" id="lbl_c11">-</td></tr>
+
+                                    <!-- C. Muatan Lokal -->
+                                    <tr class="bg-slate-100 font-bold"><td colspan="4" class="border border-slate-800 p-1">C. Muatan Lokal</td></tr>
+                                    <tr><td class="border border-slate-800 p-2 text-center">1</td><td class="border border-slate-800 p-2">Muatan Lokal</td><td class="border border-slate-800 p-2 text-center font-bold text-sm" id="lbl_n12">-</td><td class="border border-slate-800 p-2" id="lbl_c12">-</td></tr>
                                 </tbody>
                             </table>
 
-                            <div id="statusKelulusanBox" class="mt-4 p-3 bg-slate-50 border border-slate-400 rounded flex justify-between items-center">
-                                <span class="text-xs font-bold text-slate-700">STATUS KELULUSAN / KENAIKAN (Sistem Otomatis KKM):</span>
-                                <span id="lblStatusKelulusan" class="text-sm font-black px-3 py-1 rounded text-white bg-green-600">-</span>
+                            <!-- Ekstrakurikuler -->
+                            <div class="mt-4">
+                                <h4 class="font-bold mb-1 text-sm">Ekstrakurikuler</h4>
+                                <table class="w-full border border-slate-800 text-xs">
+                                    <thead>
+                                        <tr class="bg-slate-50 font-bold">
+                                            <th class="border border-slate-800 p-1 w-10 text-center">No</th>
+                                            <th class="border border-slate-800 p-1 text-left w-64">Kegiatan Ekstrakurikuler</th>
+                                            <th class="border border-slate-800 p-1 text-left">Keterangan</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr><td class="border border-slate-800 p-1 text-center">1</td><td class="border border-slate-800 p-1 font-medium">Pramuka</td><td class="border border-slate-800 p-1" id="lbl_ekstra1">-</td></tr>
+                                        <tr><td class="border border-slate-800 p-1 text-center">2</td><td class="border border-slate-800 p-1 font-medium">PMR / Olahraga</td><td class="border border-slate-800 p-1" id="lbl_ekstra2">-</td></tr>
+                                    </tbody>
+                                </table>
                             </div>
 
-                            <div class="mt-12 flex justify-between text-xs px-4">
+                            <div id="statusKelulusanBox" class="mt-4 p-2 bg-slate-50 border border-slate-400 rounded flex justify-between items-center">
+                                <span class="text-xs font-bold text-slate-700">STATUS KELULUSAN / KENAIKAN (Sistem Otomatis KKM):</span>
+                                <span id="lblStatusKelulusan" class="text-xs font-black px-3 py-1 rounded text-white bg-green-600">-</span>
+                            </div>
+
+                            <div class="mt-8 flex justify-between text-xs px-4">
                                 <div>
                                     <p>Mengetahui,</p><p>Orang Tua/Wali Murid</p><br><br><br><p>___________________</p>
                                 </div>
@@ -264,12 +407,12 @@
                     </div>
                 </div>
 
+                <!-- CONTENT MENU 2 -->
                 <div id="content-menu2" class="space-y-4 hidden">
                     <div class="flex flex-wrap gap-2 mb-4">
                         <button type="button" onclick="downloadTemplateExcel()" class="bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold py-2 px-4 rounded-lg shadow transition flex items-center gap-2">
                             <i class="fa-solid fa-file-arrow-down"></i> Download Template Kosong (.csv)
                         </button>
-                        
                         <button type="button" onclick="document.getElementById('fileUploadInput').click()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold py-2 px-4 rounded-lg shadow transition flex items-center gap-2">
                             <i class="fa-solid fa-file-arrow-up"></i> Upload Template Excel (.csv)
                         </button>
@@ -291,6 +434,7 @@
                     </div>
                 </div>
 
+                <!-- CONTENT MENU 3 -->
                 <div id="content-menu3" class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 hidden">
                     <table class="w-full border-collapse text-sm">
                         <thead>
@@ -306,6 +450,7 @@
                     </table>
                 </div>
 
+                <!-- CONTENT MENU 4 -->
                 <div id="content-menu4" class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 hidden">
                     <h2 class="text-base font-bold text-slate-800 mb-6 flex items-center gap-2 border-b pb-2">
                         <i class="fa-solid fa-sliders text-blue-600"></i> Konfigurasi Aturan Otomatisasi & KKM
@@ -352,24 +497,20 @@
     </div>
 
     <script>
-        // Data Konfigurasi Default
         let appConfig = { pencarianOtomatis: true, statusOtomatis: true, nilaiKKM: 75 };
 
-        // Database Master Siswa
         let masterSiswa = [
-            { nama: "Diana Alentisya Putri", nisn: "3082804200", keahlian: "Teknik Komputer dan Jaringan", kelas: "X (sepuluh)" },
-            { nama: "Abdulloh Sajad", nisn: "3082804201", keahlian: "Teknik Komputer dan Jaringan", kelas: "X (sepuluh)" },
-            { nama: "Rafi Sukma", nisn: "3082804202", keahlian: "Rekayasa Perangkat Lunak", kelas: "X (sepuluh)" }
+            { nama: "Diana Alentisya Putri", nisn: "3082804200", keahlian: "Teknik Komputer dan Jaringan", kelas: "X (sepuluh)", fase: "E", sekolah: "SMK AL KAAFFAH", alamat: "Jalan Semeru No.18 A Dilem Kepanjen", semester: "II (Dua)", tahunAjar: "2024-2025" },
+            { nama: "Abdulloh Sajad", nisn: "3082699358", keahlian: "Teknik Komputer dan Jaringan", kelas: "X (sepuluh)", fase: "E", sekolah: "SMK AL KAAFFAH", alamat: "Jalan Semeru No.18 A Dilem Kepanjen", semester: "II (Dua)", tahunAjar: "2024-2025" },
+            { nama: "Rafi Sukma", nisn: "3082804202", keahlian: "Rekayasa Perangkat Lunak", kelas: "X (sepuluh)", fase: "E", sekolah: "SMK AL KAAFFAH", alamat: "Jalan Semeru No.18 A Dilem Kepanjen", semester: "II (Dua)", tahunAjar: "2024-2025" }
         ];
 
-        // Riwayat Data yang telah disubmit
         let dataRekapRaport = [];
 
         window.onload = function() {
             renderSiswaTable();
         };
 
-        // 1. Sistem Login Sederhana
         function handleLogin(event) {
             event.preventDefault();
             const user = document.getElementById('username').value;
@@ -392,7 +533,6 @@
             document.getElementById('password').value = '';
         }
 
-        // 2. Sistem Navigasi Menu
         function switchMenu(menuId) {
             for (let i = 1; i <= 4; i++) {
                 document.getElementById('content-menu' + i).classList.add('hidden');
@@ -418,7 +558,6 @@
             document.getElementById('pageTitle').innerText = titles[menuId];
         }
 
-        // 3. Fitur Live Search Siswa dari Pencarian Cepat
         function liveSearchSiswa(keyword) {
             if (!appConfig.pencarianOtomatis || keyword.trim() === "") return;
 
@@ -430,30 +569,29 @@
                 document.getElementById('siswaNisn').value = match.nisn;
                 document.getElementById('siswaKeahlian').value = match.keahlian;
                 document.getElementById('siswaKelas').value = match.kelas;
+                if(match.fase) document.getElementById('siswaFase').value = match.fase;
+                if(match.sekolah) document.getElementById('siswaSekolah').value = match.sekolah;
+                if(match.alamat) document.getElementById('siswaAlamat').value = match.alamat;
+                if(match.semester) document.getElementById('siswaSemester').value = match.semester;
+                if(match.tahunAjar) document.getElementById('siswaTahunAjar').value = match.tahunAjar;
             }
         }
 
-        // 4. Proses Submit Form dan Pembuatan Preview Raport
         function processSubmitRaport() {
-            const nama = document.getElementById('siswaNama').value;
-            const nisn = document.getElementById('siswaNisn').value;
-            const keahlian = document.getElementById('siswaKeahlian').value;
-            const tanggal = document.getElementById('raportTanggal').value;
-            const kelas = document.getElementById('siswaKelas').value;
-            const semester = document.getElementById('siswaSemester').value;
+            // Pemetaan Elemen Profil
+            const fields = ['Nama', 'Nisn', 'Keahlian', 'Kelas', 'Fase', 'Sekolah', 'Alamat', 'Semester', 'TahunAjar'];
+            fields.forEach(field => {
+                document.getElementById('lbl' + field).innerText = document.getElementById('siswa' + field).value;
+            });
 
-            document.getElementById('lblNama').innerText = nama;
-            document.getElementById('lblNisn').innerText = nisn;
-            document.getElementById('lblKeahlian').innerText = keahlian;
-            document.getElementById('lblKelas').innerText = kelas;
-            document.getElementById('lblSemester').innerText = semester;
-            document.getElementById('lblTanggal').innerText = tanggal;
+            const tanggal = document.getElementById('raportTanggal').value;
             document.getElementById('lblTanggalTtd').innerText = tanggal;
 
             let totalNilai = 0;
             let diBawahKkm = false;
 
-            for (let i = 1; i <= 6; i++) {
+            // Loop 12 Mata Pelajaran (Umum + Kejuruan + Mulok)
+            for (let i = 1; i <= 12; i++) {
                 const nilaiVal = parseInt(document.getElementById('n' + i).value) || 0;
                 const descVal = document.getElementById('c' + i).value;
 
@@ -465,6 +603,10 @@
                     diBawahKkm = true;
                 }
             }
+
+            // Pemetaan Ekstrakurikuler
+            document.getElementById('lbl_ekstra1').innerText = document.getElementById('ekstra1').value;
+            document.getElementById('lbl_ekstra2').innerText = document.getElementById('ekstra2').value;
 
             const lblStatus = document.getElementById('lblStatusKelulusan');
             if (appConfig.statusOtomatis) {
@@ -480,6 +622,9 @@
                 lblStatus.className = "text-sm font-black px-3 py-1 rounded text-white bg-slate-500";
             }
 
+            const nisn = document.getElementById('siswaNisn').value;
+            const nama = document.getElementById('siswaNama').value;
+            const keahlian = document.getElementById('siswaKeahlian').value;
             if(!dataRekapRaport.some(r => r.nisn === nisn)) {
                 dataRekapRaport.push({ nama, nisn, keahlian });
                 renderRekapTable();
@@ -489,16 +634,10 @@
             document.getElementById('hasilLaporanBox').scrollIntoView({ behavior: 'smooth' });
         }
 
-        // ========================================================
-        // PERBAIKAN TOTAL: FUNGSI CETAK PRINT (AMAN UNTUK EVENT JAVASCRIPT)
-        // ========================================================
         function triggerPrintHalaman() {
-            // Kita gunakan window.print() bawaan browser karena CSS @media print 
-            // sudah dikonfigurasi dengan sangat baik di baris 11-16 berkas Anda.
             window.print();
         }
 
-        // 5. Render Data Tabel Menu 2
         function renderSiswaTable() {
             const tbody = document.getElementById('siswaTemplateTableBody');
             if(!tbody) return;
@@ -524,12 +663,16 @@
                 document.getElementById('siswaNisn').value = siswa.nisn;
                 document.getElementById('siswaKeahlian').value = siswa.keahlian;
                 document.getElementById('siswaKelas').value = siswa.kelas;
+                if(siswa.fase) document.getElementById('siswaFase').value = siswa.fase;
+                if(siswa.sekolah) document.getElementById('siswaSekolah').value = siswa.sekolah;
+                if(siswa.alamat) document.getElementById('siswaAlamat').value = siswa.alamat;
+                if(siswa.semester) document.getElementById('siswaSemester').value = siswa.semester;
+                if(siswa.tahunAjar) document.getElementById('siswaTahunAjar').value = siswa.tahunAjar;
                 switchMenu(1);
                 document.getElementById('raportForm').scrollIntoView({ behavior: 'smooth' });
             }
         }
 
-        // 6. Render Data Laporan Rekap Menu 3
         function renderRekapTable() {
             const tbody = document.getElementById('complexTableBody');
             if(!tbody) return;
@@ -557,7 +700,6 @@
             renderRekapTable();
         }
 
-        // 7. Menu 4: Pengaturan Konfigurasi KKM
         function toggleKkmContainer(isChecked) {
             const container = document.getElementById('kkmValueContainer');
             if(isChecked) {
@@ -574,17 +716,12 @@
             alert("Konfigurasi sistem berhasil disimpan!");
         }
 
-        // ========================================================
-        // PERBAIKAN TOTAL: DOWNLOAD TEMPLATE KOSONG (DUAL FORMAT EXCEL)
-        // ========================================================
         function downloadTemplateExcel() {
-            // Gunakan sep=; agar Excel Indonesia otomatis mengenali kolom secara terpisah
-            let csvContent = "sep=;\nNama;NISN;Keahlian;Kelas\n";
+            let csvContent = "sep=;\nNama;NISN;Keahlian;Kelas;Fase;Sekolah;Alamat;Semester;TahunAjar\n";
             masterSiswa.forEach(s => {
-                csvContent += `"${s.nama}";"${s.nisn}";"${s.keahlian}";"${s.kelas}"\n`;
+                csvContent += `"${s.nama}";"${s.nisn}";"${s.keahlian}";"${s.kelas}";"${s.fase||'E'}";"${s.sekolah||'SMK AL KAAFFAH'}";"${s.alamat||''}";"${s.semester||'II (Dua)'}";"${s.tahunAjar||'2024-2025'}"\n`;
             });
 
-            // Tambahkan BOM UTF-8 (\uFEFF) agar simbol karakter terbaca sempurna di Microsoft Excel Windows
             const blob = new Blob([new Uint8Array([0xEF, 0xBB, 0xBF]), csvContent], { type: 'text/csv;charset=utf-8;' });
             const link = document.createElement("a");
             const url = URL.createObjectURL(blob);
@@ -598,9 +735,6 @@
             document.body.removeChild(link);
         }
 
-        // ========================================================
-        // PERBAIKAN TOTAL: UPLOAD TEMPLATE EXCEL (KOMPATIBEL DENGAN EXCEL)
-        // ========================================================
         function bacaTemplateCSV(input) {
             const file = input.files[0];
             if (!file) return;
@@ -611,7 +745,6 @@
                 const baris = text.split("\n");
                 
                 let barisMulai = 1;
-                // Deteksi jika dokumen memiliki baris metadata pemisah 'sep='
                 if (baris[0].trim().startsWith("sep=")) {
                     barisMulai = 2;
                 }
@@ -622,7 +755,6 @@
                     const lineText = baris[i].trim();
                     if (lineText === "") continue;
                     
-                    // Deteksi otomatis pembatas kolom (apakah menggunakan titik koma ';' atau koma ',')
                     const separator = lineText.includes(";") ? ";" : ",";
                     const kolom = lineText.split(separator);
                     
@@ -631,10 +763,14 @@
                         const nisn = kolom[1].replace(/['"]+/g, '').trim();
                         const keahlian = kolom[2].replace(/['"]+/g, '').trim();
                         const kelas = kolom[3] ? kolom[3].replace(/['"]+/g, '').trim() : "X (sepuluh)";
+                        const fase = kolom[4] ? kolom[4].replace(/['"]+/g, '').trim() : "E";
+                        const sekolah = kolom[5] ? kolom[5].replace(/['"]+/g, '').trim() : "SMK AL KAAFFAH";
+                        const alamat = kolom[6] ? kolom[6].replace(/['"]+/g, '').trim() : "";
+                        const semester = kolom[7] ? kolom[7].replace(/['"]+/g, '').trim() : "II (Dua)";
+                        const tahunAjar = kolom[8] ? kolom[8].replace(/['"]+/g, '').trim() : "2024-2025";
 
-                        // Validasi string tidak kosong dan NISN tidak boleh duplikat
                         if(nama && nisn && !masterSiswa.some(s => s.nisn === nisn)) {
-                            masterSiswa.push({ nama, nisn, keahlian, kelas });
+                            masterSiswa.push({ nama, nisn, keahlian, kelas, fase, sekolah, alamat, semester, tahunAjar });
                             jumlahDataBaru++;
                         }
                     }
@@ -642,7 +778,7 @@
                 
                 renderSiswaTable();
                 alert(`Impor Sukses! Berhasil menambahkan ${jumlahDataBaru} data siswa baru ke sistem.`);
-                input.value = ''; // Reset input agar file yang sama bisa di-upload ulang
+                input.value = '';
             };
             reader.readAsText(file);
         }
