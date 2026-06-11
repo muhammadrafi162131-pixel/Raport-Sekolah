@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Software Raport Kurikulum Merdeka - Program Keahlian di Kolom Kelas</title>
+    <title>Software Raport Kurikulum Merdeka - KKM & Deskripsi Dinamis</title>
     <style>
         * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         body { background-color: #4b6584; margin: 0; padding: 20px; }
@@ -37,6 +37,7 @@
         textarea { resize: vertical; height: 80px; font-size: 13px; line-height: 1.4; }
 
         .auto-textarea { background-color: #f1f2f6; color: #2c3e50; font-style: italic; }
+        .hint-kkm { font-size: 12px; color: #7f8c8d; font-style: italic; margin-top: 4px; display: block; }
 
         table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
         th, td { border: 1px solid #2c3e50; padding: 8px; font-size: 13px; vertical-align: top; }
@@ -76,7 +77,6 @@
 </head>
 <body>
 
-<!-- ================= HALAMAN LOGIN ================= -->
 <div class="login-wrapper" id="loginWrapper">
     <div class="login-box">
         <h2>Login Sistem Rapor</h2>
@@ -95,19 +95,16 @@
     </div>
 </div>
 
-<!-- ================= APLIKASI RAPOR UTAMA ================= -->
 <div class="container hidden" id="mainApp">
     <button class="btn-logout" id="btnLogout">🚪 Log Out</button>
 
     <h2>INPUT DATA LAPORAN HASIL BELAJAR (KURIKULUM MERDEKA)</h2>
 
     <form id="raportForm">
-        <!-- DATA IDENTITAS -->
         <div class="form-section">
             <div class="section-title">DATA SISWA & SEKOLAH</div>
             <div class="row">
                 <div class="col"><label>Nama Peserta Didik</label><input type="text" id="nama" value="ABDULLOH SAJAD" required></div>
-                <!-- JURUSAN DIJADIKAN SATU DI KOLOM KELAS MENGGUNAKAN FLEX GAP -->
                 <div class="col">
                     <label>Kelas & Program Keahlian</label>
                     <div style="display: flex; gap: 10px;">
@@ -134,7 +131,44 @@
             </div>
         </div>
 
-        <!-- TABEL INPUT NILAI & DESKRIPSI OTOMATIS -->
+        <div class="form-section" style="background-color: #edf2f7; border: 2px solid #34495e;">
+            <div class="section-title" style="background-color: #34495e;">⚙️ PENGATURAN KAMUS DESKRIPSI & AMBANG NILAI (KKM)</div>
+            <div class="row">
+                <div class="col">
+                    <label>1. Pilih Mata Pelajaran yang Ingin Diatur</label>
+                    <select id="kamus_select_mapel" onchange="loadKamusMapel()">
+                        <option value="pai">Pendidikan Agama Islam dan Budi Pekerti</option>
+                        <option value="pancasila">Pendidikan Pancasila</option>
+                        <option value="indo">Bahasa Indonesia</option>
+                        <option value="pjok">Pendidikan Jasmani, Olahraga, dan Kesehatan</option>
+                        <option value="sejarah">Sejarah</option>
+                        <option value="seni">Seni Budaya</option>
+                        <option value="math">Matematika</option>
+                        <option value="inggris">Bahasa Inggris</option>
+                        <option value="info">Informatika</option>
+                        <option value="ipas">Projek Ilmu Pengetahuan Alam dan Sosial</option>
+                        <option value="dpk">Dasar Program Keahlian</option>
+                        <option value="mulok">Muatan Lokal</option>
+                    </select>
+                </div>
+                <div class="col">
+                    <label>2. Batas Minimal Kelulusan (KKM)</label>
+                    <input type="number" id="kamus_kkm" value="75" min="0" max="100" oninput="saveKamusMapel()">
+                    <span class="hint-kkm">*Nilai di bawah ini dianggap memerlukan bimbingan</span>
+                </div>
+            </div>
+            <div class="row" style="margin-top: 10px;">
+                <div class="col">
+                    <label>3. Teks Deskripsi "DI ATAS KKM" (Tercapai / Paham)</label>
+                    <textarea id="kamus_teks_paham" placeholder="Contoh: menunjukkan pemahaman dalam..." oninput="saveKamusMapel()"></textarea>
+                </div>
+                <div class="col">
+                    <label>4. Teks Deskripsi "DI BAWAH KKM" (Perlu Bimbingan)</label>
+                    <textarea id="kamus_teks_bimbingan" placeholder="Contoh: membutuhkan bimbingan dalam..." oninput="saveKamusMapel()"></textarea>
+                </div>
+            </div>
+        </div>
+
         <div class="form-section">
             <div class="section-title">MATA PELAJARAN DAN CAPAIAN KOMPETENSI</div>
             <table>
@@ -142,8 +176,8 @@
                     <tr>
                         <th style="width: 5%;">No</th>
                         <th style="width: 35%;">Muatan Pelajaran</th>
-                        <th style="width: 12%;">Nilai Akhir</th>
-                        <th style="width: 48%;">Capaian Kompetensi (Otomatis)</th>
+                        <th style="width: 17%;">Nilai Akhir & Status KKM</th>
+                        <th style="width: 43%;">Capaian Kompetensi (Otomatis)</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -151,37 +185,55 @@
                     <tr>
                         <td class="center">1</td>
                         <td>Pendidikan Agama Islam dan Budi Pekerti</td>
-                        <td><input type="number" id="n_pai" class="nilai-input" data-mapel="pai" min="0" max="100" placeholder="Contoh: 80"></td>
+                        <td>
+                            <input type="number" id="n_pai" class="nilai-input" data-mapel="pai" min="0" max="100" placeholder="Nilai">
+                            <span id="status_kkm_pai" class="hint-kkm" style="font-weight: bold;"></span>
+                        </td>
                         <td><textarea id="d_pai" class="auto-textarea" readonly placeholder="Akan terisi otomatis..."></textarea></td>
                     </tr>
                     <tr>
                         <td class="center">2</td>
                         <td>Pendidikan Pancasila</td>
-                        <td><input type="number" id="n_pancasila" class="nilai-input" data-mapel="pancasila" min="0" max="100" placeholder="Contoh: 78"></td>
+                        <td>
+                            <input type="number" id="n_pancasila" class="nilai-input" data-mapel="pancasila" min="0" max="100" placeholder="Nilai">
+                            <span id="status_kkm_pancasila" class="hint-kkm" style="font-weight: bold;"></span>
+                        </td>
                         <td><textarea id="d_pancasila" class="auto-textarea" readonly placeholder="Akan terisi otomatis..."></textarea></td>
                     </tr>
                     <tr>
                         <td class="center">3</td>
                         <td>Bahasa Indonesia</td>
-                        <td><input type="number" id="n_indo" class="nilai-input" data-mapel="indo" min="0" max="100" placeholder="Contoh: 81"></td>
+                        <td>
+                            <input type="number" id="n_indo" class="nilai-input" data-mapel="indo" min="0" max="100" placeholder="Nilai">
+                            <span id="status_kkm_indo" class="hint-kkm" style="font-weight: bold;"></span>
+                        </td>
                         <td><textarea id="d_indo" class="auto-textarea" readonly placeholder="Akan terisi otomatis..."></textarea></td>
                     </tr>
                     <tr>
                         <td class="center">4</td>
                         <td>Pendidikan Jasmani, Olahraga, dan Kesehatan</td>
-                        <td><input type="number" id="n_pjok" class="nilai-input" data-mapel="pjok" min="0" max="100" placeholder="Contoh: 78"></td>
+                        <td>
+                            <input type="number" id="n_pjok" class="nilai-input" data-mapel="pjok" min="0" max="100" placeholder="Nilai">
+                            <span id="status_kkm_pjok" class="hint-kkm" style="font-weight: bold;"></span>
+                        </td>
                         <td><textarea id="d_pjok" class="auto-textarea" readonly placeholder="Akan terisi otomatis..."></textarea></td>
                     </tr>
                     <tr>
                         <td class="center">5</td>
                         <td>Sejarah</td>
-                        <td><input type="number" id="n_sejarah" class="nilai-input" data-mapel="sejarah" min="0" max="100" placeholder="Contoh: 80"></td>
+                        <td>
+                            <input type="number" id="n_sejarah" class="nilai-input" data-mapel="sejarah" min="0" max="100" placeholder="Nilai">
+                            <span id="status_kkm_sejarah" class="hint-kkm" style="font-weight: bold;"></span>
+                        </td>
                         <td><textarea id="d_sejarah" class="auto-textarea" readonly placeholder="Akan terisi otomatis..."></textarea></td>
                     </tr>
                     <tr>
                         <td class="center">6</td>
                         <td>Seni Budaya</td>
-                        <td><input type="number" id="n_seni" class="nilai-input" data-mapel="seni" min="0" max="100" placeholder="Contoh: 83"></td>
+                        <td>
+                            <input type="number" id="n_seni" class="nilai-input" data-mapel="seni" min="0" max="100" placeholder="Nilai">
+                            <span id="status_kkm_seni" class="hint-kkm" style="font-weight: bold;"></span>
+                        </td>
                         <td><textarea id="d_seni" class="auto-textarea" readonly placeholder="Akan terisi otomatis..."></textarea></td>
                     </tr>
 
@@ -189,31 +241,46 @@
                     <tr>
                         <td class="center">1</td>
                         <td>Matematika</td>
-                        <td><input type="number" id="n_math" class="nilai-input" data-mapel="math" min="0" max="100" placeholder="Contoh: 74"></td>
+                        <td>
+                            <input type="number" id="n_math" class="nilai-input" data-mapel="math" min="0" max="100" placeholder="Nilai">
+                            <span id="status_kkm_math" class="hint-kkm" style="font-weight: bold;"></span>
+                        </td>
                         <td><textarea id="d_math" class="auto-textarea" readonly placeholder="Akan terisi otomatis..."></textarea></td>
                     </tr>
                     <tr>
                         <td class="center">2</td>
                         <td>Bahasa Inggris</td>
-                        <td><input type="number" id="n_inggris" class="nilai-input" data-mapel="inggris" min="0" max="100" placeholder="Contoh: 96"></td>
+                        <td>
+                            <input type="number" id="n_inggris" class="nilai-input" data-mapel="inggris" min="0" max="100" placeholder="Nilai">
+                            <span id="status_kkm_inggris" class="hint-kkm" style="font-weight: bold;"></span>
+                        </td>
                         <td><textarea id="d_inggris" class="auto-textarea" readonly placeholder="Akan terisi otomatis..."></textarea></td>
                     </tr>
                     <tr>
                         <td class="center">3</td>
                         <td>Informatika</td>
-                        <td><input type="number" id="n_info" class="nilai-input" data-mapel="info" min="0" max="100" placeholder="Contoh: 91"></td>
+                        <td>
+                            <input type="number" id="n_info" class="nilai-input" data-mapel="info" min="0" max="100" placeholder="Nilai">
+                            <span id="status_kkm_info" class="hint-kkm" style="font-weight: bold;"></span>
+                        </td>
                         <td><textarea id="d_info" class="auto-textarea" readonly placeholder="Akan terisi otomatis..."></textarea></td>
                     </tr>
                     <tr>
                         <td class="center">4</td>
                         <td>Projek Ilmu Pengetahuan Alam dan Sosial</td>
-                        <td><input type="number" id="n_ipas" class="nilai-input" data-mapel="ipas" min="0" max="100" placeholder="Contoh: 80"></td>
+                        <td>
+                            <input type="number" id="n_ipas" class="nilai-input" data-mapel="ipas" min="0" max="100" placeholder="Nilai">
+                            <span id="status_kkm_ipas" class="hint-kkm" style="font-weight: bold;"></span>
+                        </td>
                         <td><textarea id="d_ipas" class="auto-textarea" readonly placeholder="Akan terisi otomatis..."></textarea></td>
                     </tr>
                     <tr>
                         <td class="center">5</td>
                         <td>Dasar Program Keahlian</td>
-                        <td><input type="number" id="n_dpk" class="nilai-input" data-mapel="dpk" min="0" max="100" placeholder="Contoh: 86"></td>
+                        <td>
+                            <input type="number" id="n_dpk" class="nilai-input" data-mapel="dpk" min="0" max="100" placeholder="Nilai">
+                            <span id="status_kkm_dpk" class="hint-kkm" style="font-weight: bold;"></span>
+                        </td>
                         <td><textarea id="d_dpk" class="auto-textarea" readonly placeholder="Akan terisi otomatis..."></textarea></td>
                     </tr>
 
@@ -221,14 +288,16 @@
                     <tr>
                         <td class="center">1</td>
                         <td>Muatan Lokal</td>
-                        <td><input type="number" id="n_mulok" class="nilai-input" data-mapel="mulok" min="0" max="100" placeholder="Contoh: 80"></td>
+                        <td>
+                            <input type="number" id="n_mulok" class="nilai-input" data-mapel="mulok" min="0" max="100" placeholder="Nilai">
+                            <span id="status_kkm_mulok" class="hint-kkm" style="font-weight: bold;"></span>
+                        </td>
                         <td><textarea id="d_mulok" class="auto-textarea" readonly placeholder="Akan terisi otomatis..."></textarea></td>
                     </tr>
                 </tbody>
             </table>
         </div>
 
-        <!-- EKSKUL, ABSENSI, CATATAN -->
         <div class="row">
             <div class="col form-section">
                 <div class="section-title">Ekstrakurikuler</div>
@@ -262,7 +331,6 @@
             </div>
         </div>
 
-        <!-- PENANDATANGAN RAPOR -->
         <div class="form-section">
             <div class="section-title">NAMA PENANDATANGAN RAPOR</div>
             <div class="row">
@@ -278,7 +346,6 @@
         <button type="submit" class="btn-block">PROSES & TAMPILKAN PRATINJAU RAPOR</button>
     </form>
 
-    <!-- ================= AREA PRATINJAU SIAP CETAK ================= -->
     <div class="print-area" id="printArea">
         <div class="print-action-bar">
             <button onclick="window.print()" class="btn-print">
@@ -292,7 +359,6 @@
             <h3 style="margin-bottom: 25px; font-weight: bold;">PENILAIAN SUMATIF AKHIR TAHUN</h3>
         </div>
 
-        <!-- BLOK DATA IDENTITAS SISWA -->
         <div class="report-header">
             <table>
                 <tr>
@@ -385,6 +451,145 @@
 </div>
 
 <script>
+    // DATA DEFAULT KAMUS DESKRIPSI & KKM YANG BISA DIEDIT GURU SECARA MANUAL
+    const kamusKompetensi = {
+        pai: {
+            kkm: 75,
+            paham: "menunjukkan pemahaman dalam meyakini bahwa pergaulan bebas dan zina merupakan larangan agama, Menyakini bahwa sikap temperamental (ghadhab) merupakan larangan dan sikap kontrol diri dan berani adalah perintah agama, menganalisis cabang iman hakikat mencintai Allah SWT, Khauf, raja' dan tawakal kepada-Nya, menganalisis cabang iman hakikat mencintai Allah SWT, Khauf, raja' dan tawakal kepada-Nya,",
+            bimbingan: "membutuhkan bimbingan dalam meningkatkan konsistensi penerapan sikap kontrol diri di lingkungan sekolah."
+        },
+        pancasila: {
+            kkm: 75,
+            paham: "menunjukkan pemahaman dalam memahami dan mengamalkan nilai-nilai Pancasila,",
+            bimbingan: "membutuhkan bimbingan dalam memahami sistem pemerintahan di Indonesia,"
+        },
+        indo: {
+            kkm: 75,
+            paham: "menunjukkan pemahaman dalam Teks Biografi,",
+            bimbingan: "membutuhkan bimbingan dalam Hikayat,"
+        },
+        pjok: {
+            kkm: 75,
+            paham: "menunjukkan pemahaman dalam mempraktikkan kombinasi pola gerak dominan (bertumpu, bergantung, keseimbangan, berpindah/lokomotor, tolakan, putaran, ayunan, melayang, dan mendarat) untuk membentuk keterampilan dasar senam menggunakan alat sesuai potensi dan kreativitas yang dimiliki,",
+            bimbingan: "membutuhkan bimbingan dalam memahami konsep dan prinsip pergaulan yang sehat antar remaja dan menjaga diri dari kehamilan pada usia sekolah,"
+        },
+        sejarah: {
+            kkm: 75,
+            paham: "menunjukkan pemahaman dalam mengidentifikasi kelebihan dan kelemahan teori masuknya Islam di Indonesia ,",
+            bimbingan: "membutuhkan bimbingan dalam menganalisis cara penyebaran agama Islam di Indonesia ,"
+        },
+        seni: {
+            kkm: 75,
+            paham: "menunjukkan pemahaman dalam merancang karya seni rupa 3 dimensi,",
+            bimbingan: "membutuhkan bimbingan dalam mempersiapkan alat dan bahan dalam pembuatan karya seni rupa 3 dimensi, proses pembuatan karya seni rupa 3 dimensi, membagikan hasil karya seni rupa 3 dimensi,"
+        },
+        math: {
+            kkm: 75,
+            paham: "menunjukkan pemahaman dalam menentukan ingkaran dari suatu pernyataan,",
+            bimbingan: "membutuhkan bimbingan dalam menentukan nilai kebenaran dari suatu pernyataan majemuk dan berkuantor,"
+        },
+        inggris: {
+            kkm: 75,
+            paham: "menunjukkan pemahaman dalam membedakan dan menggunakan regular dan irregular verb dalam konteks past events., membuat kalimat Simple Past Tense dengan memperhatikan fungsi sosial, struktur, dan unsur kebahasaan. , membuat kalimat present perfect tense dengan memperhatikan fungsi sosial, struktur, dan unsur kebahasaan. , memahami fungsi sosial, struktur, dan unsur kebahasaan dalam Procedure Text lalu menyusun teks tulis sederhana.,",
+            bimbingan: "membutuhkan bimbingan dalam memahami fungsi sosial, struktur, dan unsur kebahasaan dalam Recount Text lalu menyusun teks tulis sederhana.,"
+        },
+        info: {
+            kkm: 75,
+            paham: "menunjukkan pemahaman dalam Memahami perintah-perintah dasar dan menu dasar pada pada microsoft office word,",
+            bimbingan: "membutuhkan bimbingan dalam Memahami perintah-perintah dasar, rumus dasar dan menu dasar pada pada microsoft excel,"
+        },
+        ipas: {
+            kkm: 75,
+            paham: "menunjukkan pemahaman dalam memahami konsep-konsep dasar ilmu ekonomi dan mengidentifikasi berbagai kegiatan ekonomi dan perilaku ekonomi,",
+            bimbingan: "membutuhkan bimbingan dalam menelaah konsep energi dan usaha,, serta mampu mengaitkan hubungan energi dengan usaha.,"
+        },
+        dpk: {
+            kkm: 75,
+            paham: "menunjukkan pemahaman dalam Memahami proses penyimpanan, pemindahan, olah digital dan pencetakan gambar, Memahami dasar komponen komputer, alat input output, mekanisme transfer data, dan instalasi, Memahami perkembangan teknologi mikroprosesor, manfaat bagi kehidupan manusia dan troubleshooting PC,",
+            bimbingan: "membutuhkan bimbingan dalam Memahami perangkat kamera, jenis perangkat kamera, mengatur ketajaman gambar dan sudut pandang pengambilan kamera,"
+        },
+        mulok: {
+            kkm: 75,
+            paham: "menunjukkan pemahaman dalam mengidentifikasi karakteristik bahasa dalam teks sastra dan teks non sastra, mengklasifikasikan jenis basa rinengga dalam teks,",
+            bimbingan: "membutuhkan bimbingan dalam menganalisis bacaan dan menjawab pertanyaan ,"
+        }
+    };
+
+    // Fungsi memuat data kamus ke form pengaturan saat mapel dipilih
+    function loadKamusMapel() {
+        const mapelKey = document.getElementById('kamus_select_mapel').value;
+        const data = kamusKompetensi[mapelKey];
+        
+        document.getElementById('kamus_kkm').value = data.kkm;
+        document.getElementById('kamus_teks_paham').value = data.paham;
+        document.getElementById('kamus_teks_bimbingan').value = data.bimbingan;
+    }
+
+    // Fungsi menyimpan perubahan deskripsi manual dari form pengaturan kembali ke objek kamus
+    function saveKamusMapel() {
+        const mapelKey = document.getElementById('kamus_select_mapel').value;
+        
+        kamusKompetensi[mapelKey].kkm = parseInt(document.getElementById('kamus_kkm').value) || 0;
+        kamusKompetensi[mapelKey].paham = document.getElementById('kamus_teks_paham').value;
+        kamusKompetensi[mapelKey].bimbingan = document.getElementById('kamus_teks_bimbingan').value;
+
+        // Picu kalkulasi ulang seluruh tabel nilai agar langsung berubah secara realtime
+        refreshSemuaDeskripsiSiswa();
+    }
+
+    // Generator teks berdasarkan logika ambang batas KKM dinamis
+    function generateCapaianDeskripsi(mapelKey, nilai, namaSiswa) {
+        if (!nilai || isNaN(nilai)) return "";
+        const data = kamusKompetensi[mapelKey];
+        if (!data) return "";
+
+        let n = parseInt(nilai);
+        let batasKKM = data.kkm;
+
+        // JIKA NILAI DI ATAS ATAU SAMA DENGAN KKM MANUAL
+        if (n >= batasKKM) {
+            return `${namaSiswa} ${data.paham}`;
+        } else { // JIKA NILAI DI BAWAH KKM MANUAL
+            return `${namaSiswa} ${data.bimbingan}`;
+        }
+    }
+
+    // Fungsi memproses update realtime pada status KKM dan deskripsi di tabel inputan
+    function refreshSemuaDeskripsiSiswa() {
+        document.querySelectorAll('.nilai-input').forEach(input => {
+            const mapelKey = input.getAttribute('data-mapel');
+            const nilaiVal = input.value;
+            const namaSiswa = document.getElementById('nama').value || "Siswa";
+            const statusLabel = document.getElementById('status_kkm_' + mapelKey);
+            
+            if(nilaiVal !== "") {
+                let n = parseInt(nilaiVal);
+                let batas = kamusKompetensi[mapelKey].kkm;
+                if(n >= batas) {
+                    statusLabel.innerHTML = `🟢 Di Atas KKM (>=${batas})`;
+                    statusLabel.style.color = "#27ae60";
+                } else {
+                    statusLabel.innerHTML = `🔴 Di Bawah KKM (<${batas})`;
+                    statusLabel.style.color = "#eb3b5a";
+                }
+            } else {
+                statusLabel.innerHTML = "";
+            }
+
+            document.getElementById('d_' + mapelKey).value = generateCapaianDeskripsi(mapelKey, nilaiVal, namaSiswa);
+        });
+    }
+
+    // Event listener untuk memantau ketikan nilai siswa
+    document.querySelectorAll('.nilai-input').forEach(element => {
+        element.addEventListener('input', refreshSemuaDeskripsiSiswa);
+    });
+
+    // Inisialisasi awal saat halaman dibuka pertama kali
+    window.onload = function() {
+        loadKamusMapel();
+    };
+
     // LOGIKA LOGIN
     document.getElementById('loginForm').addEventListener('submit', function(e) {
         e.preventDefault();
@@ -415,85 +620,10 @@
         document.getElementById('loginForm').reset();
     });
 
-    const kamusKompetensi = {
-        pai: {
-            paham: "menunjukkan pemahaman dalam meyakini bahwa pergaulan bebas dan zina merupakan larangan agama, Meyakini bahwa sikap temperamental (ghadhab) merupakan larangan dan sikap kontrol diri dan berani adalah perintah agama, menganalisis cabang iman hakikat mencintai Allah SWT, Khauf, raja' dan tawakal kepada-Nya, menganalisis cabang iman hakikat mencintai Allah SWT, Khauf, raja' dan tawakal kepada-Nya,",
-            bimbingan: "membutuhkan bimbingan dalam meningkatkan konsistensi penerapan sikap kontrol diri di lingkungan sekolah."
-        },
-        pancasila: {
-            paham: "menunjukkan pemahaman dalam memahami dan mengamalkan nilai-nilai Pancasila,",
-            bimbingan: "membutuhkan bimbingan dalam memahami sistem pemerintahan di Indonesia,"
-        },
-        indo: {
-            paham: "menunjukkan pemahaman dalam Teks Biografi,",
-            bimbingan: "membutuhkan bimbingan dalam Hikayat,"
-        },
-        pjok: {
-            paham: "menunjukkan pemahaman dalam mempraktikkan kombinasi pola gerak dominan (bertumpu, bergantung, keseimbangan, berpindah/lokomotor, tolakan, putaran, ayunan, melayang, dan mendarat) untuk membentuk keterampilan dasar senam menggunakan alat sesuai potensi dan kreativitas yang dimiliki,",
-            bimbingan: "membutuhkan bimbingan dalam memahami konsep dan prinsip pergaulan yang sehat antar remaja dan menjaga diri dari kehamilan pada usia sekolah,"
-        },
-        sejarah: {
-            paham: "menunjukkan pemahaman dalam mengidentifikasi kelebihan dan kelemahan teori masuknya Islam di Indonesia ,",
-            bimbingan: "membutuhkan bimbingan dalam menganalisis cara penyebaran agama Islam di Indonesia ,"
-        },
-        seni: {
-            paham: "menunjukkan pemahaman dalam merancang karya seni rupa 3 dimensi,",
-            bimbingan: "membutuhkan bimbingan dalam mempersiapkan alat dan bahan dalam pembuatan karya seni rupa 3 dimensi, proses pembuatan karya seni rupa 3 dimensi, membagikan hasil karya seni rupa 3 dimensi,"
-        },
-        math: {
-            paham: "menunjukkan pemahaman dalam menentukan ingkaran dari suatu pernyataan,",
-            bimbingan: "membutuhkan bimbingan dalam menentukan nilai kebenaran dari suatu pernyataan majemuk dan berkuantor,"
-        },
-        inggris: {
-            paham: "menunjukkan pemahaman dalam membedakan dan menggunakan regular dan irregular verb dalam konteks past events., membuat kalimat Simple Past Tense dengan memperhatikan fungsi sosial, struktur, dan unsur kebahasaan. , membuat kalimat present perfect tense dengan memperhatikan fungsi sosial, struktur, dan unsur kebahasaan. , memahami fungsi sosial, struktur, dan unsur kebahasaan dalam Procedure Text lalu menyusun teks tulis sederhana.,",
-            bimbingan: "membutuhkan bimbingan dalam memahami fungsi sosial, struktur, dan unsur kebahasaan dalam Recount Text lalu menyusun teks tulis sederhana.,"
-        },
-        info: {
-            paham: "menunjukkan pemahaman dalam Memahami perintah-perintah dasar and menu dasar pada pada microsoft office word,",
-            bimbingan: "membutuhkan bimbingan dalam Memahami perintah-perintah dasar, rumus dasar dan menu dasar pada pada microsoft excel,"
-        },
-        ipas: {
-            paham: "menunjukkan pemahaman dalam memahami konsep-konsep dasar ilmu ekonomi dan mengidentifikasi berbagai kegiatan ekonomi dan perilaku ekonomi,",
-            bimbingan: "membutuhkan bimbingan dalam menelaah konsep energi dan usaha,, serta mampu mengaitkan hubungan energi dengan usaha.,"
-        },
-        dpk: {
-            paham: "menunjukkan pemahaman dalam Memahami proses penyimpanan, pemindahan, olah digital dan pencetakan gambar, Memahami dasar komponen komputer, alat input output, mekanisme transfer data, dan instalasi, Memahami perkembangan teknologi mikroprosesor, manfaat bagi kehidupan manusia dan troubleshooting PC,",
-            bimbingan: "membutuhkan bimbingan dalam Memahami perangkat kamera, jenis perangkat kamera, mengatur ketajaman gambar dan sudut pandang pengambilan kamera,"
-        },
-        mulok: {
-            paham: "menunjukkan pemahaman dalam mengidentifikasi karakteristik bahasa dalam teks sastra dan teks non sastra, mengklasifikasikan jenis basa rinengga dalam teks,",
-            bimbingan: "membutuhkan bimbingan dalam menganalisis bacaan dan menjawab pertanyaan ,"
-        }
-    };
-
-    function generateCapaianDeskripsi(mapelKey, nilai, namaSiswa) {
-        if (!nilai || isNaN(nilai)) return "";
-        const data = kamusKompetensi[mapelKey];
-        if (!data) return "";
-
-        let n = parseInt(nilai);
-        if (n >= 85) {
-            return `${namaSiswa} ${data.paham}`;
-        } else if (n >= 75 && n < 85) {
-            return `${namaSiswa} ${data.paham}\n\n${namaSiswa} ${data.bimbingan}`;
-        } else {
-            return `${namaSiswa} ${data.bimbingan}`;
-        }
-    }
-
-    document.querySelectorAll('.nilai-input').forEach(element => {
-        element.addEventListener('input', function() {
-            const mapelKey = this.getAttribute('data-mapel');
-            const nilaiVal = this.value;
-            const namaSiswa = document.getElementById('nama').value || "Siswa";
-            document.getElementById('d_' + mapelKey).value = generateCapaianDeskripsi(mapelKey, nilaiVal, namaSiswa);
-        });
-    });
-
+    // LOGIKA PROSES & SIMPAN KE PREVIEW CETAK
     document.getElementById('raportForm').addEventListener('submit', function(e) {
         e.preventDefault();
 
-        // SINKRONISASI UTAMA VARIABEL FORM KE OUTPUT RAPOR
         const fields = ['nama', 'kelas', 'nisn', 'fase', 'program_keahlian', 'sekolah', 'semester', 'alamat', 'tapel', 'kenaikan', 'sakit', 'izin', 'alpa', 'catatan', 'titimangsa', 'nama_ortu', 'nama_walas', 'nama_kepsek'];
         fields.forEach(f => {
             document.getElementById('lbl_' + f).innerText = document.getElementById(f).value;
