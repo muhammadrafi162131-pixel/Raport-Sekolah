@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Software Raport Kurikulum Merdeka - KKM & Deskripsi Dinamis</title>
+    <title>Software Raport Kurikulum Merdeka - Multi Halaman Dinamis</title>
     <style>
         * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         body { background-color: #4b6584; margin: 0; padding: 20px; }
@@ -27,6 +27,13 @@
         .btn-logout { position: absolute; top: 25px; right: 30px; background-color: #eb3b5a; color: white; border: none; padding: 8px 15px; font-size: 14px; font-weight: bold; border-radius: 4px; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.2); transition: 0.2s; }
         .btn-logout:hover { background-color: #cf2a46; }
 
+        /* Navigasi Halaman Menu (Tab) */
+        .tab-navigation { display: flex; gap: 10px; margin-bottom: 25px; border-bottom: 2px solid #dcdde1; padding-bottom: 10px; }
+        .tab-btn { background-color: #f1f2f6; color: #2c3e50; border: 1px solid #ced4da; padding: 12px 20px; font-size: 15px; font-weight: bold; border-radius: 6px; cursor: pointer; transition: 0.2s; flex: 1; text-align: center; }
+        .tab-btn:hover { background-color: #dfe4ea; }
+        .tab-btn.active { background-color: #34495e; color: white; border-color: #34495e; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+
+        /* Komponen Form */
         .form-section { background: #f9f9f9; padding: 20px; border: 1px solid #dcdde1; border-radius: 6px; margin-bottom: 20px; }
         .section-title { background: #2c3e50; color: white; padding: 8px 12px; font-weight: bold; border-radius: 4px; margin-top: 0; margin-bottom: 15px; }
 
@@ -69,7 +76,7 @@
         @media print {
             body { background: white; padding: 0; margin: 0; }
             .container { box-shadow: none; padding: 0; max-width: 100%; }
-            form, h2, .form-section, .print-action-bar, .login-wrapper, .btn-logout { display: none !important; }
+            form, h2, .form-section, .print-action-bar, .login-wrapper, .btn-logout, .tab-navigation { display: none !important; }
             .print-area { display: block !important; border: none; padding: 0; margin-top: 0; }
             .table-ttd, .ketidakhadiran-box { page-break-inside: avoid !important; }
         }
@@ -77,6 +84,7 @@
 </head>
 <body>
 
+<!-- ================= HALAMAN LOGIN ================= -->
 <div class="login-wrapper" id="loginWrapper">
     <div class="login-box">
         <h2>Login Sistem Rapor</h2>
@@ -95,257 +103,282 @@
     </div>
 </div>
 
+<!-- ================= APLIKASI RAPOR UTAMA ================= -->
 <div class="container hidden" id="mainApp">
     <button class="btn-logout" id="btnLogout">🚪 Log Out</button>
 
-    <h2>INPUT DATA LAPORAN HASIL BELAJAR (KURIKULUM MERDEKA)</h2>
+    <h2>SISTEM MANAJEMEN RAPOR KURIKULUM MERDEKA</h2>
+
+    <!-- NAVIGASI HALAMAN BARU (TAB MENU) -->
+    <div class="tab-navigation">
+        <button type="button" class="tab-btn active" id="tabKamus" onclick="switchPage('kamus')">⚙️ HALAMAN 1: PENGATURAN KAMUS DESKRIPSI & KKM</button>
+        <button type="button" class="tab-btn" id="tabNilai" onclick="switchPage('nilai')">📝 HALAMAN 2: INPUT NILAI & DATA SISWA</button>
+    </div>
 
     <form id="raportForm">
-        <div class="form-section">
-            <div class="section-title">DATA SISWA & SEKOLAH</div>
-            <div class="row">
-                <div class="col"><label>Nama Peserta Didik</label><input type="text" id="nama" value="ABDULLOH SAJAD" required></div>
-                <div class="col">
-                    <label>Kelas & Program Keahlian</label>
-                    <div style="display: flex; gap: 10px;">
-                        <input type="text" id="kelas" value="X (sepuluh)" style="width: 30%;" placeholder="Kelas" required>
-                        <select id="program_keahlian" style="width: 70%;" required>
-                            <option value="Teknik Jaringan dan Komputer">Teknik Jaringan dan Komputer</option>
-                            <option value="Teknik Kendaraan Ringan / Otomotif">Teknik Kendaraan Ringan / Otomotif</option>
-                            <option value="Teknik Audio Video">Teknik Audio Video</option>
+        
+        <!-- ================= HALAMAN 1: SETTING KAMUS DESKRIPSI & KKM (DINAMIS) ================= -->
+        <div id="pageKamus" class="tab-content">
+            <div class="form-section" style="background-color: #edf2f7; border: 2px solid #34495e;">
+                <div class="section-title" style="background-color: #34495e;">PENGATURAN KAMUS DESKRIPSI & AMBANG NILAI (KKM) SEMUA MAPEL</div>
+                
+                <div class="row">
+                    <div class="col">
+                        <label style="color:#2c3e50; font-size:14px;">1. Pilih Mata Pelajaran yang Ingin Diedit:</label>
+                        <select id="kamus_select_mapel" onchange="loadKamusMapel()" style="border: 2px solid #34495e; font-weight: bold;">
+                            <option value="pai">Pendidikan Agama Islam dan Budi Pekerti</option>
+                            <option value="pancasila">Pendidikan Pancasila</option>
+                            <option value="indo">Bahasa Indonesia</option>
+                            <option value="pjok">Pendidikan Jasmani, Olahraga, dan Kesehatan</option>
+                            <option value="sejarah">Sejarah</option>
+                            <option value="seni">Seni Budaya</option>
+                            <option value="math">Matematika</option>
+                            <option value="inggris">Bahasa Inggris</option>
+                            <option value="info">Informatika</option>
+                            <option value="ipas">Projek Ilmu Pengetahuan Alam dan Sosial</option>
+                            <option value="dpk">Dasar Program Keahlian</option>
+                            <option value="mulok">Muatan Lokal</option>
                         </select>
                     </div>
+                    <div class="col">
+                        <label style="color:#2c3e50; font-size:14px;">2. Atur Batas Kelulusan (KKM) Mata Pelajaran Ini:</label>
+                        <input type="number" id="kamus_kkm" value="75" min="0" max="100" oninput="saveKamusMapel()" style="border: 2px solid #34495e; font-weight: bold;">
+                        <span class="hint-kkm" style="color:#2c3e50;">*Nilai di bawah angka ini otomatis memicu deskripsi "DI BAWAH KKM".</span>
+                    </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col"><label>NISN</label><input type="text" id="nisn" value="3086299358" required></div>
-                <div class="col"><label>Fase</label><input type="text" id="fase" value="E" required></div>
-            </div>
-            <div class="row">
-                <div class="col"><label>Sekolah</label><input type="text" id="sekolah" value="SMK AL KAAFFAH" required></div>
-                <div class="col"><label>Semester</label><input type="text" id="semester" value="II (Dua)" required></div>
-            </div>
-            <div class="row">
-                <div class="col"><label>Alamat</label><input type="text" id="alamat" value="Jalan Semeru No.18 A Dilem Kepanjen" required></div>
-                <div class="col"><label>Tahun Pelajaran</label><input type="text" id="tapel" value="2024-2025" required></div>
-            </div>
-        </div>
 
-        <div class="form-section" style="background-color: #edf2f7; border: 2px solid #34495e;">
-            <div class="section-title" style="background-color: #34495e;">⚙️ PENGATURAN KAMUS DESKRIPSI & AMBANG NILAI (KKM)</div>
-            <div class="row">
-                <div class="col">
-                    <label>1. Pilih Mata Pelajaran yang Ingin Diatur</label>
-                    <select id="kamus_select_mapel" onchange="loadKamusMapel()">
-                        <option value="pai">Pendidikan Agama Islam dan Budi Pekerti</option>
-                        <option value="pancasila">Pendidikan Pancasila</option>
-                        <option value="indo">Bahasa Indonesia</option>
-                        <option value="pjok">Pendidikan Jasmani, Olahraga, dan Kesehatan</option>
-                        <option value="sejarah">Sejarah</option>
-                        <option value="seni">Seni Budaya</option>
-                        <option value="math">Matematika</option>
-                        <option value="inggris">Bahasa Inggris</option>
-                        <option value="info">Informatika</option>
-                        <option value="ipas">Projek Ilmu Pengetahuan Alam dan Sosial</option>
-                        <option value="dpk">Dasar Program Keahlian</option>
-                        <option value="mulok">Muatan Lokal</option>
-                    </select>
+                <div class="row" style="margin-top: 15px;">
+                    <div class="col">
+                        <label style="color: #27ae60;">3. Teks Deskripsi "DI ATAS / SAMA DENGAN KKM" (Paham / Tercapai)</label>
+                        <textarea id="kamus_teks_paham" placeholder="Ketik deskripsi capaian jika nilai siswa tuntas di sini..." oninput="saveKamusMapel()" style="height: 120px; border: 1px solid #27ae60;"></textarea>
+                    </div>
+                    <div class="col">
+                        <label style="color: #eb3b5a;">4. Teks Deskripsi "DI BAWAH KKM" (Belum Tercapai / Perlu Bimbingan)</label>
+                        <textarea id="kamus_teks_bimbingan" placeholder="Ketik deskripsi capaian jika nilai siswa kurang di sini..." oninput="saveKamusMapel()" style="height: 120px; border: 1px solid #eb3b5a;"></textarea>
+                    </div>
                 </div>
-                <div class="col">
-                    <label>2. Batas Minimal Kelulusan (KKM)</label>
-                    <input type="number" id="kamus_kkm" value="75" min="0" max="100" oninput="saveKamusMapel()">
-                    <span class="hint-kkm">*Nilai di bawah ini dianggap memerlukan bimbingan</span>
-                </div>
-            </div>
-            <div class="row" style="margin-top: 10px;">
-                <div class="col">
-                    <label>3. Teks Deskripsi "DI ATAS KKM" (Tercapai / Paham)</label>
-                    <textarea id="kamus_teks_paham" placeholder="Contoh: menunjukkan pemahaman dalam..." oninput="saveKamusMapel()"></textarea>
-                </div>
-                <div class="col">
-                    <label>4. Teks Deskripsi "DI BAWAH KKM" (Perlu Bimbingan)</label>
-                    <textarea id="kamus_teks_bimbingan" placeholder="Contoh: membutuhkan bimbingan dalam..." oninput="saveKamusMapel()"></textarea>
+                
+                <div style="margin-top: 20px; padding: 10px; background-color: #dff9fb; border-radius: 4px; border: 1px solid #c7ecee; font-size: 13px; color: #2c3e50;">
+                    💡 <strong>Petunjuk:</strong> Anda dapat mengganti isi kurikulum/deskripsi di atas kapan saja. Perubahan akan langsung memengaruhi otomasi penilaian di Halaman 2 secara real-time. Setelah selesai mengatur, silakan klik tombol <strong>"HALAMAN 2"</strong> di atas untuk mengisi nilai siswa.
                 </div>
             </div>
         </div>
 
-        <div class="form-section">
-            <div class="section-title">MATA PELAJARAN DAN CAPAIAN KOMPETENSI</div>
-            <table>
-                <thead>
-                    <tr>
-                        <th style="width: 5%;">No</th>
-                        <th style="width: 35%;">Muatan Pelajaran</th>
-                        <th style="width: 17%;">Nilai Akhir & Status KKM</th>
-                        <th style="width: 43%;">Capaian Kompetensi (Otomatis)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr class="sub-header"><td colspan="4">A. Kelompok Mata Pelajaran Umum</td></tr>
-                    <tr>
-                        <td class="center">1</td>
-                        <td>Pendidikan Agama Islam dan Budi Pekerti</td>
-                        <td>
-                            <input type="number" id="n_pai" class="nilai-input" data-mapel="pai" min="0" max="100" placeholder="Nilai">
-                            <span id="status_kkm_pai" class="hint-kkm" style="font-weight: bold;"></span>
-                        </td>
-                        <td><textarea id="d_pai" class="auto-textarea" readonly placeholder="Akan terisi otomatis..."></textarea></td>
-                    </tr>
-                    <tr>
-                        <td class="center">2</td>
-                        <td>Pendidikan Pancasila</td>
-                        <td>
-                            <input type="number" id="n_pancasila" class="nilai-input" data-mapel="pancasila" min="0" max="100" placeholder="Nilai">
-                            <span id="status_kkm_pancasila" class="hint-kkm" style="font-weight: bold;"></span>
-                        </td>
-                        <td><textarea id="d_pancasila" class="auto-textarea" readonly placeholder="Akan terisi otomatis..."></textarea></td>
-                    </tr>
-                    <tr>
-                        <td class="center">3</td>
-                        <td>Bahasa Indonesia</td>
-                        <td>
-                            <input type="number" id="n_indo" class="nilai-input" data-mapel="indo" min="0" max="100" placeholder="Nilai">
-                            <span id="status_kkm_indo" class="hint-kkm" style="font-weight: bold;"></span>
-                        </td>
-                        <td><textarea id="d_indo" class="auto-textarea" readonly placeholder="Akan terisi otomatis..."></textarea></td>
-                    </tr>
-                    <tr>
-                        <td class="center">4</td>
-                        <td>Pendidikan Jasmani, Olahraga, dan Kesehatan</td>
-                        <td>
-                            <input type="number" id="n_pjok" class="nilai-input" data-mapel="pjok" min="0" max="100" placeholder="Nilai">
-                            <span id="status_kkm_pjok" class="hint-kkm" style="font-weight: bold;"></span>
-                        </td>
-                        <td><textarea id="d_pjok" class="auto-textarea" readonly placeholder="Akan terisi otomatis..."></textarea></td>
-                    </tr>
-                    <tr>
-                        <td class="center">5</td>
-                        <td>Sejarah</td>
-                        <td>
-                            <input type="number" id="n_sejarah" class="nilai-input" data-mapel="sejarah" min="0" max="100" placeholder="Nilai">
-                            <span id="status_kkm_sejarah" class="hint-kkm" style="font-weight: bold;"></span>
-                        </td>
-                        <td><textarea id="d_sejarah" class="auto-textarea" readonly placeholder="Akan terisi otomatis..."></textarea></td>
-                    </tr>
-                    <tr>
-                        <td class="center">6</td>
-                        <td>Seni Budaya</td>
-                        <td>
-                            <input type="number" id="n_seni" class="nilai-input" data-mapel="seni" min="0" max="100" placeholder="Nilai">
-                            <span id="status_kkm_seni" class="hint-kkm" style="font-weight: bold;"></span>
-                        </td>
-                        <td><textarea id="d_seni" class="auto-textarea" readonly placeholder="Akan terisi otomatis..."></textarea></td>
-                    </tr>
-
-                    <tr class="sub-header"><td colspan="4">B. Kelompok Mata Pelajaran Kejuruan</td></tr>
-                    <tr>
-                        <td class="center">1</td>
-                        <td>Matematika</td>
-                        <td>
-                            <input type="number" id="n_math" class="nilai-input" data-mapel="math" min="0" max="100" placeholder="Nilai">
-                            <span id="status_kkm_math" class="hint-kkm" style="font-weight: bold;"></span>
-                        </td>
-                        <td><textarea id="d_math" class="auto-textarea" readonly placeholder="Akan terisi otomatis..."></textarea></td>
-                    </tr>
-                    <tr>
-                        <td class="center">2</td>
-                        <td>Bahasa Inggris</td>
-                        <td>
-                            <input type="number" id="n_inggris" class="nilai-input" data-mapel="inggris" min="0" max="100" placeholder="Nilai">
-                            <span id="status_kkm_inggris" class="hint-kkm" style="font-weight: bold;"></span>
-                        </td>
-                        <td><textarea id="d_inggris" class="auto-textarea" readonly placeholder="Akan terisi otomatis..."></textarea></td>
-                    </tr>
-                    <tr>
-                        <td class="center">3</td>
-                        <td>Informatika</td>
-                        <td>
-                            <input type="number" id="n_info" class="nilai-input" data-mapel="info" min="0" max="100" placeholder="Nilai">
-                            <span id="status_kkm_info" class="hint-kkm" style="font-weight: bold;"></span>
-                        </td>
-                        <td><textarea id="d_info" class="auto-textarea" readonly placeholder="Akan terisi otomatis..."></textarea></td>
-                    </tr>
-                    <tr>
-                        <td class="center">4</td>
-                        <td>Projek Ilmu Pengetahuan Alam dan Sosial</td>
-                        <td>
-                            <input type="number" id="n_ipas" class="nilai-input" data-mapel="ipas" min="0" max="100" placeholder="Nilai">
-                            <span id="status_kkm_ipas" class="hint-kkm" style="font-weight: bold;"></span>
-                        </td>
-                        <td><textarea id="d_ipas" class="auto-textarea" readonly placeholder="Akan terisi otomatis..."></textarea></td>
-                    </tr>
-                    <tr>
-                        <td class="center">5</td>
-                        <td>Dasar Program Keahlian</td>
-                        <td>
-                            <input type="number" id="n_dpk" class="nilai-input" data-mapel="dpk" min="0" max="100" placeholder="Nilai">
-                            <span id="status_kkm_dpk" class="hint-kkm" style="font-weight: bold;"></span>
-                        </td>
-                        <td><textarea id="d_dpk" class="auto-textarea" readonly placeholder="Akan terisi otomatis..."></textarea></td>
-                    </tr>
-
-                    <tr class="sub-header"><td colspan="4">C. Muatan Lokal</td></tr>
-                    <tr>
-                        <td class="center">1</td>
-                        <td>Muatan Lokal</td>
-                        <td>
-                            <input type="number" id="n_mulok" class="nilai-input" data-mapel="mulok" min="0" max="100" placeholder="Nilai">
-                            <span id="status_kkm_mulok" class="hint-kkm" style="font-weight: bold;"></span>
-                        </td>
-                        <td><textarea id="d_mulok" class="auto-textarea" readonly placeholder="Akan terisi otomatis..."></textarea></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <div class="row">
-            <div class="col form-section">
-                <div class="section-title">Ekstrakurikuler</div>
-                <label>Ekskul 1</label>
+        <!-- ================= HALAMAN 2: INPUT NILAI & DATA SISWA ================= -->
+        <div id="pageNilai" class="tab-content hidden">
+            <!-- DATA IDENTITAS -->
+            <div class="form-section">
+                <div class="section-title">DATA SISWA & SEKOLAH</div>
                 <div class="row">
-                    <input type="text" id="e1_nama" value="English Conversation Club (ECC)" style="flex:2;">
-                    <input type="text" id="e1_nilai" value="B" style="flex:1;">
+                    <div class="col"><label>Nama Peserta Didik</label><input type="text" id="nama" value="ABDULLOH SAJAD" required></div>
+                    <div class="col">
+                        <label>Kelas & Program Keahlian</label>
+                        <div style="display: flex; gap: 10px;">
+                            <input type="text" id="kelas" value="X (sepuluh)" style="width: 30%;" placeholder="Kelas" required>
+                            <select id="program_keahlian" style="width: 70%;" required>
+                                <option value="Teknik Jaringan dan Komputer">Teknik Jaringan dan Komputer</option>
+                                <option value="Teknik Kendaraan Ringan / Otomotif">Teknik Kendaraan Ringan / Otomotif</option>
+                                <option value="Teknik Audio Video">Teknik Audio Video</option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
-                <textarea id="e1_ket">Ananda baik dan aktif dalam menangkap makna lisan teks transaksional lisan Bahasa Inggris sederhana.</textarea>
-
-                <label style="margin-top:10px;">Ekskul 2</label>
                 <div class="row">
-                    <input type="text" id="e2_nama" value="Pagar Nusa" style="flex:2;">
-                    <input type="text" id="e2_nilai" value="A" style="flex:1;">
+                    <div class="col"><label>NISN</label><input type="text" id="nisn" value="3086299358" required></div>
+                    <div class="col"><label>Fase</label><input type="text" id="fase" value="E" required></div>
                 </div>
-                <textarea id="e2_ket">Ananda sangat aktif dalam mengikuti kegiatan ekstrakurikuler pagar nusa.</textarea>
-            </div>
-
-            <div class="col form-section">
-                <div class="section-title">Ketidakhadiran & Keputusan</div>
                 <div class="row">
-                    <div class="col"><label>Sakit (Hari)</label><input type="text" id="sakit" value="-"></div>
-                    <div class="col"><label>Izin (Hari)</label><input type="text" id="izin" value="-"></div>
-                    <div class="col"><label>Alpa (Hari)</label><input type="text" id="alpa" value="-"></div>
+                    <div class="col"><label>Sekolah</label><input type="text" id="sekolah" value="SMK AL KAAFFAH" required></div>
+                    <div class="col"><label>Semester</label><input type="text" id="semester" value="II (Dua)" required></div>
                 </div>
-                <label style="margin-top:10px;">Keputusan Kenaikan</label>
-                <input type="text" id="kenaikan" value="ANANDA NAIK DI KELAS XI">
-
-                <label style="margin-top:10px;">Catatan Wali Kelas</label>
-                <textarea id="catatan">Ananda telah menunjukkan usaha yang luar biasa di semester ini dan hasilnya sangat membanggakan. Tetap semangat dan teruslah berprestasi.</textarea>
+                <div class="row">
+                    <div class="col"><label>Alamat</label><input type="text" id="alamat" value="Jalan Semeru No.18 A Dilem Kepanjen" required></div>
+                    <div class="col"><label>Tahun Pelajaran</label><input type="text" id="tapel" value="2024-2025" required></div>
+                </div>
             </div>
-        </div>
 
-        <div class="form-section">
-            <div class="section-title">NAMA PENANDATANGAN RAPOR</div>
+            <!-- TABEL INPUT NILAI & DESKRIPSI OTOMATIS -->
+            <div class="form-section">
+                <div class="section-title">MATA PELAJARAN DAN CAPAIAN KOMPETENSI</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 5%;">No</th>
+                            <th style="width: 35%;">Muatan Pelajaran</th>
+                            <th style="width: 22%;">Nilai Akhir & Status KKM</th>
+                            <th style="width: 38%;">Capaian Kompetensi (Otomatis Sesuai Kamus Halaman 1)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="sub-header"><td colspan="4">A. Kelompok Mata Pelajaran Umum</td></tr>
+                        <tr>
+                            <td class="center">1</td>
+                            <td>Pendidikan Agama Islam dan Budi Pekerti</td>
+                            <td>
+                                <input type="number" id="n_pai" class="nilai-input" data-mapel="pai" min="0" max="100" placeholder="Masukkan nilai">
+                                <span id="status_kkm_pai" class="hint-kkm" style="font-weight: bold;"></span>
+                            </td>
+                            <td><textarea id="d_pai" class="auto-textarea" readonly placeholder="Akan terisi otomatis..."></textarea></td>
+                        </tr>
+                        <tr>
+                            <td class="center">2</td>
+                            <td>Pendidikan Pancasila</td>
+                            <td>
+                                <input type="number" id="n_pancasila" class="nilai-input" data-mapel="pancasila" min="0" max="100" placeholder="Masukkan nilai">
+                                <span id="status_kkm_pancasila" class="hint-kkm" style="font-weight: bold;"></span>
+                            </td>
+                            <td><textarea id="d_pancasila" class="auto-textarea" readonly placeholder="Akan terisi otomatis..."></textarea></td>
+                        </tr>
+                        <tr>
+                            <td class="center">3</td>
+                            <td>Bahasa Indonesia</td>
+                            <td>
+                                <input type="number" id="n_indo" class="nilai-input" data-mapel="indo" min="0" max="100" placeholder="Masukkan nilai">
+                                <span id="status_kkm_indo" class="hint-kkm" style="font-weight: bold;"></span>
+                            </td>
+                            <td><textarea id="d_indo" class="auto-textarea" readonly placeholder="Akan terisi otomatis..."></textarea></td>
+                        </tr>
+                        <tr>
+                            <td class="center">4</td>
+                            <td>Pendidikan Jasmani, Olahraga, dan Kesehatan</td>
+                            <td>
+                                <input type="number" id="n_pjok" class="nilai-input" data-mapel="pjok" min="0" max="100" placeholder="Masukkan nilai">
+                                <span id="status_kkm_pjok" class="hint-kkm" style="font-weight: bold;"></span>
+                            </td>
+                            <td><textarea id="d_pjok" class="auto-textarea" readonly placeholder="Akan terisi otomatis..."></textarea></td>
+                        </tr>
+                        <tr>
+                            <td class="center">5</td>
+                            <td>Sejarah</td>
+                            <td>
+                                <input type="number" id="n_sejarah" class="nilai-input" data-mapel="sejarah" min="0" max="100" placeholder="Masukkan nilai">
+                                <span id="status_kkm_sejarah" class="hint-kkm" style="font-weight: bold;"></span>
+                            </td>
+                            <td><textarea id="d_sejarah" class="auto-textarea" readonly placeholder="Akan terisi otomatis..."></textarea></td>
+                        </tr>
+                        <tr>
+                            <td class="center">6</td>
+                            <td>Seni Budaya</td>
+                            <td>
+                                <input type="number" id="n_seni" class="nilai-input" data-mapel="seni" min="0" max="100" placeholder="Masukkan nilai">
+                                <span id="status_kkm_seni" class="hint-kkm" style="font-weight: bold;"></span>
+                            </td>
+                            <td><textarea id="d_seni" class="auto-textarea" readonly placeholder="Akan terisi otomatis..."></textarea></td>
+                        </tr>
+
+                        <tr class="sub-header"><td colspan="4">B. Kelompok Mata Pelajaran Kejuruan</td></tr>
+                        <tr>
+                            <td class="center">1</td>
+                            <td>Matematika</td>
+                            <td>
+                                <input type="number" id="n_math" class="nilai-input" data-mapel="math" min="0" max="100" placeholder="Masukkan nilai">
+                                <span id="status_kkm_math" class="hint-kkm" style="font-weight: bold;"></span>
+                            </td>
+                            <td><textarea id="d_math" class="auto-textarea" readonly placeholder="Akan terisi otomatis..."></textarea></td>
+                        </tr>
+                        <tr>
+                            <td class="center">2</td>
+                            <td>Bahasa Inggris</td>
+                            <td>
+                                <input type="number" id="n_inggris" class="nilai-input" data-mapel="inggris" min="0" max="100" placeholder="Masukkan nilai">
+                                <span id="status_kkm_inggris" class="hint-kkm" style="font-weight: bold;"></span>
+                            </td>
+                            <td><textarea id="d_inggris" class="auto-textarea" readonly placeholder="Akan terisi otomatis..."></textarea></td>
+                        </tr>
+                        <tr>
+                            <td class="center">3</td>
+                            <td>Informatika</td>
+                            <td>
+                                <input type="number" id="n_info" class="nilai-input" data-mapel="info" min="0" max="100" placeholder="Masukkan nilai">
+                                <span id="status_kkm_info" class="hint-kkm" style="font-weight: bold;"></span>
+                            </td>
+                            <td><textarea id="d_info" class="auto-textarea" readonly placeholder="Akan terisi otomatis..."></textarea></td>
+                        </tr>
+                        <tr>
+                            <td class="center">4</td>
+                            <td>Projek Ilmu Pengetahuan Alam dan Sosial</td>
+                            <td>
+                                <input type="number" id="n_ipas" class="nilai-input" data-mapel="ipas" min="0" max="100" placeholder="Masukkan nilai">
+                                <span id="status_kkm_ipas" class="hint-kkm" style="font-weight: bold;"></span>
+                            </td>
+                            <td><textarea id="d_ipas" class="auto-textarea" readonly placeholder="Akan terisi otomatis..."></textarea></td>
+                        </tr>
+                        <tr>
+                            <td class="center">5</td>
+                            <td>Dasar Program Keahlian</td>
+                            <td>
+                                <input type="number" id="n_dpk" class="nilai-input" data-mapel="dpk" min="0" max="100" placeholder="Masukkan nilai">
+                                <span id="status_kkm_dpk" class="hint-kkm" style="font-weight: bold;"></span>
+                            </td>
+                            <td><textarea id="d_dpk" class="auto-textarea" readonly placeholder="Akan terisi otomatis..."></textarea></td>
+                        </tr>
+
+                        <tr class="sub-header"><td colspan="4">C. Muatan Lokal</td></tr>
+                        <tr>
+                            <td class="center">1</td>
+                            <td>Muatan Lokal</td>
+                            <td>
+                                <input type="number" id="n_mulok" class="nilai-input" data-mapel="mulok" min="0" max="100" placeholder="Masukkan nilai">
+                                <span id="status_kkm_mulok" class="hint-kkm" style="font-weight: bold;"></span>
+                            </td>
+                            <td><textarea id="d_mulok" class="auto-textarea" readonly placeholder="Akan terisi otomatis..."></textarea></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- EKSKUL, ABSENSI, CATATAN -->
             <div class="row">
-                <div class="col"><label>Tempat, Tanggal Rapor</label><input type="text" id="titimangsa" value="Kepanjen, 21 Juni 2025"></div>
-                <div class="col"><label>Nama Orang Tua / Wali</label><input type="text" id="nama_ortu" value="Daimatus Sadriyah"></div>
-            </div>
-            <div class="row">
-                <div class="col"><label>Nama Wali Kelas</label><input type="text" id="nama_walas" value="Darin Intan Nur A.S, S.Pd"></div>
-                <div class="col"><label>Nama Kepala Sekolah</label><input type="text" id="nama_kepsek" value="Nama Kepala Sekolah, S.Pd"></div>
-            </div>
-        </div>
+                <div class="col form-section">
+                    <div class="section-title">Ekstrakurikuler</div>
+                    <label>Ekskul 1</label>
+                    <div class="row">
+                        <input type="text" id="e1_nama" value="English Conversation Club (ECC)" style="flex:2;">
+                        <input type="text" id="e1_nilai" value="B" style="flex:1;">
+                    </div>
+                    <textarea id="e1_ket">Ananda baik dan aktif dalam menangkap makna lisan teks transaksional lisan Bahasa Inggris sederhana.</textarea>
 
-        <button type="submit" class="btn-block">PROSES & TAMPILKAN PRATINJAU RAPOR</button>
+                    <label style="margin-top:10px;">Ekskul 2</label>
+                    <div class="row">
+                        <input type="text" id="e2_nama" value="Pagar Nusa" style="flex:2;">
+                        <input type="text" id="e2_nilai" value="A" style="flex:1;">
+                    </div>
+                    <textarea id="e2_ket">Ananda sangat aktif dalam mengikuti kegiatan ekstrakurikuler pagar nusa.</textarea>
+                </div>
+
+                <div class="col form-section">
+                    <div class="section-title">Ketidakhadiran & Keputusan</div>
+                    <div class="row">
+                        <div class="col"><label>Sakit (Hari)</label><input type="text" id="sakit" value="-"></div>
+                        <div class="col"><label>Izin (Hari)</label><input type="text" id="izin" value="-"></div>
+                        <div class="col"><label>Alpa (Hari)</label><input type="text" id="alpa" value="-"></div>
+                    </div>
+                    <label style="margin-top:10px;">Keputusan Kenaikan</label>
+                    <input type="text" id="kenaikan" value="ANANDA NAIK DI KELAS XI">
+
+                    <label style="margin-top:10px;">Catatan Wali Kelas</label>
+                    <textarea id="catatan">Ananda telah menunjukkan usaha yang luar biasa di semester ini dan hasilnya sangat membanggakan. Tetap semangat dan teruslah berprestasi.</textarea>
+                </div>
+            </div>
+
+            <!-- PENANDATANGAN RAPOR -->
+            <div class="form-section">
+                <div class="section-title">NAMA PENANDATANGAN RAPOR</div>
+                <div class="row">
+                    <div class="col"><label>Tempat, Tanggal Rapor</label><input type="text" id="titimangsa" value="Kepanjen, 21 Juni 2025"></div>
+                    <div class="col"><label>Nama Orang Tua / Wali</label><input type="text" id="nama_ortu" value="Daimatus Sadriyah"></div>
+                </div>
+                <div class="row">
+                    <div class="col"><label>Nama Wali Kelas</label><input type="text" id="nama_walas" value="Darin Intan Nur A.S, S.Pd"></div>
+                    <div class="col"><label>Nama Kepala Sekolah</label><input type="text" id="nama_kepsek" value="Nama Kepala Sekolah, S.Pd"></div>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-block">PROSES & TAMPILKAN PRATINJAU RAPOR SEKARANG</button>
+        </div>
     </form>
 
+    <!-- ================= AREA PRATINJAU SIAP CETAK ================= -->
     <div class="print-area" id="printArea">
         <div class="print-action-bar">
             <button onclick="window.print()" class="btn-print">
@@ -359,6 +392,7 @@
             <h3 style="margin-bottom: 25px; font-weight: bold;">PENILAIAN SUMATIF AKHIR TAHUN</h3>
         </div>
 
+        <!-- BLOK DATA IDENTITAS SISWA -->
         <div class="report-header">
             <table>
                 <tr>
@@ -451,7 +485,23 @@
 </div>
 
 <script>
-    // DATA DEFAULT KAMUS DESKRIPSI & KKM YANG BISA DIEDIT GURU SECARA MANUAL
+    // FUNGSI NAVIGASI HALAMAN (TAB SWITCHER)
+    function switchPage(pageName) {
+        document.getElementById('pageKamus').classList.add('hidden');
+        document.getElementById('pageNilai').classList.add('hidden');
+        document.getElementById('tabKamus').classList.remove('active');
+        document.getElementById('tabNilai').classList.remove('active');
+
+        if(pageName === 'kamus') {
+            document.getElementById('pageKamus').classList.remove('hidden');
+            document.getElementById('tabKamus').classList.add('active');
+        } else if(pageName === 'nilai') {
+            document.getElementById('pageNilai').classList.remove('hidden');
+            document.getElementById('tabNilai').classList.add('active');
+        }
+    }
+
+    // KAMUS DATA DEFAULT MAPEL & KKM
     const kamusKompetensi = {
         pai: {
             kkm: 75,
@@ -515,7 +565,7 @@
         }
     };
 
-    // Fungsi memuat data kamus ke form pengaturan saat mapel dipilih
+    // Fungsi memuat data kamus ke halaman pengaturan saat drop-down mapel dipilih
     function loadKamusMapel() {
         const mapelKey = document.getElementById('kamus_select_mapel').value;
         const data = kamusKompetensi[mapelKey];
@@ -525,7 +575,7 @@
         document.getElementById('kamus_teks_bimbingan').value = data.bimbingan;
     }
 
-    // Fungsi menyimpan perubahan deskripsi manual dari form pengaturan kembali ke objek kamus
+    // Fungsi menyimpan perubahan deskripsi manual dari halaman 1 ke sistem core
     function saveKamusMapel() {
         const mapelKey = document.getElementById('kamus_select_mapel').value;
         
@@ -533,11 +583,11 @@
         kamusKompetensi[mapelKey].paham = document.getElementById('kamus_teks_paham').value;
         kamusKompetensi[mapelKey].bimbingan = document.getElementById('kamus_teks_bimbingan').value;
 
-        // Picu kalkulasi ulang seluruh tabel nilai agar langsung berubah secara realtime
+        // Picu pembaruan real-time di tabel input nilai
         refreshSemuaDeskripsiSiswa();
     }
 
-    // Generator teks berdasarkan logika ambang batas KKM dinamis
+    // Generator teks dinamis berdasarkan aturan KKM buatan guru
     function generateCapaianDeskripsi(mapelKey, nilai, namaSiswa) {
         if (!nilai || isNaN(nilai)) return "";
         const data = kamusKompetensi[mapelKey];
@@ -546,15 +596,14 @@
         let n = parseInt(nilai);
         let batasKKM = data.kkm;
 
-        // JIKA NILAI DI ATAS ATAU SAMA DENGAN KKM MANUAL
         if (n >= batasKKM) {
             return `${namaSiswa} ${data.paham}`;
-        } else { // JIKA NILAI DI BAWAH KKM MANUAL
+        } else {
             return `${namaSiswa} ${data.bimbingan}`;
         }
     }
 
-    // Fungsi memproses update realtime pada status KKM dan deskripsi di tabel inputan
+    // Fungsi memperbarui teks deskripsi & teks indikator KKM di samping kotak nilai
     function refreshSemuaDeskripsiSiswa() {
         document.querySelectorAll('.nilai-input').forEach(input => {
             const mapelKey = input.getAttribute('data-mapel');
@@ -566,7 +615,7 @@
                 let n = parseInt(nilaiVal);
                 let batas = kamusKompetensi[mapelKey].kkm;
                 if(n >= batas) {
-                    statusLabel.innerHTML = `🟢 Di Atas KKM (>=${batas})`;
+                    statusLabel.innerHTML = `🟢 Di Atas KKM (≥${batas})`;
                     statusLabel.style.color = "#27ae60";
                 } else {
                     statusLabel.innerHTML = `🔴 Di Bawah KKM (<${batas})`;
@@ -580,12 +629,12 @@
         });
     }
 
-    // Event listener untuk memantau ketikan nilai siswa
+    // Event listener deteksi input nilai
     document.querySelectorAll('.nilai-input').forEach(element => {
         element.addEventListener('input', refreshSemuaDeskripsiSiswa);
     });
 
-    // Inisialisasi awal saat halaman dibuka pertama kali
+    // Inisialisasi awal sistem
     window.onload = function() {
         loadKamusMapel();
     };
@@ -618,9 +667,10 @@
         printWindow.style.display = 'none';
         loginWindow.classList.remove('hidden');
         document.getElementById('loginForm').reset();
+        switchPage('kamus'); // reset tab ke halaman 1
     });
 
-    // LOGIKA PROSES & SIMPAN KE PREVIEW CETAK
+    // LOGIKA PROSES & GENERATE PREVIEW CETAK RAPOR
     document.getElementById('raportForm').addEventListener('submit', function(e) {
         e.preventDefault();
 
