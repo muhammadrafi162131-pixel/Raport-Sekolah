@@ -2,65 +2,168 @@
 <html>
 <head>
   <base target="_top">
-  <!-- Menggunakan Bootstrap untuk tampilan yang rapi di HP -->
+  <!-- Menggunakan Bootstrap 5 untuk framework tampilan -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Google Fonts & Icons untuk kesan aplikasi profesional -->
+  <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
   <!-- Library QR Scanner -->
   <script src="https://unpkg.com/html5-qrcode"></script>
+  
   <style>
-    body { background-color: #f8f9fa; padding: 20px; }
-    .scanner-box { max-width: 500px; margin: 0 auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0px 4px 10px rgba(0,0,0,0.1); }
-    #reader { width: 100%; border: none !important; }
+    body { 
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+      background-color: #f3f4f6; 
+      padding: 20px; 
+    }
+    .header-dashboard {
+      background: #ffffff;
+      padding: 15px 25px;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      margin-bottom: 20px;
+    }
+    .panel-card { 
+      background: white; 
+      padding: 20px; 
+      border-radius: 8px; 
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      border: 1px solid #e5e7eb;
+      height: 100%;
+    }
+    .table-container {
+      max-height: 450px;
+      overflow-y: auto;
+    }
+    .table-kerja {
+      font-size: 0.9rem;
+    }
+    .table-kerja th {
+      background-color: #f8fafc;
+      color: #475569;
+      font-weight: 600;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    #reader { 
+      width: 100%; 
+      border: 2px dashed #cbd5e1 !important; 
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    #reader__dashboard_section_csr button {
+      background-color: #2563eb !important;
+      color: white !important;
+      border: none !important;
+      padding: 6px 12px !important;
+      border-radius: 4px !important;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
 
-<div class="container">
-  <div class="scanner-box text-center">
-    <h3 class="mb-4">Absensi QR Code Siswa</h3>
+<div class="container-fluid">
+  
+  <!-- HEADER LEMBAR KERJA -->
+  <div class="header-dashboard d-flex justify-content-between align-items-center">
+    <div>
+      <h4 class="mb-1 text-primary fw-bold"><i class="bi bi-spreadsheet"></i> Lembar Kerja Absensi Digital</h4>
+      <p class="text-muted small mb-0">Scan kartu pelajar untuk mengisi lembar kehadiran & kirim WhatsApp otomatis.</p>
+    </div>
+    <div class="text-end">
+      <span class="badge bg-success p-2" id="live-clock"> Memuat Waktu...</span>
+    </div>
+  </div>
+
+  <div class="row g-4">
     
-    <!-- Pilihan Status Kehadiran -->
-    <div class="mb-3 text-start">
-      <label class="form-label fw-bold">Pilih Status Kehadiran Guru/Petugas:</label>
-      <select id="statusAbsen" class="form-select form-select-lg">
-        <option value="Hadir">Hadir</option>
-        <option value="Izin">Izin</option>
-        <option value="Sakit">Sakit</option>
-        <option value="Alpa">Alpa</option>
-      </select>
+    <!-- KOLOM KIRI: INPUT & SCANNER -->
+    <div class="col-md-4">
+      <div class="panel-card">
+        <h5 class="border-bottom pb-2 mb-3 text-secondary"><i class="bi bi-qr-code-scan"></i> Control Panel</h5>
+        
+        <!-- Pilihan Status Kehadiran -->
+        <div class="mb-3">
+          <label class="form-label fw-bold text-muted small">STATUS INPUT</label>
+          <select id="statusAbsen" class="form-select form-select-lg border-primary text-primary fw-bold">
+            <option value="Hadir">🟢 HADIR</option>
+            <option value="Izin">🟡 IZIN</option>
+            <option value="Sakit">🔵 SAKIT</option>
+            <option value="Alpa">🔴 ALPA</option>
+          </select>
+        </div>
+
+        <!-- Area Kamera Scanner -->
+        <div class="mb-3">
+          <label class="form-label fw-bold text-muted small">KAMERA SCANNER</label>
+          <div id="reader"></div>
+        </div>
+        
+        <!-- Notifikasi Status Proses -->
+        <div id="loading" class="text-center d-none my-2">
+          <div class="spinner-border text-primary spinner-border-sm" role="status"></div>
+          <span class="ms-2 small text-muted">Memproses lembar kerja...</span>
+        </div>
+        <div id="hasil" class="alert d-none text-center py-2 small" role="alert"></div>
+      </div>
+    </div>
+    
+    <!-- KOLOM KANAN: LEMBAR KERJA / TABLE LOG -->
+    <div class="col-md-8">
+      <div class="panel-card">
+        <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-3">
+          <h5 class="text-secondary mb-0"><i class="bi bi-table"></i> Log Aktivitas Masuk (Hari Ini)</h5>
+          <span class="badge bg-light text-dark border" id="total-absen">Total: 0 Siswa</span>
+        </div>
+        
+        <!-- Wadah Tabel Lembar Kerja -->
+        <div class="table-container border rounded">
+          <table class="table table-kerja table-hover table-striped mb-0">
+            <thead>
+              <tr>
+                <th width="5%">No</th>
+                <th width="25%">Waktu Scan</th>
+                <th width="20%">NIS</th>
+                <th width="35%">Nama Siswa</th>
+                <th width="15%">Status</th>
+              </tr>
+            </thead>
+            <tbody id="log-body">
+              <tr id="empty-row">
+                <td colspan="5" class="text-center text-muted py-4">Belum ada data masuk. Silakan lakukan scan pada kartu pelajar.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        
+      </div>
     </div>
 
-    <!-- Area Kamera Scanner -->
-    <div id="reader" class="mb-3"></div>
-    
-    <!-- Log Status -->
-    <div id="loading" class="spinner-border text-primary d-none" role="status"></div>
-    <div id="hasil" class="alert d-none mt-3" role="alert"></div>
   </div>
 </div>
 
 <script>
+  let noUrut = 1;
+
   // Inisialisasi Scanner Kamera
   const html5QrcodeScanner = new Html5QrcodeScanner("reader", { 
     fps: 10, 
-    qrbox: { width: 250, height: 250 } 
+    qrbox: { width: 220, height: 220 } 
   });
-  
   html5QrcodeScanner.render(onScanSuccess);
 
   function onScanSuccess(decodedText) {
-    // decodedText adalah isi dari QR Code (yaitu NIS Siswa, contoh: 2026001)
-    
-    // Matikan scanner sebentar agar tidak double scan
+    // Kunci scanner selama proses pencatatan berlangsung
     html5QrcodeScanner.clear();
     
-    // Ambil status terpilih
     var status = document.getElementById("statusAbsen").value;
     
-    // Tampilkan loading
     document.getElementById("loading").classList.remove("d-none");
     document.getElementById("hasil").classList.add("d-none");
 
-    // Kirim data NIS ke Google Apps Script (Backend)
+    // Kirim NIS ke backend Google Apps Script
     google.script.run
       .withSuccessHandler(function(response) {
         document.getElementById("loading").classList.add("d-none");
@@ -68,22 +171,59 @@
         hasilDiv.classList.remove("d-none");
         
         if(response.status === "sukses") {
-          hasilDiv.className = "alert alert-success mt-3";
-          hasilDiv.innerHTML = `<strong>${response.nama}</strong><br>${response.pesan}`;
+          hasilDiv.className = "alert alert-success py-2 small";
+          hasilDiv.innerHTML = `<i class="bi bi-check-circle"></i> Berhasil: <b>${response.nama}</b>`;
+          
+          // Masukkan data baru ke baris paling atas lembar kerja (Tabel)
+          tambahBarisLembarKerja(decodedText, response.nama, status);
         } else {
-          hasilDiv.className = "alert alert-danger mt-3";
-          hasilDiv.innerHTML = response.pesan;
+          hasilDiv.className = "alert alert-danger py-2 small";
+          hasilDiv.innerHTML = `<i class="bi bi-exclamation-triangle"></i> Gagal: ${response.pesan}`;
         }
         
-        // Hidupkan kembali scanner setelah 3 detik untuk siswa berikutnya
+        // Aktifkan kembali scanner otomatis setelah delay 2,5 detik
         setTimeout(() => {
           html5QrcodeScanner.render(onScanSuccess);
           hasilDiv.classList.add("d-none");
-        }, 3000);
+        }, 2500);
       })
       .prosesAbsen(decodedText, status);
   }
-  =IMAGE("https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=" & A2)
+
+  // Fungsi untuk memasukkan data hasil scan ke tabel halaman web secara instant
+  function tambahBarisLembarKerja(nis, nama, status) {
+    const tbody = document.getElementById("log-body");
+    const emptyRow = document.getElementById("empty-row");
+    if (emptyRow) emptyRow.remove();
+
+    let badgeColor = "bg-success";
+    if(status === "Izin") badgeColor = "bg-warning text-dark";
+    if(status === "Sakit") badgeColor = "bg-info text-dark";
+    if(status === "Alpa") badgeColor = "bg-danger";
+
+    let waktuSekarang = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+
+    // Format HTML untuk baris baru
+    let rowHTML = `<tr>
+      <td>${noUrut++}</td>
+      <td>${waktuSekarang}</td>
+      <td><code>${nis}</code></td>
+      <td class="fw-bold">${nama}</td>
+      <td><span class="badge ${badgeColor}">${status.toUpperCase()}</span></td>
+    </tr>`;
+
+    // Sisipkan baris baru di posisi paling atas tabel
+    tbody.insertAdjacentHTML('afterbegin', rowHTML);
+    
+    // Update Total Counter Siswa
+    document.getElementById("total-absen").innerText = `Total: ${noUrut - 1} Siswa`;
+  }
+
+  // Fitur Jam Jam Digital di Header
+  setInterval(() => {
+    const opsi = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' };
+    document.getElementById("live-clock").innerText = new Date().toLocaleDateString('id-ID', opsi);
+  }, 1000);
 </script>
 
 </body>
