@@ -1,1 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+  <!-- Menggunakan Bootstrap untuk tampilan yang rapi di HP -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Library QR Scanner -->
+  <script src="https://unpkg.com/html5-qrcode"></script>
+  <style>
+    body { background-color: #f8f9fa; padding: 20px; }
+    .scanner-box { max-width: 500px; margin: 0 auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0px 4px 10px rgba(0,0,0,0.1); }
+    #reader { width: 100%; border: none !important; }
+  </style>
+</head>
+<body>
 
+<div class="container">
+  <div class="scanner-box text-center">
+    <h3 class="mb-4">Absensi QR Code Siswa</h3>
+    
+    <!-- Pilihan Status Kehadiran -->
+    <div class="mb-3 text-start">
+      <label class="form-label fw-bold">Pilih Status Kehadiran Guru/Petugas:</label>
+      <select id="statusAbsen" class="form-select form-select-lg">
+        <option value="Hadir">Hadir</option>
+        <option value="Izin">Izin</option>
+        <option value="Sakit">Sakit</option>
+        <option value="Alpa">Alpa</option>
+      </select>
+    </div>
+
+    <!-- Area Kamera Scanner -->
+    <div id="reader" class="mb-3"></div>
+    
+    <!-- Log Status -->
+    <div id="loading" class="spinner-border text-primary d-none" role="status"></div>
+    <div id="hasil" class="alert d-none mt-3" role="alert"></div>
+  </div>
+</div>
+
+<script>
+  // Inisialisasi Scanner Kamera
+  const html5QrcodeScanner = new Html5QrcodeScanner("reader", { 
+    fps: 10, 
+    qrbox: { width: 250, height: 250 } 
+  });
+  
+  html5QrcodeScanner.render(onScanSuccess);
+
+  function onScanSuccess(decodedText) {
+    // decodedText adalah isi dari QR Code (yaitu NIS Siswa, contoh: 2026001)
+    
+    // Matikan scanner sebentar agar tidak double scan
+    html5QrcodeScanner.clear();
+    
+    // Ambil status terpilih
+    var status = document.getElementById("statusAbsen").value;
+    
+    // Tampilkan loading
+    document.getElementById("loading").classList.remove("d-none");
+    document.getElementById("hasil").classList.add("d-none");
+
+    // Kirim data NIS ke Google Apps Script (Backend)
+    google.script.run
+      .withSuccessHandler(function(response) {
+        document.getElementById("loading").classList.add("d-none");
+        var hasilDiv = document.getElementById("hasil");
+        hasilDiv.classList.remove("d-none");
+        
+        if(response.status === "sukses") {
+          hasilDiv.className = "alert alert-success mt-3";
+          hasilDiv.innerHTML = `<strong>${response.nama}</strong><br>${response.pesan}`;
+        } else {
+          hasilDiv.className = "alert alert-danger mt-3";
+          hasilDiv.innerHTML = response.pesan;
+        }
+        
+        // Hidupkan kembali scanner setelah 3 detik untuk siswa berikutnya
+        setTimeout(() => {
+          html5QrcodeScanner.render(onScanSuccess);
+          hasilDiv.classList.add("d-none");
+        }, 3000);
+      })
+      .prosesAbsen(decodedText, status);
+  }
+  =IMAGE("https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=" & A2)
+</script>
+
+</body>
+</html>
