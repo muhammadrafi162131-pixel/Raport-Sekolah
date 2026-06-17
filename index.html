@@ -56,14 +56,21 @@
       <h4 class="mb-1 text-primary fw-bold"><i class="bi bi-grid-1x2-fill"></i> Sistem Terpadu Absensi & Kartu QR</h4>
       <p class="text-muted small mb-0">Kelola absensi real-time WhatsApp dan cetak kartu pelajar mandiri.</p>
     </div>
-    <ul class="nav nav-pills" id="pills-tab" role="tablist">
-      <li class="nav-item">
-        <button class="nav-link active" id="tab-absen" data-bs-toggle="pill" data-bs-target="#konten-absen"><i class="bi bi-spreadsheet"></i> Lembar Kerja Absen</button>
-      </li>
-      <li class="nav-item">
-        <button class="nav-link" id="tab-kartu" data-bs-toggle="pill" data-bs-target="#konten-kartu" onclick="muatDaftarKartu()"><i class="bi bi-card-id"></i> Cetak Kartu Pelajar</button>
-      </li>
-    </ul>
+    
+    <div class="d-flex align-items-center gap-3">
+      <a href="https://www.google.com/search?q=google+spreadsheets&rlz=1C1CHWL_enID1133ID1133&oq=google+sp&gs_lcrp=EgZjaHJvbWUqCggBEAAYsQMYgAQyBggAEEUYOTIKCAEQABixAxiABDIHCAIQABiABDIKCAMQABixAxiABDIHCAQQABiABDIGCAUQRRg8MgYIBhBFGDwyBggHEEUYPNIBCDg0NjlqMGo3qAIIsAIB8QUE8erixLcXvQ&sourceid=chrome&ie=UTF-8&safe=active&ssui=on" target="_blank" class="btn btn-outline-success btn-sm fw-bold">
+        <i class="bi bi-file-earmark-spreadsheet-fill"></i> Buka Google Sheets
+      </a>
+
+      <ul class="nav nav-pills" id="pills-tab" role="tablist">
+        <li class="nav-item">
+          <button class="nav-link active" id="tab-absen" data-bs-toggle="pill" data-bs-target="#konten-absen"><i class="bi bi-spreadsheet"></i> Lembar Kerja Absen</button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link" id="tab-kartu" data-bs-toggle="pill" data-bs-target="#konten-kartu" onclick="muatDaftarKartu()"><i class="bi bi-card-id"></i> Cetak Kartu Pelajar</button>
+        </li>
+      </ul>
+    </div>
   </div>
 
   <div class="tab-content">
@@ -196,13 +203,12 @@
     document.getElementById("total-absen").innerText = `Total: ${noUrut - 1} Siswa`;
   }
 
-  // --- LOGIKA OTOMATIS GENERATE KARTU + QR ---
+  // --- LOGIKA GENERATE KARTU + QR ---
   function muatDaftarKartu() {
-    // Fungsi ini memanggil fungsi baru di Apps Script untuk mengambil list semua data siswa
     google.script.run
       .withSuccessHandler(function(siswaList) {
         const wadahKartu = document.getElementById("area-cetak-kartu");
-        wadahKartu.innerHTML = ""; // Bersihkan loading
+        wadahKartu.innerHTML = "";
         
         if(siswaList.length === 0) {
           wadahKartu.innerHTML = "<p class='text-center w-100 text-muted'>Tidak ada data siswa di database.</p>";
@@ -213,7 +219,6 @@
           let nis = siswa.nis;
           let nama = siswa.nama;
           
-          // Mengintegrasikan API QR Server pengganti rumus =IMAGE ke dalam elemen HTML <img>
           let qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${nis}`;
 
           let kartuHTML = `
@@ -236,7 +241,7 @@
           wadahKartu.insertAdjacentHTML('beforeend', kartuHTML);
         });
       })
-      .ambilSemuaSiswa(); // Pemicu fungsi backend
+      .ambilSemuaSiswa();
   }
 </script>
 
