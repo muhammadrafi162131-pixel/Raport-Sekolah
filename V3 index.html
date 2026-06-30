@@ -145,12 +145,12 @@
         <h1>Aplikasi e-Rapor Kurikulum Merdeka</h1>
         
         <div class="tabs">
-            <button class="tab-btn active" onclick="openTab(0)">1. Data Sekolah</button>
-            <button class="tab-btn" onclick="openTab(1)">2. Data Siswa</button>
-            <button class="tab-btn" onclick="openTab(2)">3. TP & Materi</button>
-            <button class="tab-btn" onclick="openTab(3)">4. Input Nilai</button>
-            <button class="tab-btn" onclick="openTab(4)">5. Ekskul & Absen</button>
-            <button class="tab-btn" onclick="openTab(5)">6. Preview & Cetak</button>
+            <button class="tab-btn active" id="btn-tab-0" onclick="openTab(0)">1. Data Sekolah</button>
+            <button class="tab-btn" id="btn-tab-1" onclick="openTab(1)">2. Data Siswa</button>
+            <button class="tab-btn" id="btn-tab-2" onclick="openTab(2)">3. TP & Materi</button>
+            <button class="tab-btn" id="btn-tab-3" onclick="openTab(3)">4. Input Nilai</button>
+            <button class="tab-btn" id="btn-tab-4" onclick="openTab(4)">5. Ekskul & Absen</button>
+            <button class="tab-btn" id="btn-tab-5" onclick="openTab(5)">6. Preview & Cetak</button>
         </div>
     </div>
 
@@ -245,7 +245,7 @@
                 <input type="number" id="absen_alfa" value="0">
             </div>
         </div>
-        <button class="btn-next" onclick="generateRapor(); openTab(5);">Generate & Preview &rarr;</button>
+        <button class="btn-next" onclick="openTab(5)">Generate & Preview &rarr;</button>
     </div>
 
     <div id="step5" class="tab-content">
@@ -356,7 +356,7 @@
         tabs.forEach(tab => tab.classList.remove('active'));
         
         document.getElementById('step' + tabIndex).classList.add('active');
-        tabs[tabIndex].classList.add('active');
+        document.getElementById('btn-tab-' + tabIndex).classList.add('active');
         
         if(tabIndex === 5) {
             generateRapor();
@@ -368,19 +368,18 @@
         const formatif = parseFloat(document.getElementById('nilai_formatif').value) || 0;
         const sumatif = parseFloat(document.getElementById('nilai_sumatif').value) || 0;
         
-        // Rumus Bobot: Formatif 40%, Sumatif 60%
-        const nilaiAkhir = Math.round((formatif * 0x.4) + (sumatif * 0x.6));
+        // Perbaikan kode bobot: Formatif 40% (0.4) & Sumatif 60% (0.6)
+        const nilaiAkhir = Math.round((formatif * 0.4) + (sumatif * 0.6));
         document.getElementById('display_na').innerText = nilaiAkhir;
         return nilaiAkhir;
     }
 
-    // Menghubungkan Form Input ke Lembar Cetak Rapor & Membuat Deskripsi Otomatis
+    // Menghubungkan Form Input ke Lembar Cetak Rapor
     function generateRapor() {
         const na = hitungOtomatis();
         const tp = document.getElementById('tp_materi').value;
         const lm = document.getElementById('lm_materi').value;
         
-        // Sinkronisasi data teks dasar
         document.getElementById('lbl_nama').innerText = document.getElementById('nama_siswa').value;
         document.getElementById('lbl_nisn').innerText = document.getElementById('nisn').value;
         document.getElementById('lbl_sekolah').innerText = document.getElementById('nama_sekolah').value;
@@ -389,14 +388,14 @@
         document.getElementById('lbl_mapel').innerText = document.getElementById('mapel').value;
         document.getElementById('lbl_na').innerText = na;
         
-        // Struktur e-Rapor: Membuat Deskripsi Otomatis berdasarkan Nilai Akhir (Capaian Kompetensi)
+        // Deskripsi Otomatis
         let deskripsi = "";
         if (na >= 80) {
-            deskripsi = `Menunjukkan penguasaan yang SANGAT BAIK dalam materi ${lm}, terutama dalam hal ${tp}`;
+            deskripsi = "Menunjukkan penguasaan yang SANGAT BAIK dalam materi " + lm + ", terutama dalam hal " + tp;
         } else if (na >= 70) {
-            deskripsi = `Menunjukkan penguasaan yang BAIK dalam materi ${lm}, untuk kompetensi ${tp}`;
+            deskripsi = "Menunjukkan penguasaan yang BAIK dalam materi " + lm + ", untuk kompetensi " + tp;
         } else {
-            deskripsi = `Perlu bimbingan dan pendampingan lebih lanjut dalam materi ${lm}, khususnya pada kompetensi ${tp}`;
+            deskripsi = "Perlu bimbingan dan pendampingan lebih lanjut dalam materi " + lm + ", khususnya pada kompetensi " + tp;
         }
         document.getElementById('lbl_deskripsi').innerText = deskripsi;
         
