@@ -1,1 +1,413 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aplikasi e-Rapor Kurikulum Merdeka</title>
+    <style>
+        :root {
+            --primary: #2b6cb0;
+            --success: #2f855a;
+            --gray: #e2e8f0;
+            --dark: #2d3748;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f7fafc;
+            color: var(--dark);
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        h1, h2, h3 {
+            color: var(--primary);
+            margin-top: 0;
+        }
+        /* Tab Navigation */
+        .tabs {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 5px;
+            margin-bottom: 25px;
+            border-bottom: 2px solid var(--gray);
+            padding-bottom: 10px;
+        }
+        .tab-btn {
+            background: #edf2f7;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        .tab-btn.active {
+            background: var(--primary);
+            color: white;
+        }
+        /* Content Sections */
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        /* Forms */
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+        input, textarea, select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #cbd5e0;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button.btn-next {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            float: right;
+            margin-top: 20px;
+        }
+        /* Rapor Print Area */
+        #rapor-cetak {
+            border: 2px solid #000;
+            padding: 40px;
+            background: white;
+        }
+        .rapor-header {
+            text-align: center;
+            border-bottom: 3px double #000;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        .rapor-meta {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            #rapor-cetak, #rapor-cetak * {
+                visibility: visible;
+            }
+            #rapor-cetak {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+            }
+            .no-print {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
 
+<div class="container">
+    <div class="no-print">
+        <h1>Aplikasi e-Rapor Kurikulum Merdeka</h1>
+        
+        <div class="tabs">
+            <button class="tab-btn active" onclick="openTab(0)">1. Data Sekolah</button>
+            <button class="tab-btn" onclick="openTab(1)">2. Data Siswa</button>
+            <button class="tab-btn" onclick="openTab(2)">3. TP & Materi</button>
+            <button class="tab-btn" onclick="openTab(3)">4. Input Nilai</button>
+            <button class="tab-btn" onclick="openTab(4)">5. Ekskul & Absen</button>
+            <button class="tab-btn" onclick="openTab(5)">6. Preview & Cetak</button>
+        </div>
+    </div>
+
+    <div id="step0" class="tab-content active">
+        <h2>Langkah 1: Isi Data Sekolah</h2>
+        <div class="form-group">
+            <label>Nama Sekolah</label>
+            <input type="text" id="nama_sekolah" value="SD Negeri Merdeka Belajar">
+        </div>
+        <div class="form-group">
+            <label>Kelas / Semester</label>
+            <input type="text" id="kelas_semester" value="IV (Empat) / 2 (Genap)">
+        </div>
+        <div class="form-group">
+            <label>Tahun Ajaran</label>
+            <input type="text" id="tahun_ajaran" value="2025/2026">
+        </div>
+        <button class="btn-next" onclick="openTab(1)">Selanjutnya &rarr;</button>
+    </div>
+
+    <div id="step1" class="tab-content">
+        <h2>Langkah 2: Input Data Siswa</h2>
+        <div class="form-group">
+            <label>Nama Siswa</label>
+            <input type="text" id="nama_siswa" value="Andi Wijaya">
+        </div>
+        <div class="form-group">
+            <label>NISN</label>
+            <input type="text" id="nisn" value="0123456789">
+        </div>
+        <button class="btn-next" onclick="openTab(2)">Selanjutnya &rarr;</button>
+    </div>
+
+    <div id="step2" class="tab-content">
+        <h2>Langkah 3: Tentukan Tujuan Pembelajaran (TP) & Lingkup Materi (LM)</h2>
+        <div class="form-group">
+            <label>Mata Pelajaran</label>
+            <input type="text" id="mapel" value="Matematika" readonly>
+        </div>
+        <div class="form-group">
+            <label>Lingkup Materi (LM)</label>
+            <input type="text" id="lm_materi" value="Pecahan dan Desimal">
+        </div>
+        <div class="form-group">
+            <label>Tujuan Pembelajaran (TP) Utama</label>
+            <textarea id="tp_materi" rows="3">Memahami konsep pecahan senilai dan mengubahnya ke bentuk desimal.</textarea>
+        </div>
+        <button class="btn-next" onclick="openTab(3)">Selanjutnya &rarr;</button>
+    </div>
+
+    <div id="step3" class="tab-content">
+        <h2>Langkah 4: Input Nilai Formatif & Sumatif</h2>
+        <p style="font-size: 14px; color: #666;">Sistem akan menghitung Nilai Akhir (NA) secara otomatis dengan bobot 40% Formatif & 60% Sumatif.</p>
+        <div class="form-group">
+            <label>Nilai Formatif (Tugas/Harian)</label>
+            <input type="number" id="nilai_formatif" value="85" oninput="hitungOtomatis()">
+        </div>
+        <div class="form-group">
+            <label>Nilai Sumatif (Ujian Akhir)</label>
+            <input type="number" id="nilai_sumatif" value="75" oninput="hitungOtomatis()">
+        </div>
+        <div class="form-group" style="background: #e6fffa; padding: 15px; border-radius: 4px;">
+            <label><b>Hasil Hitung Otomatis Nilai Akhir:</b></label>
+            <h3 id="display_na" style="margin: 5px 0 0 0; color: var(--success);">79</h3>
+        </div>
+        <button class="btn-next" onclick="openTab(4)">Selanjutnya &rarr;</button>
+    </div>
+
+    <div id="step4" class="tab-content">
+        <h2>Langkah 5: Isi Ekstrakurikuler & Kehadiran</h2>
+        <h3>Ekstrakurikuler</h3>
+        <div class="form-group">
+            <label>Kegiatan Ekskul</label>
+            <input type="text" id="ekskul_nama" value="Pramuka">
+        </div>
+        <div class="form-group">
+            <label>Keterangan/Predikat</label>
+            <input type="text" id="ekskul_ket" value="Sangat Aktif dan menunjukkan jiwa kepemimpinan.">
+        </div>
+        <h3>Kehadiran</h3>
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;">
+            <div class="form-group">
+                <label>Sakit (Hari)</label>
+                <input type="number" id="absen_sakit" value="1">
+            </div>
+            <div class="form-group">
+                <label>Izin (Hari)</label>
+                <input type="number" id="absen_izin" value="0">
+            </div>
+            <div class="form-group">
+                <label>Tanpa Ket. (Hari)</label>
+                <input type="number" id="absen_alfa" value="0">
+            </div>
+        </div>
+        <button class="btn-next" onclick="generateRapor(); openTab(5);">Generate & Preview &rarr;</button>
+    </div>
+
+    <div id="step5" class="tab-content">
+        <div class="no-print">
+            <h2>Langkah 6: Periksa Deskripsi & Cetak Rapor</h2>
+            <p>Silakan periksa lembar dokumen di bawah ini. Jika sudah sesuai, klik tombol cetak.</p>
+            <button onclick="window.print()" style="background: var(--success); color: white; border: none; padding: 12px 25px; border-radius: 4px; font-weight: bold; cursor: pointer; margin-bottom: 20px;">🖨️ Cetak Dokumen Rapor</button>
+        </div>
+
+        <div id="rapor-cetak">
+            <div class="rapor-header">
+                <h2>LAPORAN HASIL BELAJAR (RAPOR)</h2>
+                <h3>KURIKULUM MERDEKA</h3>
+            </div>
+            
+            <div class="rapor-meta">
+                <div>
+                    <strong>Nama Peserta Didik :</strong> <span id="lbl_nama"></span><br>
+                    <strong>NISN :</strong> <span id="lbl_nisn"></span>
+                </div>
+                <div>
+                    <strong>Sekolah :</strong> <span id="lbl_sekolah"></span><br>
+                    <strong>Kelas/Sem :</strong> <span id="lbl_kelas"></span><br>
+                    <strong>Tahun Ajaran :</strong> <span id="lbl_ta"></span>
+                </div>
+            </div>
+
+            <h3>A. Nilai Akademik</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th width="5%">No</th>
+                        <th width="25%">Mata Pelajaran</th>
+                        <th width="15%">Nilai Akhir</th>
+                        <th width="55%">Capaian Kompetensi (Deskripsi)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td><span id="lbl_mapel"></span></td>
+                        <td style="text-align: center; font-weight: bold;"><span id="lbl_na"></span></td>
+                        <td>
+                            <span id="lbl_deskripsi"></span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>B. Ekstrakurikuler</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th width="5%">No</th>
+                        <th width="35%">Kegiatan Ekstrakurikuler</th>
+                        <th width="60%">Keterangan</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td><span id="lbl_ekskul"></span></td>
+                        <td><span id="lbl_ekskul_ket"></span></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>C. Kehadiran</h3>
+            <table style="width: 50%;">
+                <tr>
+                    <td>Sakit</td>
+                    <td>: <span id="lbl_sakit"></span> Hari</td>
+                </tr>
+                <tr>
+                    <td>Izin</td>
+                    <td>: <span id="lbl_izin"></span> Hari</td>
+                </tr>
+                <tr>
+                    <td>Tanpa Keterangan</td>
+                    <td>: <span id="lbl_alfa"></span> Hari</td>
+                </tr>
+            </table>
+
+            <div style="margin-top: 50px; display: flex; justify-content: space-between;">
+                <div>
+                    <br>Orang Tua/Wali,
+                    <br><br><br><br>
+                    ( ____________________ )
+                </div>
+                <div>
+                    Jakarta, 30 Juni 2026<br>
+                    Wali Kelas,
+                    <br><br><br><br>
+                    ( ____________________ )
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Fungsi Navigasi Tab
+    function openTab(tabIndex) {
+        const contents = document.querySelectorAll('.tab-content');
+        const tabs = document.querySelectorAll('.tab-btn');
+        
+        contents.forEach(content => content.classList.remove('active'));
+        tabs.forEach(tab => tab.classList.remove('active'));
+        
+        document.getElementById('step' + tabIndex).classList.add('active');
+        tabs[tabIndex].classList.add('active');
+        
+        if(tabIndex === 5) {
+            generateRapor();
+        }
+    }
+
+    // Perhitungan Otomatis Nilai Akhir
+    function hitungOtomatis() {
+        const formatif = parseFloat(document.getElementById('nilai_formatif').value) || 0;
+        const sumatif = parseFloat(document.getElementById('nilai_sumatif').value) || 0;
+        
+        // Rumus Bobot: Formatif 40%, Sumatif 60%
+        const nilaiAkhir = Math.round((formatif * 0x.4) + (sumatif * 0x.6));
+        document.getElementById('display_na').innerText = nilaiAkhir;
+        return nilaiAkhir;
+    }
+
+    // Menghubungkan Form Input ke Lembar Cetak Rapor & Membuat Deskripsi Otomatis
+    function generateRapor() {
+        const na = hitungOtomatis();
+        const tp = document.getElementById('tp_materi').value;
+        const lm = document.getElementById('lm_materi').value;
+        
+        // Sinkronisasi data teks dasar
+        document.getElementById('lbl_nama').innerText = document.getElementById('nama_siswa').value;
+        document.getElementById('lbl_nisn').innerText = document.getElementById('nisn').value;
+        document.getElementById('lbl_sekolah').innerText = document.getElementById('nama_sekolah').value;
+        document.getElementById('lbl_kelas').innerText = document.getElementById('kelas_semester').value;
+        document.getElementById('lbl_ta').innerText = document.getElementById('tahun_ajaran').value;
+        document.getElementById('lbl_mapel').innerText = document.getElementById('mapel').value;
+        document.getElementById('lbl_na').innerText = na;
+        
+        // Struktur e-Rapor: Membuat Deskripsi Otomatis berdasarkan Nilai Akhir (Capaian Kompetensi)
+        let deskripsi = "";
+        if (na >= 80) {
+            deskripsi = `Menunjukkan penguasaan yang SANGAT BAIK dalam materi ${lm}, terutama dalam hal ${tp}`;
+        } else if (na >= 70) {
+            deskripsi = `Menunjukkan penguasaan yang BAIK dalam materi ${lm}, untuk kompetensi ${tp}`;
+        } else {
+            deskripsi = `Perlu bimbingan dan pendampingan lebih lanjut dalam materi ${lm}, khususnya pada kompetensi ${tp}`;
+        }
+        document.getElementById('lbl_deskripsi').innerText = deskripsi;
+        
+        // Ekskul & Absensi
+        document.getElementById('lbl_ekskul').innerText = document.getElementById('ekskul_nama').value;
+        document.getElementById('lbl_ekskul_ket').innerText = document.getElementById('ekskul_ket').value;
+        document.getElementById('lbl_sakit').innerText = document.getElementById('absen_sakit').value;
+        document.getElementById('lbl_izin').innerText = document.getElementById('absen_izin').value;
+        document.getElementById('lbl_alfa').innerText = document.getElementById('absen_alfa').value;
+    }
+</script>
+
+</body>
+</html>
