@@ -77,7 +77,7 @@
             background-color: #b91c1c;
         }
 
-        /* Header utama Aplikasi (Screen) */
+        /* Header utama e-Rapor */
         .main-header {
             text-align: center;
             border-bottom: 3px solid var(--secondary);
@@ -275,7 +275,16 @@
             color: black;
         }
         
-        /* Header Cetak Rapor: Ukuran Standar FIsik */
+        /* Kotak Keputusan Kenaikan Kelas */
+        .box-kenaikan {
+            border: 1px solid black;
+            padding: 12px;
+            margin-top: 15px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        /* Header Cetak Rapor */
         .rapor-header-container {
             text-align: center;
             border-bottom: 4px double #000;
@@ -379,7 +388,7 @@
         <div class="form-group no-print" style="max-width: 450px; margin-bottom: 20px; background: #f9fafb; padding: 15px; border-radius: 6px; border: 1px solid #e5e7eb;">
             <label for="guru_select" style="font-weight: bold; color: var(--primary);">Pilih Guru Mata Pelajaran:</label>
             <select id="guru_select" onchange="handleGuruChange()">
-                </select>
+            </select>
         </div>
 
         <form id="raporForm" onsubmit="event.preventDefault();">
@@ -409,7 +418,7 @@
                 <button class="sub-tab-btn active" id="btn-sub-0" onclick="openSubTab(0)">1. Data Sekolah</button>
                 <button class="sub-tab-btn" id="btn-sub-1" onclick="openSubTab(1)">2. Data Siswa</button>
                 <button class="sub-tab-btn" id="btn-sub-2" onclick="openSubTab(2)">3. Input Nilai & TP Mapel</button>
-                <button class="sub-tab-btn" id="btn-sub-3" onclick="openSubTab(3)">4. Ekskul & Absen</button>
+                <button class="sub-tab-btn" id="btn-sub-3" onclick="openSubTab(3)">4. Ekskul, Catatan & Absen</button>
                 <button class="sub-tab-btn" id="btn-sub-4" onclick="openSubTab(4)">5. Preview & Cetak</button>
             </div>
         </div>
@@ -443,7 +452,7 @@
             <h3>Langkah 2: Pilih Data Siswa</h3>
             <div class="form-group">
                 <label>Nama Peserta Didik</label>
-                <select id="nama_siswa" onchange="renderNilaiSiswaAktif()">
+                <select id="nama_siswa" onchange="renderNilaiSiswaAktif(); loadDataTambahanSiswa();">
                 </select>
             </div>
             <div class="form-group">
@@ -485,29 +494,50 @@
         </div>
 
         <div id="step3" class="sub-tab-content">
-            <h3>Langkah 4: Isi Ekstrakurikuler & Kehadiran</h3>
+            <h3>Langkah 4: Isi Ekstrakurikuler, Catatan Mandiri & Kehadiran</h3>
+            
             <h4>Ekstrakurikuler</h4>
             <div class="form-group">
                 <label>Kegiatan Ekskul</label>
-                <input type="text" id="ekskul_nama" value="-">
+                <input type="text" id="ekskul_nama" value="Pramuka">
             </div>
             <div class="form-group">
                 <label>Keterangan/Predikat</label>
-                <input type="text" id="ekskul_ket" value="-">
+                <input type="text" id="ekskul_ket" value="Melaksanakan kegiatan ekstrakurikuler kepramukaan dengan Sangat Baik.">
             </div>
-            <h4>Kehadiran</h4>
+
+            <h4 style="color: var(--secondary); border-top: 2px solid var(--gray); padding-top: 15px;">Keputusan Kenaikan Kelas</h4>
+            <div class="form-group">
+                <label for="status_kenaikan">Keterangan Status Kenaikan:</label>
+                <select id="status_kenaikan" onchange="saveDataTambahanSiswa()">
+                    <option value="naik">NAIK ke Kelas XI (Sebelas)</option>
+                    <option value="tidak_naik">TIDAK NAIK ke Kelas XI (Sebelas)</option>
+                </select>
+            </div>
+
+            <h4 style="color: var(--secondary); border-top: 2px solid var(--gray); padding-top: 15px;">Catatan & Refleksi Mandiri</h4>
+            <div class="form-group">
+                <label for="catatan_walas">Catatan Wali Kelas (Manual):</label>
+                <textarea id="catatan_walas" rows="3" placeholder="Contoh: Pertahankan prestasi belajar Anda. Tingkatkan frekuensi belajar di rumah terutama kompetensi kejuruan..." oninput="saveDataTambahanSiswa()"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="refleksi_orangtua">Refleksi / Tanggapan Orang Tua Wali (Manual):</label>
+                <textarea id="refleksi_orangtua" rows="3" placeholder="Contoh: Terima kasih atas bimbingan bapak/ibu wali kelas. Kami akan terus memantau perkembangan belajar anak di rumah..." oninput="saveDataTambahanSiswa()"></textarea>
+            </div>
+
+            <h4 style="color: var(--secondary); border-top: 2px solid var(--gray); padding-top: 15px;">Kehadiran / Absensi</h4>
             <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;">
                 <div class="form-group">
                     <label>Sakit (Hari)</label>
-                    <input type="number" id="absen_sakit" value="0">
+                    <input type="number" id="absen_sakit" value="0" oninput="saveDataTambahanSiswa()">
                 </div>
                 <div class="form-group">
                     <label>Izin (Hari)</label>
-                    <input type="number" id="absen_izin" value="1">
+                    <input type="number" id="absen_izin" value="0" oninput="saveDataTambahanSiswa()">
                 </div>
                 <div class="form-group">
                     <label>Tanpa Ket. (Hari)</label>
-                    <input type="number" id="absen_alfa" value="0">
+                    <input type="number" id="absen_alfa" value="0" oninput="saveDataTambahanSiswa()">
                 </div>
             </div>
             <button class="btn-next" onclick="openSubTab(4)">Generate & Preview &rarr;</button>
@@ -555,7 +585,7 @@
                     </tbody>
                 </table>
 
-                <h3 style="font-size: 16px; margin-top:25px; margin-bottom:5px; color:black; font-weight:700;">Ekstrakurikuler</h3>
+                <h3 style="font-size: 15px; margin-top:20px; margin-bottom:5px; color:black; font-weight:700;">Ekstrakurikuler</h3>
                 <table>
                     <thead>
                         <tr>
@@ -573,7 +603,29 @@
                     </tbody>
                 </table>
 
-                <h3 style="font-size: 16px; margin-top:25px; margin-bottom:5px; color:black; font-weight:700;">Kehadiran</h3>
+                <div class="box-kenaikan" id="container_lbl_kenaikan">
+                    <strong>Keputusan:</strong><br>
+                    Berdasarkan hasil yang dicapai pada semester 1 dan 2, peserta didik ditetapkan: <br>
+                    <span id="lbl_status_kenaikan" style="font-weight: bold; text-transform: uppercase; font-size: 15px;">NAIK / TIDAK NAIK</span>
+                </div>
+
+                <h3 style="font-size: 15px; margin-top:20px; margin-bottom:5px; color:black; font-weight:700;">Catatan & Tanggapan Hasil Belajar</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th width="50%">Catatan Wali Kelas</th>
+                            <th width="50%">Refleksi / Tanggapan Orang Tua/Wali</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="vertical-align: top; height: 75px; font-size: 13px; line-height: 1.4; text-align: justify;" id="lbl_catatan_walas">-</td>
+                            <td style="vertical-align: top; height: 75px; font-size: 13px; line-height: 1.4; text-align: justify;" id="lbl_refleksi_orangtua">-</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3 style="font-size: 15px; margin-top:20px; margin-bottom:5px; color:black; font-weight:700;">Kehadiran</h3>
                 <table style="width: 40%;">
                     <tr>
                         <td width="60%">Sakit</td>
@@ -589,7 +641,7 @@
                     </tr>
                 </table>
 
-                <div style="margin-top: 40px; display: flex; justify-content: space-between; font-size: 14px;">
+                <div style="margin-top: 35px; display: flex; justify-content: space-between; font-size: 14px;">
                     <div>
                         <br>Orang Tua/Wali,
                         <br><br><br><br>
@@ -608,19 +660,16 @@
 </div>
 
 <script>
-    // FUNGSI SISTEM LOGIN DAN LOGOUT
     function handleLogin(e) {
         e.preventDefault();
         const user = document.getElementById('username').value;
         const pass = document.getElementById('password').value;
 
-        // Validasi sederhana asal terisi
         if(user.trim() !== "" && pass !== "") {
             document.getElementById('user-logged').innerText = user;
             document.getElementById('login-screen').style.display = 'none';
             document.getElementById('app-screen').style.display = 'block';
             
-            // Bersihkan field form login
             document.getElementById('username').value = '';
             document.getElementById('password').value = '';
         } else {
@@ -721,12 +770,25 @@
     };
 
     let dbNilaiSiswa = {};
+    let dbDataTambahan = {}; // Tempat penyimpanan database mandiri Catatan, Kenaikan & Absensi per siswa
 
     students.forEach(student => {
         dbNilaiSiswa[student] = {};
         Object.keys(bankMateri).forEach(m => {
             dbNilaiSiswa[student][m] = 80;
         });
+
+        // Default Isian Mandiri Tambahan Baru Per Siswa
+        dbDataTambahan[student] = {
+            status_kenaikan: "naik",
+            catatan_walas: "",
+            refleksi_orangtua: "",
+            ekskul_nama: "Pramuka",
+            ekskul_ket: "Melaksanakan kegiatan ekstrakurikuler kepramukaan dengan Sangat Baik.",
+            sakit: 0,
+            izin: 0,
+            alfa: 0
+        };
     });
 
     window.onload = function() {
@@ -734,6 +796,7 @@
         initTabKolektif();
         initDropdownSiswa();
         renderNilaiSiswaAktif();
+        loadDataTambahanSiswa();
     };
 
     function switchMainTab(tabIndex) {
@@ -827,6 +890,39 @@
             opt.textContent = student;
             selectSiswa.appendChild(opt);
         });
+    }
+
+    // Fungsi memuat data Catatan & Absensi saat siswa aktif diganti di Tab 2
+    function loadDataTambahanSiswa() {
+        const student = document.getElementById('nama_siswa').value;
+        if (!student || !dbDataTambahan[student]) return;
+
+        const data = dbDataTambahan[student];
+        document.getElementById('status_kenaikan').value = data.status_kenaikan;
+        document.getElementById('catatan_walas').value = data.catatan_walas;
+        document.getElementById('refleksi_orangtua').value = data.refleksi_orangtua;
+        document.getElementById('ekskul_nama').value = data.ekskul_nama;
+        document.getElementById('ekskul_ket').value = data.ekskul_ket;
+        document.getElementById('absen_sakit').value = data.sakit;
+        document.getElementById('absen_izin').value = data.izin;
+        document.getElementById('absen_alfa').value = data.alfa;
+    }
+
+    // Fungsi menyimpan perubahan ketikan manual elemen tambahan per siswa
+    function saveDataTambahanSiswa() {
+        const student = document.getElementById('nama_siswa').value;
+        if (!student) return;
+
+        dbDataTambahan[student] = {
+            status_kenaikan: document.getElementById('status_kenaikan').value,
+            catatan_walas: document.getElementById('catatan_walas').value,
+            refleksi_orangtua: document.getElementById('refleksi_orangtua').value,
+            ekskul_nama: document.getElementById('ekskul_nama').value,
+            ekskul_ket: document.getElementById('ekskul_ket').value,
+            sakit: parseInt(document.getElementById('absen_sakit').value) || 0,
+            izin: parseInt(document.getElementById('absen_izin').value) || 0,
+            alfa: parseInt(document.getElementById('absen_alfa').value) || 0
+        };
     }
 
     function renderNilaiSiswaAktif() {
@@ -929,6 +1025,7 @@
         }
 
         renderNilaiSiswaAktif();
+        loadDataTambahanSiswa();
         alert(`Berhasil meng-import ${countImported} data nilai untuk mata pelajaran [ ${mapelValue} ]! Data telah disimpan ke Tab 2.`);
 
         switchMainTab(1);
@@ -992,6 +1089,9 @@
         const namaSiswa = document.getElementById('nama_siswa').value;
         if(!namaSiswa) return;
 
+        // Pastikan inputan paling terakhir ikut tersimpan ke basis data
+        saveDataTambahanSiswa();
+
         document.getElementById('lbl_nama').innerText = namaSiswa;
         document.getElementById('lbl_nisn').innerText = document.getElementById('nisn').value;
         document.getElementById('lbl_sekolah').innerText = document.getElementById('nama_sekolah').value;
@@ -1023,11 +1123,25 @@
         let resC = prosesKelompokMapel("tbody-input-C", urutan, namaSiswa);
         tbodyPreview.innerHTML += resC.html;
 
-        document.getElementById('lbl_ekskul').innerText = document.getElementById('ekskul_nama').value;
-        document.getElementById('lbl_ekskul_ket').innerText = document.getElementById('ekskul_ket').value;
-        document.getElementById('lbl_sakit').innerText = document.getElementById('absen_sakit').value;
-        document.getElementById('lbl_izin').innerText = document.getElementById('absen_izin').value;
-        document.getElementById('lbl_alfa').innerText = document.getElementById('absen_alfa').value;
+        // Load teks preview Ekstrakurikuler & Absensi
+        const sData = dbDataTambahan[namaSiswa];
+        document.getElementById('lbl_ekskul').innerText = sData.ekskul_nama;
+        document.getElementById('lbl_ekskul_ket').innerText = sData.ekskul_ket;
+        document.getElementById('lbl_sakit').innerText = sData.sakit;
+        document.getElementById('lbl_izin').innerText = sData.izin;
+        document.getElementById('lbl_alfa').innerText = sData.alfa;
+
+        // Tampilkan Keputusan Status Kenaikan Kelas di Lembar Preview
+        const lblKenaikan = document.getElementById('lbl_status_kenaikan');
+        if (sData.status_kenaikan === "naik") {
+            lblKenaikan.innerHTML = `<span style="color: green;">Mempunyai kriteria kelulusan/kenaikan dan ditetapkan NAIK ke Kelas XI (Sebelas).</span>`;
+        } else {
+            lblKenaikan.innerHTML = `<span style="color: red; font-weight: bold;">Ditetapkan TIDAK NAIK ke Kelas XI (Sebelas) karena belum memenuhi kriteria ketuntasan minimal.</span>`;
+        }
+
+        // Tampilkan Catatan Walas & Refleksi Wali Murid Manual
+        document.getElementById('lbl_catatan_walas').innerText = sData.catatan_walas.trim() !== "" ? sData.catatan_walas : "-";
+        document.getElementById('lbl_refleksi_orangtua').innerText = sData.refleksi_orangtua.trim() !== "" ? sData.refleksi_orangtua : "Diisi mandiri oleh orang tua/wali murid setelah dokumen hasil belajar dicetak.";
     }
 </script>
 
